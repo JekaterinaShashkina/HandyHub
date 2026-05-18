@@ -29,7 +29,7 @@ object SampleData {
         Category(
             id = 1,
             name = "Manicure",
-            iconUrl = "manicure"
+            iconUrl = "manicurist"
         ),
         Category(
             id = 2,

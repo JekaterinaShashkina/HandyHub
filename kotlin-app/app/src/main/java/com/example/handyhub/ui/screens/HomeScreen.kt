@@ -14,6 +14,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.handyhub.ui.components.AppExpandableCategories
 import com.example.handyhub.ui.components.AppHeader
 import com.example.handyhub.ui.components.AppSearchBar
 import com.example.handyhub.viewmodel.HomeViewModel
@@ -30,6 +31,7 @@ fun HomeScreen (
         master.fullName.contains(searchText, ignoreCase = true) ||
                 master.description.contains(searchText, ignoreCase = true)
     }
+    var selectedCategoryId by remember { mutableStateOf<Int?>(null) }
 
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
@@ -48,18 +50,16 @@ fun HomeScreen (
             )
         }
         item {
-            Text(
-                text = "Categories",
-                style = MaterialTheme.typography.headlineSmall
+            AppExpandableCategories(
+                categories = categories,
+                selectedCategoryId = selectedCategoryId,
+                onCategoryClick = { category ->
+                    selectedCategoryId =
+                        if (selectedCategoryId == category.id) null else category.id
+                },
+                modifier = Modifier.padding(top = 16.dp)
             )
         }
-        items(categories) { category ->
-            Text(
-                text = category.name,
-                modifier = Modifier.padding(vertical = 8.dp)
-            )
-        }
-
         item {
             Text(
                 text = "Masters",

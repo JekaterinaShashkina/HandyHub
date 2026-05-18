@@ -1,0 +1,19 @@
+<resources>
+
+    <style name="Theme.Kotlinapp" parent="android:Theme.Material.Light.NoActionBar">
+
+        <item name="android:windowSplashScreenAnimatedIcon">
+            @drawable/logo_splash
+        </item>
+
+        <item name="android:windowSplashScreenBackground">
+            @color/white
+        </item>
+
+        <item name="android:windowSplashScreenIconBackgroundColor">
+            @android:color/transparent
+        </item>
+
+    </style>
+
+</resources>
