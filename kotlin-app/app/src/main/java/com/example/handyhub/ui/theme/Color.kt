@@ -1,4 +1,4 @@
-package com.example.kotlin_app.ui.theme
+package com.example.handyhub.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

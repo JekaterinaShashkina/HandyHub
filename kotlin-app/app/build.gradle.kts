@@ -2,14 +2,15 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id("com.google.devtools.ksp")
 }
 
 android {
-    namespace = "com.example.kotlin_app"
+    namespace = "com.example.handyhub"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.example.kotlin_app"
+        applicationId = "com.example.handyhub"
         minSdk = 24
         targetSdk = 36
         versionCode = 1
@@ -56,4 +57,23 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    // Room
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
+
+// ViewModel
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+
+// Navigation
+    implementation(libs.androidx.navigation.compose)
+
+// Coil
+    implementation(libs.coil.compose)
+
+// Material Icons
+    implementation(libs.androidx.material.icons.extended)
+
+// Coroutines
+    implementation(libs.kotlinx.coroutines.android)
 }
