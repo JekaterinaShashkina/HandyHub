@@ -1,5 +1,6 @@
 package com.example.handyhub.ui.screens
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import com.example.handyhub.ui.components.AppExpandableCategories
 import com.example.handyhub.ui.components.AppHeader
 import com.example.handyhub.ui.components.AppSearchBar
+import com.example.handyhub.ui.components.MasterCard
 import com.example.handyhub.viewmodel.HomeViewModel
 
 @Composable
@@ -66,30 +68,14 @@ fun HomeScreen (
                 style = MaterialTheme.typography.headlineSmall
             )
         }
-        items(filteredMasters) { master ->
-            Card(
-                modifier = Modifier.padding(vertical = 8.dp)
+        item {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                Column(
-                    modifier = Modifier.padding(16.dp)
-                ) {
-                    Text(
-                        text = master.fullName
-                    )
-                    Text(
-                        text = master.categoryName
-                    )
-                    Text(
-                        text = master.description
-                    )
-
-                    Text(
-                        text = "Experience: ${master.expYears} years"
-                    )
-
-                    Text(
-                        text = "From ${master.priceFrom} €"
-                    )
+                filteredMasters.forEach { master ->
+                    MasterCard(master = master, onClick = { masterId ->
+                        // navigate to master profile
+                    })
                 }
             }
         }

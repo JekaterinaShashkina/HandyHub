@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.handyhub.data.repository.HandyHubRepository
 import com.example.handyhub.model.Category
-import com.example.handyhub.model.MasterProfile
 import com.example.handyhub.ui.model.MasterCardUiModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

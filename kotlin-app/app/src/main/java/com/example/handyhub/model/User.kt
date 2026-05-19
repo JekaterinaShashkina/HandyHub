@@ -22,11 +22,8 @@ data class User(
     val email: String,
     val phone: String,
     val passwordHash: String,
-
     val roleId: Int,
-
-    val avatarUrl: String?,
-
+    val avatarUrl: Int,
     val createdAt: Long,
     val updatedAt: Long
 )

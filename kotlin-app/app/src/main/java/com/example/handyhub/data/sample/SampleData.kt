@@ -1,5 +1,6 @@
 package com.example.handyhub.data.sample
 
+import com.example.handyhub.R
 import com.example.handyhub.data.repository.HandyHubRepository
 import com.example.handyhub.model.Category
 import com.example.handyhub.model.MasterProfile
@@ -45,7 +46,12 @@ object SampleData {
             id = 4,
             name = "Plumber",
             iconUrl = "plumber"
-        )
+        ),
+        Category(
+            id = 5,
+            name = "Cosmetologist",
+            iconUrl = "cosmetologist"
+        ),
     )
 
     val users = listOf(
@@ -57,7 +63,7 @@ object SampleData {
             phone = "+37255550001",
             passwordHash = "hash1",
             roleId = 2,
-            avatarUrl = "",
+            avatarUrl = R.drawable.master_photo_1,
             createdAt = System.currentTimeMillis(),
             updatedAt = System.currentTimeMillis()
         ),
@@ -69,7 +75,7 @@ object SampleData {
             phone = "+37255550002",
             passwordHash = "hash2",
             roleId = 2,
-            avatarUrl = "",
+            avatarUrl = R.drawable.master_photo_2,
             createdAt = System.currentTimeMillis(),
             updatedAt = System.currentTimeMillis()
         ),
@@ -81,7 +87,7 @@ object SampleData {
             phone = "+37255550003",
             passwordHash = "hash3",
             roleId = 1,
-            avatarUrl = "",
+            avatarUrl = R.drawable.master_photo_1,
             createdAt = System.currentTimeMillis(),
             updatedAt = System.currentTimeMillis()
         )

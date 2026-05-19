@@ -73,7 +73,7 @@ fun AppExpandableCategories(
 
                         Text(
                             text = category.name,
-                            style = MaterialTheme.typography.titleMedium
+                            style = MaterialTheme.typography.bodyLarge
                         )
                     }
                 }

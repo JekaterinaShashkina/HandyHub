@@ -9,5 +9,5 @@ data class MasterCardUiModel(
     val priceFrom: Double,
     val ratingAvg: Double,
     val reviewsCount: Int,
-    val avatarUrl: String?,
+    val avatarUrl: Int,
 )
