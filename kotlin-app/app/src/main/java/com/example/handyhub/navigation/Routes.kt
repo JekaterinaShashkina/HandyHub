@@ -1,4 +1,10 @@
 package com.example.handyhub.navigation
 
-class Routes {
+object Routes {
+    const val HOME = "home"
+    const val  MASTER_DETAIL = "master_detail/{masterId}"
+
+    fun masterDetail(masterId: Int): String {
+        return "master_detail/$masterId"
+    }
 }

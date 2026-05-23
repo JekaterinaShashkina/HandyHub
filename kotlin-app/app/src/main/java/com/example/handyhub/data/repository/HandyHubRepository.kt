@@ -32,6 +32,9 @@ class HandyHubRepository(
     suspend fun getUserById(userId: Int): User? {
         return database.userDao().getUserById(userId)
     }
+    suspend fun getReviewsByMaster(masterProfileId: Int): List<Review> {
+        return database.reviewDao().getReviewsByMaster(masterProfileId)
+    }
     suspend fun insertCategory(category: Category) {
         database.categoryDao().insertCategory(category)
     }

@@ -15,9 +15,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.handyhub.data.local.DatabaseProvider
 import com.example.handyhub.data.repository.HandyHubRepository
 import com.example.handyhub.data.sample.SampleData
+import com.example.handyhub.navigation.AppNavigation
 import com.example.handyhub.ui.screens.HomeScreen
 import com.example.handyhub.ui.theme.HandyHubTheme
 import com.example.handyhub.viewmodel.HomeViewModel
+import com.example.handyhub.viewmodel.MasterDetailViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -36,11 +38,13 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             val homeViewModel = HomeViewModel(repository)
+            val masterDetailViewModel = MasterDetailViewModel(repository)
             homeViewModel.loadData()
 
-            HandyHubTheme {
-                HomeScreen(viewModel = homeViewModel)
-            }
+            AppNavigation(
+                homeViewModel = homeViewModel,
+                masterDetailViewModel = masterDetailViewModel
+            )
 
         }
     }

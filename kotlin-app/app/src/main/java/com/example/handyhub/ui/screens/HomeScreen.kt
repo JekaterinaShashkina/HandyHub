@@ -23,7 +23,8 @@ import com.example.handyhub.viewmodel.HomeViewModel
 
 @Composable
 fun HomeScreen (
-    viewModel: HomeViewModel
+    viewModel: HomeViewModel,
+    onMasterClick: (Int) -> Unit
 ){
     val categories by viewModel.categories.collectAsState()
 
@@ -74,7 +75,7 @@ fun HomeScreen (
             ) {
                 filteredMasters.forEach { master ->
                     MasterCard(master = master, onClick = { masterId ->
-                        // navigate to master profile
+                        onMasterClick(masterId)
                     })
                 }
             }
