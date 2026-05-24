@@ -80,3 +80,15 @@ Add local review submission flow
 - Updated displayed rating and reviews count after publishing
 - Added keyboard avoiding behavior for the review form
 - Added role-based review restrictions for clients/masters
+
+Refactor master details review flow
+
+- Added local review submission with useState
+- Added review validation for empty comment, missing rating, name and phone
+- Added one-review-per-client logic with update mode
+- Updated displayed rating average and reviews count after review changes
+- Added keyboard avoiding behavior for the review form
+- Extracted master detail review UI into reusable components
+- Added ReviewCard, ReviewNotice, InteractiveRating and ReviewForm components
+- Cleaned up the master details screen structure
+

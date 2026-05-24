@@ -1,7 +1,16 @@
 import { Feather } from '@expo/vector-icons';
 import { Image, Pressable, StyleSheet, View } from 'react-native';
+import { canAddMaster } from '@/data/handyhub-data';
+import { useHandyHub } from '@/state/HandyHubContext';
 
-export function AppHeader() {
+type AppHeaderProps = {
+  onAddMasterPress?: () => void;
+};
+
+export function AppHeader({ onAddMasterPress }: AppHeaderProps) {
+  const { currentUser } = useHandyHub();
+  const showAddMaster = canAddMaster(currentUser);
+
   return (
     <View style={styles.header}>
       <Image
@@ -11,6 +20,12 @@ export function AppHeader() {
       />
 
       <View style={styles.headerActions}>
+        {showAddMaster && (
+          <Pressable style={styles.iconButton} onPress={onAddMasterPress}>
+            <Feather name="plus-circle" size={28} color="#111111" />
+          </Pressable>
+        )}
+
         <Pressable style={styles.iconButton}>
           <Feather name="log-in" size={28} color="#111111" />
         </Pressable>

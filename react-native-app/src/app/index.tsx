@@ -9,18 +9,19 @@ import { MasterCard } from '@/components/home/MasterCard';
 import { SearchBar } from '@/components/home/SearchBar';
 import { AppFooter } from '@/components/home/AppFooter';
 
-import {
-  categories,
-  getMasterCards,
-  type MasterCardItem,
-} from '@/data/handyhub-data';
+import type { MasterCardItem } from '@/data/handyhub-data';
+import { useHandyHub } from '@/state/HandyHubContext';
 
 export default function HomeScreen() {
   const router = useRouter();
+  const { categories, getMasterCards } = useHandyHub();
   const [searchText, setSearchText] = useState('');
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
 
-  const masters: MasterCardItem[] = useMemo(() => getMasterCards(), []);
+  const masters: MasterCardItem[] = useMemo(
+      () => getMasterCards(),
+      [getMasterCards]
+    );
 
   const filteredMasters: MasterCardItem[] = useMemo(() => {
     const query = searchText.trim().toLowerCase();
@@ -48,7 +49,11 @@ export default function HomeScreen() {
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
       >
-        <AppHeader />
+      <AppHeader
+        onAddMasterPress={() => {
+          router.push('/add-master' as never);
+        }}
+      />
 
         <SearchBar value={searchText} onChangeText={setSearchText} />
 

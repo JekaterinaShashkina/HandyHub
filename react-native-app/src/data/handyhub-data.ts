@@ -223,6 +223,10 @@ export function canLeaveReview(user: User | null | undefined) {
   return user?.roleId === 1;
 }
 
+export function canAddMaster(user: User | null | undefined) {
+  return user?.roleId === 2;
+}
+
 export type MasterDetails = {
   id: number;
   fullName: string;

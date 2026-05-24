@@ -1,56 +1,42 @@
 import { useState } from 'react';
+import { useHandyHub } from '@/state/HandyHubContext';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import {
   Pressable,
   ScrollView,
   StyleSheet,
   Text,
-  TextInput,
   View,
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { RatingStars } from '@/components/common/RatingStars';
 import {
-  canLeaveReview,
-  currentUser,
-  getMasterDetails,
-} from '@/data/handyhub-data';
-import {
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
-import { InteractiveRating } from '@/components/master/InteractiveRating';
 import { ReviewCard } from '@/components/master/ReviewCard';
 import { ReviewNotice } from '@/components/master/ReviewNotice';
 import { ReviewForm } from '@/components/master/ReviewForm';
+import {
+  canLeaveReview,
+} from '@/data/handyhub-data';
+
+
 
 
 export default function MasterDetailsScreen() {
   const router = useRouter();
   const params = useLocalSearchParams<{ id: string }>();
   const masterId = Number(params.id);
+  const { currentUser, getMasterDetails, upsertReview } = useHandyHub();
+
   const master = getMasterDetails(masterId);
   const reviewAllowed = canLeaveReview(currentUser);
 
-    const [localReviews, setLocalReviews] = useState(master?.reviews ?? []);
+    
     const [commentText, setCommentText] = useState('');
     const [selectedRating, setSelectedRating] = useState(0);
     const [reviewError, setReviewError] = useState('');
-
-    const currentUserId = currentUser?.id;
-
-    const currentUserReview =
-    currentUserId === undefined
-        ? undefined
-        : localReviews.find((review) => review.userId === currentUserId);
-
-    const displayReviewsCount = localReviews.length;
-
-    const displayRatingAvg =
-    localReviews.length > 0
-        ? localReviews.reduce((sum, review) => sum + review.rating, 0) /
-        localReviews.length
-        : master?.ratingAvg ?? 0;
 
   if (!master) {
     return (
@@ -67,6 +53,26 @@ export default function MasterDetailsScreen() {
       </View>
     );
   }
+  const selectedMaster = master;
+const displayedReviews = selectedMaster.reviews;
+
+const currentUserId = currentUser?.id;
+
+const currentUserReview =
+  currentUserId === undefined
+    ? undefined
+    : displayedReviews.find((review) => review.userId === currentUserId);
+
+const displayReviewsCount = displayedReviews.length;
+
+const displayRatingAvg =
+  displayedReviews.length > 0
+    ? displayedReviews.reduce((sum, review) => sum + review.rating, 0) /
+      displayedReviews.length
+    : selectedMaster.ratingAvg;
+
+
+
 function handlePublishReview() {
   if (!currentUser) {
     setReviewError('Log in as a client to leave a review.');
@@ -98,29 +104,14 @@ function handlePublishReview() {
     return;
   }
 
-  const reviewPayload = {
-    id: currentUserReview?.id ?? Date.now(),
-    userId: user.id,
-    authorName: currentUserName,
+    upsertReview({
+    masterId: selectedMaster.id,
+    user,
     rating: selectedRating,
     comment: trimmedComment,
-    createdAt: currentUserReview?.createdAt ?? new Date().toISOString(),
-  };
+    });
 
-  setLocalReviews((prevReviews) => {
-    const alreadyReviewed = prevReviews.some(
-      (review) => review.userId === user.id
-    );
-
-    if (alreadyReviewed) {
-      return prevReviews.map((review) =>
-        review.userId === user.id ? reviewPayload : review
-      );
-    }
-
-    return [reviewPayload, ...prevReviews];
-  });
-
+    
   setCommentText('');
   setSelectedRating(0);
   setReviewError('');
@@ -199,11 +190,11 @@ function MailIcon() {
           <Text style={styles.sectionTitle}>Reviews</Text>
 
           <View style={styles.reviewList}>
-            {localReviews.map((review) => (
-                <ReviewCard key={review.id} review={review} />
-                ))}
+            {displayedReviews.map((review) => (
+            <ReviewCard key={review.id} review={review} />
+            ))}
 
-            {localReviews.length === 0 && (
+            {displayedReviews.length === 0 && (
               <Text style={styles.emptyText}>No reviews yet</Text>
             )}
           </View>
