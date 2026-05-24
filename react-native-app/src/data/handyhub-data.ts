@@ -245,6 +245,7 @@ export type MasterDetails = {
   }>;
   reviews: Array<{
     id: number;
+    userId: number;
     authorName: string;
     rating: number;
     comment: string;
@@ -269,13 +270,14 @@ export function getMasterDetails(masterId: number): MasterDetails | undefined {
     .map((review) => {
       const author = users.find((item) => item.id === review.userId);
 
-      return {
-        id: review.id,
-        authorName: `${author?.name ?? 'Client'} ${author?.surname ?? ''}`.trim(),
-        rating: review.rating,
-        comment: review.comment,
-        createdAt: review.createdAt,
-      };
+     return {
+      id: review.id,
+      userId: review.userId,
+      authorName: `${author?.name ?? 'Client'} ${author?.surname ?? ''}`.trim(),
+      rating: review.rating,
+      comment: review.comment,
+      createdAt: review.createdAt,
+    };
     });
 
   return {

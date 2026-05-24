@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import {
   Pressable,
@@ -14,6 +15,10 @@ import {
   currentUser,
   getMasterDetails,
 } from '@/data/handyhub-data';
+import {
+  KeyboardAvoidingView,
+  Platform,
+} from 'react-native';
 
 export default function MasterDetailsScreen() {
   const router = useRouter();
@@ -22,6 +27,25 @@ export default function MasterDetailsScreen() {
   const master = getMasterDetails(masterId);
   const reviewAllowed = canLeaveReview(currentUser);
 
+    const [localReviews, setLocalReviews] = useState(master?.reviews ?? []);
+    const [commentText, setCommentText] = useState('');
+    const [selectedRating, setSelectedRating] = useState(0);
+    const [reviewError, setReviewError] = useState('');
+
+    const currentUserId = currentUser?.id;
+
+    const currentUserReview =
+    currentUserId === undefined
+        ? undefined
+        : localReviews.find((review) => review.userId === currentUserId);
+
+    const displayReviewsCount = localReviews.length;
+
+    const displayRatingAvg =
+    localReviews.length > 0
+        ? localReviews.reduce((sum, review) => sum + review.rating, 0) /
+        localReviews.length
+        : master?.ratingAvg ?? 0;
 
   if (!master) {
     return (
@@ -38,6 +62,64 @@ export default function MasterDetailsScreen() {
       </View>
     );
   }
+function handlePublishReview() {
+  if (!currentUser) {
+    setReviewError('Log in as a client to leave a review.');
+    return;
+  }
+
+  const user = currentUser;
+  const trimmedComment = commentText.trim();
+  const currentUserName = `${user.name} ${user.surname}`.trim();
+  const currentUserPhone = user.phone.trim();
+
+  if (!currentUserName) {
+    setReviewError('User name is missing.');
+    return;
+  }
+
+  if (!currentUserPhone) {
+    setReviewError('User phone is missing.');
+    return;
+  }
+
+  if (!trimmedComment) {
+    setReviewError('Please write a comment.');
+    return;
+  }
+
+  if (selectedRating === 0) {
+    setReviewError('Please select a rating.');
+    return;
+  }
+
+  const reviewPayload = {
+    id: currentUserReview?.id ?? Date.now(),
+    userId: user.id,
+    authorName: currentUserName,
+    rating: selectedRating,
+    comment: trimmedComment,
+    createdAt: currentUserReview?.createdAt ?? new Date().toISOString(),
+  };
+
+  setLocalReviews((prevReviews) => {
+    const alreadyReviewed = prevReviews.some(
+      (review) => review.userId === user.id
+    );
+
+    if (alreadyReviewed) {
+      return prevReviews.map((review) =>
+        review.userId === user.id ? reviewPayload : review
+      );
+    }
+
+    return [reviewPayload, ...prevReviews];
+  });
+
+  setCommentText('');
+  setSelectedRating(0);
+  setReviewError('');
+}
 
 function CommentIcon() {
   return <Feather name="message-circle" size={16} color="#111111" />;
@@ -51,15 +133,38 @@ function MailIcon() {
   return <Feather name="mail" size={20} color="#5368C9" />;
 }
 
-  return (
-    <View style={styles.safeArea}>
-      <Stack.Screen options={{ headerShown: false }} />
+type InteractiveRatingProps = {
+  rating: number;
+  onChange: (rating: number) => void;
+};
 
-      <ScrollView
+function InteractiveRating({ rating, onChange }: InteractiveRatingProps) {
+  return (
+    <View style={styles.interactiveRating}>
+      {[1, 2, 3, 4, 5].map((value) => (
+        <Pressable key={value} onPress={() => onChange(value)}>
+          <Text style={styles.interactiveStar}>
+            {value <= rating ? '★' : '☆'}
+          </Text>
+        </Pressable>
+      ))}
+    </View>
+  );
+}
+  return (
+    <KeyboardAvoidingView
+        style={styles.safeArea} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={0}
+    >
+        <Stack.Screen options={{ headerShown: false }} />
+
+        <ScrollView
         style={styles.container}
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
-      >
+        keyboardShouldPersistTaps="handled"
+        keyboardDismissMode="interactive"
+        >
         <Pressable style={styles.backButton} onPress={() => router.back()}>
           <Text style={styles.backButtonText}>Back</Text>
         </Pressable>
@@ -81,9 +186,9 @@ function MailIcon() {
             <Text style={styles.masterName}>{master.fullName}</Text>
 
             <View style={styles.ratingWithReviews}>
-              <RatingStars rating={master.ratingAvg} />
+              <RatingStars rating={displayRatingAvg} />
               <CommentIcon />
-              <Text style={styles.reviewsCount}>{master.reviewsCount}</Text>
+              <Text style={styles.reviewsCount}>{displayReviewsCount}</Text>
             </View>
           </View>
 
@@ -107,7 +212,7 @@ function MailIcon() {
           <Text style={styles.sectionTitle}>Reviews</Text>
 
           <View style={styles.reviewList}>
-            {master.reviews.map((review) => (
+            {localReviews.map((review) => (
               <View key={review.id} style={styles.reviewCard}>
                 <View style={styles.reviewHeader}>
                   <Text style={styles.reviewAuthor}>{review.authorName}</Text>
@@ -120,7 +225,7 @@ function MailIcon() {
               </View>
             ))}
 
-            {master.reviews.length === 0 && (
+            {localReviews.length === 0 && (
               <Text style={styles.emptyText}>No reviews yet</Text>
             )}
           </View>
@@ -132,39 +237,64 @@ function MailIcon() {
 
         {reviewAllowed ? (
   <View style={styles.form}>
+     {currentUserReview && (
+        <Text style={styles.updateHint}>
+        You already reviewed this specialist. Publishing again will update your review.
+        </Text>
+    )}
     <Text style={styles.inputLabel}>Name</Text>
     <TextInput
-      style={styles.input}
-      value={
-        currentUser
-          ? `${currentUser.name} ${currentUser.surname}`.trim()
-          : ''
-      }
-      editable={false}
-    />
+        style={styles.input}
+        value={
+            currentUser
+            ? `${currentUser.name} ${currentUser.surname}`.trim()
+            : ''
+        }
+        editable={false}
+        placeholder="Name"
+        />
 
     <Text style={styles.inputLabel}>Phone</Text>
     <TextInput
-      style={styles.input}
-      value={currentUser?.phone ?? ''}
-      editable={false}
-      keyboardType="phone-pad"
+    style={styles.input}
+    value={currentUser?.phone ?? ''}
+    editable={false}
+    keyboardType="phone-pad"
+    placeholder="Phone"
     />
 
     <Text style={styles.inputLabel}>Comment</Text>
     <TextInput
-      style={[styles.input, styles.commentInput]}
-      multiline
-      textAlignVertical="top"
+    style={[styles.input, styles.commentInput]}
+    value={commentText}
+    onChangeText={(value) => {
+        setCommentText(value);
+        setReviewError('');
+    }}
+    placeholder="Write your review"
+    multiline
+    textAlignVertical="top"
     />
 
-    <Pressable style={styles.publishButton}>
-      <Text style={styles.publishButtonText}>Publish review</Text>
-    </Pressable>
+{reviewError ? (
+  <Text style={styles.errorText}>{reviewError}</Text>
+) : null}
 
-    <View style={styles.formStars}>
-      <RatingStars rating={0} />
-    </View>
+<Pressable style={styles.publishButton} onPress={handlePublishReview}>
+  <Text style={styles.publishButtonText}>
+    {currentUserReview ? 'Update review' : 'Publish review'}
+    </Text>
+</Pressable>
+
+<View style={styles.formStars}>
+  <InteractiveRating
+    rating={selectedRating}
+    onChange={(rating) => {
+      setSelectedRating(rating);
+      setReviewError('');
+    }}
+  />
+</View>
   </View>
 ) : (
   <View style={styles.reviewNotice}>
@@ -179,9 +309,11 @@ function MailIcon() {
 )}
 
       </ScrollView>
-    </View>
+    </KeyboardAvoidingView>
   );
 }
+
+
 
 
 const styles = StyleSheet.create({
@@ -402,5 +534,27 @@ reviewNoticeText: {
   fontSize: 18,
   color: '#5368C9',
   textAlign: 'center',
+},
+errorText: {
+  fontSize: 13,
+  color: '#C62828',
+  marginTop: -4,
+  marginBottom: 8,
+},
+interactiveRating: {
+  flexDirection: 'row',
+  alignItems: 'center',
+},
+interactiveStar: {
+  fontSize: 22,
+  lineHeight: 24,
+  color: '#FFC107',
+  marginLeft: 2,
+},
+updateHint: {
+  fontSize: 13,
+  lineHeight: 18,
+  color: '#6B6B6B',
+  marginBottom: 12,
 },
 });
