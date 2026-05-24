@@ -19,6 +19,11 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
+import { InteractiveRating } from '@/components/master/InteractiveRating';
+import { ReviewCard } from '@/components/master/ReviewCard';
+import { ReviewNotice } from '@/components/master/ReviewNotice';
+import { ReviewForm } from '@/components/master/ReviewForm';
+
 
 export default function MasterDetailsScreen() {
   const router = useRouter();
@@ -55,9 +60,9 @@ export default function MasterDetailsScreen() {
         <View style={styles.emptyState}>
           <Text style={styles.emptyTitle}>Specialist not found</Text>
 
-          <Pressable style={styles.publishButton} onPress={() => router.back()}>
-            <Text style={styles.publishButtonText}>Go back</Text>
-          </Pressable>
+          <Pressable style={styles.backButton} onPress={() => router.back()}>
+            <Text style={styles.backButtonText}>Go back</Text>
+            </Pressable>
         </View>
       </View>
     );
@@ -133,24 +138,6 @@ function MailIcon() {
   return <Feather name="mail" size={20} color="#5368C9" />;
 }
 
-type InteractiveRatingProps = {
-  rating: number;
-  onChange: (rating: number) => void;
-};
-
-function InteractiveRating({ rating, onChange }: InteractiveRatingProps) {
-  return (
-    <View style={styles.interactiveRating}>
-      {[1, 2, 3, 4, 5].map((value) => (
-        <Pressable key={value} onPress={() => onChange(value)}>
-          <Text style={styles.interactiveStar}>
-            {value <= rating ? '★' : '☆'}
-          </Text>
-        </Pressable>
-      ))}
-    </View>
-  );
-}
   return (
     <KeyboardAvoidingView
         style={styles.safeArea} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -213,17 +200,8 @@ function InteractiveRating({ rating, onChange }: InteractiveRatingProps) {
 
           <View style={styles.reviewList}>
             {localReviews.map((review) => (
-              <View key={review.id} style={styles.reviewCard}>
-                <View style={styles.reviewHeader}>
-                  <Text style={styles.reviewAuthor}>{review.authorName}</Text>
-                  <RatingStars rating={review.rating} />
-                </View>
-
-                <Text style={styles.reviewComment} numberOfLines={2}>
-                  {review.comment}
-                </Text>
-              </View>
-            ))}
+                <ReviewCard key={review.id} review={review} />
+                ))}
 
             {localReviews.length === 0 && (
               <Text style={styles.emptyText}>No reviews yet</Text>
@@ -235,78 +213,26 @@ function InteractiveRating({ rating, onChange }: InteractiveRatingProps) {
           </Pressable>
         </View>
 
-        {reviewAllowed ? (
-  <View style={styles.form}>
-     {currentUserReview && (
-        <Text style={styles.updateHint}>
-        You already reviewed this specialist. Publishing again will update your review.
-        </Text>
-    )}
-    <Text style={styles.inputLabel}>Name</Text>
-    <TextInput
-        style={styles.input}
-        value={
-            currentUser
-            ? `${currentUser.name} ${currentUser.surname}`.trim()
-            : ''
-        }
-        editable={false}
-        placeholder="Name"
+        {reviewAllowed && currentUser ? (
+        <ReviewForm
+            currentUser={currentUser}
+            currentUserReview={currentUserReview}
+            commentText={commentText}
+            selectedRating={selectedRating}
+            reviewError={reviewError}
+            onCommentChange={(value) => {
+            setCommentText(value);
+            setReviewError('');
+            }}
+            onRatingChange={(rating) => {
+            setSelectedRating(rating);
+            setReviewError('');
+            }}
+            onSubmit={handlePublishReview}
         />
-
-    <Text style={styles.inputLabel}>Phone</Text>
-    <TextInput
-    style={styles.input}
-    value={currentUser?.phone ?? ''}
-    editable={false}
-    keyboardType="phone-pad"
-    placeholder="Phone"
-    />
-
-    <Text style={styles.inputLabel}>Comment</Text>
-    <TextInput
-    style={[styles.input, styles.commentInput]}
-    value={commentText}
-    onChangeText={(value) => {
-        setCommentText(value);
-        setReviewError('');
-    }}
-    placeholder="Write your review"
-    multiline
-    textAlignVertical="top"
-    />
-
-{reviewError ? (
-  <Text style={styles.errorText}>{reviewError}</Text>
-) : null}
-
-<Pressable style={styles.publishButton} onPress={handlePublishReview}>
-  <Text style={styles.publishButtonText}>
-    {currentUserReview ? 'Update review' : 'Publish review'}
-    </Text>
-</Pressable>
-
-<View style={styles.formStars}>
-  <InteractiveRating
-    rating={selectedRating}
-    onChange={(rating) => {
-      setSelectedRating(rating);
-      setReviewError('');
-    }}
-  />
-</View>
-  </View>
-) : (
-  <View style={styles.reviewNotice}>
-    <Text style={styles.reviewNoticeTitle}>Want to leave a review?</Text>
-
-    <Text style={styles.reviewNoticeText}>
-      {currentUser
-        ? 'Only clients can leave reviews.'
-        : 'Log in as a client to leave a review.'}
-    </Text>
-  </View>
-)}
+        ) : (
+        <ReviewNotice isLoggedIn={Boolean(currentUser)} />
+        )}
 
       </ScrollView>
     </KeyboardAvoidingView>
@@ -317,23 +243,7 @@ function InteractiveRating({ rating, onChange }: InteractiveRatingProps) {
 
 
 const styles = StyleSheet.create({
-    reviewNotice: {
-  padding: 16,
-  borderRadius: 6,
-  backgroundColor: '#FFFFFF',
-  marginBottom: 24,
-},
-reviewNoticeTitle: {
-  fontSize: 16,
-  fontWeight: '700',
-  color: '#111111',
-  marginBottom: 6,
-},
-reviewNoticeText: {
-  fontSize: 13,
-  lineHeight: 18,
-  color: '#3F3F3F',
-},
+    
   safeArea: {
     flex: 1,
     backgroundColor: '#F4F4F8',
@@ -442,28 +352,7 @@ reviewNoticeText: {
   reviewList: {
     gap: 10,
   },
-  reviewCard: {
-    paddingHorizontal: 14,
-    paddingVertical: 12,
-    borderRadius: 6,
-    backgroundColor: '#FFFFFF',
-  },
-  reviewHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 8,
-  },
-  reviewAuthor: {
-    flex: 1,
-    fontSize: 14,
-    color: '#111111',
-  },
-  reviewComment: {
-    fontSize: 13,
-    lineHeight: 18,
-    color: '#3F3F3F',
-  },
+  
   allReviewsButton: {
     alignSelf: 'flex-end',
     marginTop: 8,
@@ -473,45 +362,7 @@ reviewNoticeText: {
     color: '#111111',
     textDecorationLine: 'underline',
   },
-  form: {
-    paddingBottom: 24,
-  },
-  inputLabel: {
-    fontSize: 13,
-    color: '#3F3F3F',
-    marginBottom: 5,
-  },
-  input: {
-    minHeight: 44,
-    borderRadius: 6,
-    backgroundColor: '#FFFFFF',
-    paddingHorizontal: 14,
-    fontSize: 15,
-    color: '#111111',
-    marginBottom: 10,
-  },
-  commentInput: {
-    minHeight: 74,
-    paddingTop: 12,
-  },
-  publishButton: {
-    alignSelf: 'flex-end',
-    minHeight: 34,
-    borderRadius: 4,
-    backgroundColor: '#FFD51E',
-    paddingHorizontal: 18,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 20,
-  },
-  publishButtonText: {
-    fontSize: 13,
-    color: '#111111',
-  },
-  formStars: {
-    alignSelf: 'flex-end',
-    marginTop: 16,
-  },
+
   
   emptyText: {
     paddingVertical: 12,
@@ -529,32 +380,8 @@ reviewNoticeText: {
     color: '#111111',
     marginBottom: 16,
   },
-  contactEmojiIcon: {
-  width: 20,
-  fontSize: 18,
-  color: '#5368C9',
-  textAlign: 'center',
-},
-errorText: {
-  fontSize: 13,
-  color: '#C62828',
-  marginTop: -4,
-  marginBottom: 8,
-},
-interactiveRating: {
-  flexDirection: 'row',
-  alignItems: 'center',
-},
-interactiveStar: {
-  fontSize: 22,
-  lineHeight: 24,
-  color: '#FFC107',
-  marginLeft: 2,
-},
-updateHint: {
-  fontSize: 13,
-  lineHeight: 18,
-  color: '#6B6B6B',
-  marginBottom: 12,
-},
+
+
+
+
 });

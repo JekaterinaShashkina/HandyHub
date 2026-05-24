@@ -61,6 +61,7 @@ Masters cannot review other masters.
 Anonymous users cannot leave reviews.
 
 Build React Native home and master detail screens
+
 - Added React Native sample data based on the HandyHub domain model
 - Built the home screen with header, search, expandable categories, master cards and footer
 - Added category icons and HandyHub logo assets
@@ -70,3 +71,12 @@ Build React Native home and master detail screens
 - Unified app icons using @expo/vector-icons
 - Downgraded Expo setup to SDK 54 for Expo Go compatibility
 - Removed Expo starter tabs and template UI
+
+Add local review submission flow
+
+- Added local review creation and update with useState
+- Added one-review-per-client logic
+- Added review form validation
+- Updated displayed rating and reviews count after publishing
+- Added keyboard avoiding behavior for the review form
+- Added role-based review restrictions for clients/masters
