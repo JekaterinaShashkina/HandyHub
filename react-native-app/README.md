@@ -54,3 +54,19 @@ Join our community of developers creating universal apps.
 
 - [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
 - [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+
+
+Only authenticated users with role client can leave reviews.
+Masters cannot review other masters.
+Anonymous users cannot leave reviews.
+
+Build React Native home and master detail screens
+- Added React Native sample data based on the HandyHub domain model
+- Built the home screen with header, search, expandable categories, master cards and footer
+- Added category icons and HandyHub logo assets
+- Added master detail screen with profile info, contacts, reviews and review form layout
+- Added navigation from master cards to the detail screen
+- Added role-based review form visibility for authenticated client users
+- Unified app icons using @expo/vector-icons
+- Downgraded Expo setup to SDK 54 for Expo Go compatibility
+- Removed Expo starter tabs and template UI
