@@ -54,3 +54,41 @@ Join our community of developers creating universal apps.
 
 - [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
 - [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+
+
+Only authenticated users with role client can leave reviews.
+Masters cannot review other masters.
+Anonymous users cannot leave reviews.
+
+Build React Native home and master detail screens
+
+- Added React Native sample data based on the HandyHub domain model
+- Built the home screen with header, search, expandable categories, master cards and footer
+- Added category icons and HandyHub logo assets
+- Added master detail screen with profile info, contacts, reviews and review form layout
+- Added navigation from master cards to the detail screen
+- Added role-based review form visibility for authenticated client users
+- Unified app icons using @expo/vector-icons
+- Downgraded Expo setup to SDK 54 for Expo Go compatibility
+- Removed Expo starter tabs and template UI
+
+Add local review submission flow
+
+- Added local review creation and update with useState
+- Added one-review-per-client logic
+- Added review form validation
+- Updated displayed rating and reviews count after publishing
+- Added keyboard avoiding behavior for the review form
+- Added role-based review restrictions for clients/masters
+
+Refactor master details review flow
+
+- Added local review submission with useState
+- Added review validation for empty comment, missing rating, name and phone
+- Added one-review-per-client logic with update mode
+- Updated displayed rating average and reviews count after review changes
+- Added keyboard avoiding behavior for the review form
+- Extracted master detail review UI into reusable components
+- Added ReviewCard, ReviewNotice, InteractiveRating and ReviewForm components
+- Cleaned up the master details screen structure
+

@@ -1,98 +1,125 @@
-import * as Device from 'expo-device';
-import { Platform, StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useMemo, useState } from 'react';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 
-import { AnimatedIcon } from '@/components/animated-icon';
-import { HintRow } from '@/components/hint-row';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { WebBadge } from '@/components/web-badge';
-import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
+import { useRouter } from 'expo-router';
 
-function getDevMenuHint() {
-  if (Platform.OS === 'web') {
-    return <ThemedText type="small">use browser devtools</ThemedText>;
-  }
-  if (Device.isDevice) {
-    return (
-      <ThemedText type="small">
-        shake device or press <ThemedText type="code">m</ThemedText> in terminal
-      </ThemedText>
-    );
-  }
-  const shortcut = Platform.OS === 'android' ? 'cmd+m (or ctrl+m)' : 'cmd+d';
-  return (
-    <ThemedText type="small">
-      press <ThemedText type="code">{shortcut}</ThemedText>
-    </ThemedText>
-  );
-}
+import { AppHeader } from '@/components/home/AppHeader';
+import { ExpandableCategories } from '@/components/home/ExpandableCategories';
+import { MasterCard } from '@/components/home/MasterCard';
+import { SearchBar } from '@/components/home/SearchBar';
+import { AppFooter } from '@/components/home/AppFooter';
+
+import type { MasterCardItem } from '@/data/handyhub-data';
+import { useHandyHub } from '@/state/HandyHubContext';
 
 export default function HomeScreen() {
+  const router = useRouter();
+  const { categories, getMasterCards } = useHandyHub();
+  const [searchText, setSearchText] = useState('');
+  const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
+
+  const masters: MasterCardItem[] = useMemo(
+      () => getMasterCards(),
+      [getMasterCards]
+    );
+
+  const filteredMasters: MasterCardItem[] = useMemo(() => {
+    const query = searchText.trim().toLowerCase();
+    const selectedCategory = categories.find(
+      (category) => category.id === selectedCategoryId
+    );
+
+    return masters.filter((master: MasterCardItem) => {
+      const matchesSearch =
+        master.fullName.toLowerCase().includes(query) ||
+        master.description.toLowerCase().includes(query) ||
+        master.categoryName.toLowerCase().includes(query);
+
+      const matchesCategory =
+        !selectedCategory || master.categoryName === selectedCategory.name;
+
+      return matchesSearch && matchesCategory;
+    });
+  }, [masters, searchText, selectedCategoryId]);
+
   return (
-    <ThemedView style={styles.container}>
-      <SafeAreaView style={styles.safeArea}>
-        <ThemedView style={styles.heroSection}>
-          <AnimatedIcon />
-          <ThemedText type="title" style={styles.title}>
-            Welcome to&nbsp;Expo
-          </ThemedText>
-        </ThemedView>
+    <View style={styles.safeArea}>
+      <ScrollView
+        style={styles.container}
+        contentContainerStyle={styles.content}
+        showsVerticalScrollIndicator={false}
+      >
+      <AppHeader
+        onAddMasterPress={() => {
+          router.push('/add-master' as never);
+        }}
+      />
 
-        <ThemedText type="code" style={styles.code}>
-          get started
-        </ThemedText>
+        <SearchBar value={searchText} onChangeText={setSearchText} />
 
-        <ThemedView type="backgroundElement" style={styles.stepContainer}>
-          <HintRow
-            title="Try editing"
-            hint={<ThemedText type="code">src/app/index.tsx</ThemedText>}
-          />
-          <HintRow title="Dev tools" hint={getDevMenuHint()} />
-          <HintRow
-            title="Fresh start"
-            hint={<ThemedText type="code">npm run reset-project</ThemedText>}
-          />
-        </ThemedView>
+        <ExpandableCategories
+          categories={categories}
+          selectedCategoryId={selectedCategoryId}
+          onCategoryPress={(category) =>
+            setSelectedCategoryId(
+              selectedCategoryId === category.id ? null : category.id
+            )
+          }
+        />
 
-        {Platform.OS === 'web' && <WebBadge />}
-      </SafeAreaView>
-    </ThemedView>
+        <Text style={styles.sectionTitle}>Masters</Text>
+
+        <View style={styles.masterList}>
+          {filteredMasters.map((master) => (
+            <MasterCard
+              key={master.id}
+              master={master}
+              onPress={() =>
+                router.push({
+                  pathname: '/master/[id]',
+                  params: { id: String(master.id) },
+                })
+              }
+/>
+          ))}
+
+          {filteredMasters.length === 0 && (
+            <Text style={styles.emptyText}>No specialists found</Text>
+          )}
+        </View>
+
+        <AppFooter />
+      </ScrollView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+safeArea: {
+  flex: 1,
+  backgroundColor: '#F4F4F8',
+  paddingTop: 40,
+},
   container: {
     flex: 1,
-    justifyContent: 'center',
-    flexDirection: 'row',
   },
-  safeArea: {
-    flex: 1,
-    paddingHorizontal: Spacing.four,
-    alignItems: 'center',
-    gap: Spacing.three,
-    paddingBottom: BottomTabInset + Spacing.three,
-    maxWidth: MaxContentWidth,
+  content: {
+    padding: 16,
+    paddingBottom: 32,
   },
-  heroSection: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1,
-    paddingHorizontal: Spacing.four,
-    gap: Spacing.four,
+  sectionTitle: {
+    fontSize: 22,
+    fontWeight: '700',
+    color: '#111111',
+    marginBottom: 12,
   },
-  title: {
+
+  masterList: {
+    gap: 14,
+  },
+  emptyText: {
+    paddingVertical: 24,
     textAlign: 'center',
-  },
-  code: {
-    textTransform: 'uppercase',
-  },
-  stepContainer: {
-    gap: Spacing.three,
-    alignSelf: 'stretch',
-    paddingHorizontal: Spacing.three,
-    paddingVertical: Spacing.four,
-    borderRadius: Spacing.four,
+    color: '#6B6B6B',
   },
 });
