@@ -1,8 +1,10 @@
 package com.example.handyhub.ui.components
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ExpandLess
 import androidx.compose.material.icons.outlined.ExpandMore
@@ -12,6 +14,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -56,10 +59,17 @@ fun AppExpandableCategories(
                 modifier = Modifier.padding(bottom = 12.dp)
             ) {
                 categories.forEach { category ->
+                    val isSelected = selectedCategoryId == category.id
+
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable { onCategoryClick(category) },
+                            .clip(RoundedCornerShape(12.dp))
+                            .background(
+                                if (isSelected) Color(0xFFE8EAFB) else Color.Transparent
+                            )
+                            .clickable { onCategoryClick(category) }
+                            .padding(horizontal = 8.dp, vertical = 6.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Icon(

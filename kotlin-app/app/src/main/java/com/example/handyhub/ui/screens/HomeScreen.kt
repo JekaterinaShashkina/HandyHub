@@ -30,11 +30,21 @@ fun HomeScreen (
 
     val masters by viewModel.masters.collectAsState()
     var searchText by remember { mutableStateOf("") }
-    val filteredMasters = masters.filter { master ->
-        master.fullName.contains(searchText, ignoreCase = true) ||
-                master.description.contains(searchText, ignoreCase = true)
-    }
     var selectedCategoryId by remember { mutableStateOf<Int?>(null) }
+
+    val filteredMasters = masters.filter { master ->
+        val matchesSearch = master.fullName.contains(searchText, ignoreCase = true) ||
+                master.description.contains(searchText, ignoreCase = true)||
+                master.categoryName.contains(searchText, ignoreCase = true)
+
+        val matchesCategory =
+            selectedCategoryId == null ||
+                    master.categoryId == selectedCategoryId
+
+        matchesSearch && matchesCategory
+
+    }
+
 
     LazyColumn(
         modifier = Modifier.fillMaxSize(),

@@ -30,17 +30,27 @@ class HomeViewModel(
                 val category = firstService?.let {
                     repository.getCategoryById(it.categoryId)
                 }
+                val reviews = repository.getReviewsByMaster(master.id)
+                val reviewsCount = reviews.size
+                val ratingAvg = if (reviews.isNotEmpty()) {
+                    reviews.map { it.rating }.average()
+                } else {
+                    0.0
+                }
 
                 user?.let {
                     MasterCardUiModel(
                         id = master.id,
                         fullName = "${user.name} ${user.surname}",
+                        phone = user.phone,
+                        email = user.email,
+                        categoryId = category?.id,
                         categoryName = category?.name ?: "Specialist",
                         description = master.description,
                         expYears = master.expYears,
                         priceFrom = master.priceFrom,
-                        ratingAvg = master.ratingAvg,
-                        reviewsCount = master.reviewsCount,
+                        ratingAvg = ratingAvg,
+                        reviewsCount = reviewsCount,
                         avatarUrl = user.avatarUrl
                     )
                 }

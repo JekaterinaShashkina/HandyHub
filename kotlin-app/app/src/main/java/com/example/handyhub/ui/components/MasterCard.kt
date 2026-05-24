@@ -86,17 +86,7 @@ fun MasterCard(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
 
-                    repeat(5) { index ->
-                        Icon(
-                            imageVector =
-                                if (index < master.ratingAvg.toInt())
-                                    Icons.Filled.Star
-                                else
-                                    Icons.Outlined.StarBorder,
-                            contentDescription = null,
-                            tint = Color(0xFFFFC107)
-                        )
-                    }
+                    RatingBar(rating = master.ratingAvg)
                     Spacer(modifier = Modifier.width(8.dp))
                     Icon(
                         imageVector = Icons.Outlined.ChatBubble,

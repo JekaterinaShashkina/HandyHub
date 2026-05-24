@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.handyhub.ui.screens.AddReviewScreen
 import com.example.handyhub.ui.screens.HomeScreen
 import com.example.handyhub.ui.screens.MasterDetailScreen
 import com.example.handyhub.viewmodel.HomeViewModel
@@ -40,9 +41,36 @@ fun AppNavigation(
             MasterDetailScreen(
                 viewModel = masterDetailViewModel,
                 masterId = masterId,
-                onBackClick = { navController.popBackStack() }
+                onBackClick = { navController.popBackStack()},
+                onAddReviewClick = {
+                    navController.navigate(Routes.addReview(masterId))
+                }
             )
 
+        }
+        composable(
+            route = Routes.ADD_REVIEW,
+            arguments = listOf(
+                navArgument("masterId") {
+                    type = NavType.IntType
+                }
+            )
+        ) { backStackEntry ->
+
+            val masterId = backStackEntry
+                .arguments
+                ?.getInt("masterId")
+                ?: 0
+
+            AddReviewScreen(
+                //masterId = masterId,
+                onBackClick = {
+                    navController.popBackStack()
+                },
+                onPublishClick = { name, phone, comment, rating ->
+                    navController.popBackStack()
+                }
+            )
         }
     }
 }
