@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.handyhub.data.repository.HandyHubRepository
 import com.example.handyhub.model.Review
 import com.example.handyhub.model.Service
-import com.example.handyhub.model.User
 import com.example.handyhub.ui.model.MasterCardUiModel
 import com.example.handyhub.ui.model.ReviewWithUser
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -38,7 +37,7 @@ class MasterDetailViewModel(
             val category = firstService?.let {
                 repository.getCategoryById(it.categoryId)
             }
-            val reviewList = repository.getReviewsByMaster(masterId)
+            val reviewList = repository.getReviewsByMasterId(masterId)
             _reviews.value = reviewList
             _reviewsWithUsers.value = reviewList.mapNotNull { review ->
                 val user = repository.getUserById(review.userId)
@@ -75,7 +74,26 @@ class MasterDetailViewModel(
             _services.value = services
             _reviews.value = repository.getReviewsByMaster(masterId)
         }
-
-
     }
+    fun addReview(
+        masterId: Int,
+        userId: Int,
+        rating: Int,
+        comment: String
+    ) {
+        viewModelScope.launch {
+            repository.insertReview(
+                Review(
+                    id = 0,
+                    masterProfileId = masterId,
+                    userId = userId,
+                    rating = rating,
+                    comment = comment,
+                    createdAt = System.currentTimeMillis()
+                )
+            )
+            loadMaster(masterId)
+        }
+    }
+
 }

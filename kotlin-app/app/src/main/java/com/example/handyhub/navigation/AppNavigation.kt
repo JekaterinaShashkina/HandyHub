@@ -8,6 +8,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.handyhub.ui.screens.AddReviewScreen
 import com.example.handyhub.ui.screens.HomeScreen
+import com.example.handyhub.ui.screens.LoginScreen
 import com.example.handyhub.ui.screens.MasterDetailScreen
 import com.example.handyhub.viewmodel.HomeViewModel
 import com.example.handyhub.viewmodel.MasterDetailViewModel
@@ -25,6 +26,9 @@ fun AppNavigation(
                 viewModel = homeViewModel,
                 onMasterClick = { masterId ->
                     navController.navigate(Routes.masterDetail(masterId))
+                },
+                onLoginClick = {
+                    navController.navigate(Routes.LOGIN)
                 }
             )
         }
@@ -44,6 +48,9 @@ fun AppNavigation(
                 onBackClick = { navController.popBackStack()},
                 onAddReviewClick = {
                     navController.navigate(Routes.addReview(masterId))
+                },
+                onLoginClick = {
+                    navController.navigate(Routes.LOGIN)
                 }
             )
 
@@ -63,14 +70,34 @@ fun AppNavigation(
                 ?: 0
 
             AddReviewScreen(
-                //masterId = masterId,
+                masterId = masterId,
                 onBackClick = {
                     navController.popBackStack()
                 },
-                onPublishClick = { name, phone, comment, rating ->
+                onPublishClick = { comment, rating ->
+                    masterDetailViewModel.addReview(
+                        masterId = masterId,
+                        userId = 1, // временно, пока нет логина
+                        rating = rating,
+                        comment = comment
+                    )
                     navController.popBackStack()
                 }
             )
         }
+        composable(Routes.LOGIN) {
+            LoginScreen(
+                onBackClick = {
+                    navController.popBackStack()
+                },
+                onLoginClick = { email, password ->
+                    navController.navigate(Routes.HOME)
+                },
+                onRegisterClick = {
+                    navController.navigate(Routes.REGISTER_ROLE)
+                },
+            )
+        }
+
     }
 }

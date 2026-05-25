@@ -42,5 +42,10 @@ val Typography = Typography(
         fontFamily = Roboto,
         fontWeight = FontWeight.Bold,
         fontSize = 16.sp
+    ),
+    headlineMedium = TextStyle(
+        fontFamily = Roboto,
+        fontWeight = FontWeight.Bold,
+        fontSize = 18.sp
     )
 )

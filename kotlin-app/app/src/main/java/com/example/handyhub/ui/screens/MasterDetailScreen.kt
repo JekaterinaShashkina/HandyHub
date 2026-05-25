@@ -15,6 +15,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.handyhub.ui.components.AppHeader
 import com.example.handyhub.ui.components.MasterInfoCard
 import com.example.handyhub.ui.components.MasterProfileCard
 import com.example.handyhub.ui.components.MasterReviewSection
@@ -25,7 +26,8 @@ fun MasterDetailScreen(
     masterId: Int,
     viewModel: MasterDetailViewModel,
     onBackClick: () -> Unit,
-    onAddReviewClick: () -> Unit
+    onAddReviewClick: () -> Unit,
+    onLoginClick: () -> Unit
 ) {
     LaunchedEffect(masterId) {
         viewModel.loadMaster(masterId)
@@ -39,15 +41,17 @@ fun MasterDetailScreen(
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .padding(20.dp)
+            .padding(24.dp, 32.dp)
     ) {
         item {
-            IconButton(onClick = onBackClick) {
-                Icon(
-                    imageVector = Icons.Outlined.ArrowBack,
-                    contentDescription = "Back"
-                )
-            }
+            AppHeader(
+                title = "Master details",
+                showBack = true,
+                isLoggedIn = false,
+                onBackClick = onBackClick,
+                onLoginClick = onLoginClick,
+                onProfileClick = { TODO() }
+            )
         }
         master?.let { item ->
             item {

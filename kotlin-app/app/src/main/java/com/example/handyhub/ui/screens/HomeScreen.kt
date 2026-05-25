@@ -15,6 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.handyhub.navigation.Routes
 import com.example.handyhub.ui.components.AppExpandableCategories
 import com.example.handyhub.ui.components.AppHeader
 import com.example.handyhub.ui.components.AppSearchBar
@@ -24,7 +25,8 @@ import com.example.handyhub.viewmodel.HomeViewModel
 @Composable
 fun HomeScreen (
     viewModel: HomeViewModel,
-    onMasterClick: (Int) -> Unit
+    onMasterClick: (Int) -> Unit,
+    onLoginClick: () -> Unit
 ){
     val categories by viewModel.categories.collectAsState()
 
@@ -48,11 +50,16 @@ fun HomeScreen (
 
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(16.dp)
+        contentPadding = PaddingValues(24.dp, 32.dp)
 
     ) {
         item {
-            AppHeader()
+            AppHeader(
+                showLogo = true,
+                isLoggedIn = false,
+                onLoginClick = onLoginClick ,
+                onProfileClick = {TODO()}
+            )
         }
         item {
             AppSearchBar(
