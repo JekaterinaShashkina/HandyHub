@@ -97,11 +97,9 @@ object SampleData {
         MasterProfile(
             id = 1,
             userId = 1,
-            description = "Professional manicure master with 5 years of experience.",
+            description = "Professional manicure master with 5 years of experience. Professional manicure master with 5 years of experience.Professional manicure master with 5 years of experience.Professional manicure master with 5 years of experience.Professional manicure master with 5 years of experience.Professional manicure master with 5 years of experience.Professional manicure master with 5 years of experience.Professional manicure master with 5 years of experience.Professional manicure master with 5 years of experience.",
             expYears = 5,
             priceFrom = 25.0,
-            ratingAvg = 4.8,
-            reviewsCount = 12,
             isActive = true,
             createdAt = System.currentTimeMillis(),
             updatedAt = System.currentTimeMillis()
@@ -112,8 +110,6 @@ object SampleData {
             description = "Certified electrician for apartments and houses.",
             expYears = 8,
             priceFrom = 40.0,
-            ratingAvg = 4.6,
-            reviewsCount = 8,
             isActive = true,
             createdAt = System.currentTimeMillis(),
             updatedAt = System.currentTimeMillis()
@@ -144,7 +140,19 @@ object SampleData {
             duration = 60,
             createdAt = System.currentTimeMillis(),
             updatedAt = System.currentTimeMillis()
-        )
+        ),
+        Service(
+            id = 3,
+            masterProfileId = 1,
+            categoryId = 1,
+            title = "Gel Removing",
+            description = "Gel polish gentle removing of nails.",
+            price = 15.0,
+            priceType = "fixed",
+            duration = 60,
+            createdAt = System.currentTimeMillis(),
+            updatedAt = System.currentTimeMillis()
+        ),
     )
 
     val reviews = listOf(
@@ -160,10 +168,18 @@ object SampleData {
             id = 2,
             userId = 3,
             masterProfileId = 2,
-            rating = 4,
+            rating = 5,
             comment = "Work was completed quickly and neatly.",
             createdAt = System.currentTimeMillis()
-        )
+        ),
+        Review(
+        id = 3,
+        userId = 2,
+        masterProfileId = 1,
+        rating = 3,
+        comment = "Work was completed quickly but not very nice.",
+        createdAt = System.currentTimeMillis()
+    )
     )
 
     suspend fun seedDatabase(repository: HandyHubRepository) {

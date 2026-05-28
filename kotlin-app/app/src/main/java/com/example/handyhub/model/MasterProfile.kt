@@ -23,8 +23,8 @@ data class MasterProfile(
     val description: String,
     val expYears: Int,
     val priceFrom: Double,
-    val ratingAvg: Double,
-    val reviewsCount: Int,
+    // val ratingAvg: Double,
+    //val reviewsCount: Int,
     val isActive: Boolean,
     val createdAt: Long,
     val updatedAt: Long

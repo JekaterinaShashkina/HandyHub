@@ -15,6 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.handyhub.navigation.Routes
 import com.example.handyhub.ui.components.AppExpandableCategories
 import com.example.handyhub.ui.components.AppHeader
 import com.example.handyhub.ui.components.AppSearchBar
@@ -24,25 +25,41 @@ import com.example.handyhub.viewmodel.HomeViewModel
 @Composable
 fun HomeScreen (
     viewModel: HomeViewModel,
-    onMasterClick: (Int) -> Unit
+    onMasterClick: (Int) -> Unit,
+    onLoginClick: () -> Unit
 ){
     val categories by viewModel.categories.collectAsState()
 
     val masters by viewModel.masters.collectAsState()
     var searchText by remember { mutableStateOf("") }
-    val filteredMasters = masters.filter { master ->
-        master.fullName.contains(searchText, ignoreCase = true) ||
-                master.description.contains(searchText, ignoreCase = true)
-    }
     var selectedCategoryId by remember { mutableStateOf<Int?>(null) }
+
+    val filteredMasters = masters.filter { master ->
+        val matchesSearch = master.fullName.contains(searchText, ignoreCase = true) ||
+                master.description.contains(searchText, ignoreCase = true)||
+                master.categoryName.contains(searchText, ignoreCase = true)
+
+        val matchesCategory =
+            selectedCategoryId == null ||
+                    master.categoryId == selectedCategoryId
+
+        matchesSearch && matchesCategory
+
+    }
+
 
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(16.dp)
+        contentPadding = PaddingValues(24.dp, 32.dp)
 
     ) {
         item {
-            AppHeader()
+            AppHeader(
+                showLogo = true,
+                isLoggedIn = false,
+                onLoginClick = onLoginClick ,
+                onProfileClick = {TODO()}
+            )
         }
         item {
             AppSearchBar(
