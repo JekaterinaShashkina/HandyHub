@@ -32,6 +32,9 @@ class HandyHubRepository(
     suspend fun getUserById(userId: Int): User? {
         return database.userDao().getUserById(userId)
     }
+    suspend fun getUserByEmail(email: String): User? {
+        return database.userDao().getUserByEmail(email)
+    }
     suspend fun getReviewsByMaster(masterProfileId: Int): List<Review> {
         return database.reviewDao().getReviewsByMaster(masterProfileId)
     }
@@ -47,8 +50,8 @@ class HandyHubRepository(
     suspend fun insertReview(review: Review) {
         database.reviewDao().insertReview(review)
     }
-    suspend fun insertUser(user: User) {
-        database.userDao().insertUser(user)
+    suspend fun insertUser(user: User): Long{
+       return database.userDao().insertUser(user)
     }
     suspend fun insertRole(role: Role) {
         database.roleDao().insertRole(role)

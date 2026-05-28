@@ -8,6 +8,7 @@ import com.example.handyhub.model.Review
 import com.example.handyhub.model.Role
 import com.example.handyhub.model.Service
 import com.example.handyhub.model.User
+import com.example.handyhub.utils.security.PasswordHasher
 
 object SampleData {
 
@@ -53,6 +54,9 @@ object SampleData {
             iconUrl = "cosmetologist"
         ),
     )
+    val salt1 = PasswordHasher.generateSalt()
+    val salt2 = PasswordHasher.generateSalt()
+    val salt3 = PasswordHasher.generateSalt()
 
     val users = listOf(
         User(
@@ -61,11 +65,12 @@ object SampleData {
             surname = "Petrova",
             email = "anna@example.com",
             phone = "+37255550001",
-            passwordHash = "hash1",
+            passwordHash = PasswordHasher.hashPassword("123456", salt1),
+            passwordSalt = salt1,
             roleId = 2,
             avatarUrl = R.drawable.master_photo_1,
             createdAt = System.currentTimeMillis(),
-            updatedAt = System.currentTimeMillis()
+            updatedAt = System.currentTimeMillis(),
         ),
         User(
             id = 2,
@@ -73,11 +78,12 @@ object SampleData {
             surname = "Ivanov",
             email = "maksim@example.com",
             phone = "+37255550002",
-            passwordHash = "hash2",
+            passwordHash = PasswordHasher.hashPassword("123456", salt2),
+            passwordSalt = salt2,
             roleId = 2,
             avatarUrl = R.drawable.master_photo_2,
             createdAt = System.currentTimeMillis(),
-            updatedAt = System.currentTimeMillis()
+            updatedAt = System.currentTimeMillis(),
         ),
         User(
             id = 3,
@@ -85,7 +91,8 @@ object SampleData {
             surname = "Smirnova",
             email = "olga@example.com",
             phone = "+37255550003",
-            passwordHash = "hash3",
+            passwordHash = PasswordHasher.hashPassword("123456", salt3),
+            passwordSalt = salt3,
             roleId = 1,
             avatarUrl = R.drawable.master_photo_1,
             createdAt = System.currentTimeMillis(),
