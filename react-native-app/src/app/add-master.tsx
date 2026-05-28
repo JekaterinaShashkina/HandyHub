@@ -99,6 +99,9 @@ export default function AddMasterScreen() {
         <Stack.Screen options={{ headerShown: false }} />
 
         <View style={styles.notice}>
+          <Pressable style={styles.backButtonLight} onPress={() => router.back()}>
+            <Text style={styles.backButtonLightText}>Back</Text>
+          </Pressable>
           <Text style={styles.noticeTitle}>Specialist registration</Text>
           <Text style={styles.noticeText}>
             Only users with a master role can register a specialist profile.
@@ -477,4 +480,19 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#111111',
   },
+  backButtonLight: {
+  alignSelf: 'flex-start',
+  minHeight: 38,
+  paddingHorizontal: 14,
+  borderRadius: 19,
+  backgroundColor: '#FFFFFF',
+  alignItems: 'center',
+  justifyContent: 'center',
+  marginBottom: 14,
+},
+backButtonLightText: {
+  fontSize: 14,
+  fontWeight: '700',
+  color: '#111111',
+},
 });

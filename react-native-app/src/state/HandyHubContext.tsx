@@ -1,4 +1,11 @@
-import { createContext, useContext, useMemo, useState, type ReactNode } from 'react';
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+  type ReactNode,
+} from 'react';
 
 import {
   categories as initialCategories,
@@ -15,6 +22,14 @@ import {
   type Service,
   type User,
 } from '@/data/handyhub-data';
+import {
+  initializeDatabase,
+  insertMasterProfile,
+  insertReview,
+  insertService,
+  insertUser,
+  loadDatabaseSnapshot,
+} from '@/database/handyhub-db';
 
 type NewReviewInput = {
   masterId: number;
@@ -38,26 +53,70 @@ type AddMasterInput = {
 type HandyHubState = {
   categories: Category[];
   currentUser: User | null;
+  isDatabaseReady: boolean;
   getMasterCards: () => MasterCardItem[];
   getMasterDetails: (masterId: number) => MasterDetails | undefined;
   upsertReview: (input: NewReviewInput) => void;
   addMaster: (input: AddMasterInput) => void;
+  login: (email: string, password: string) => boolean;
+  logout: () => void;
+  hasMasterProfile: (userId: number) => boolean;
 };
 
 const HandyHubContext = createContext<HandyHubState | undefined>(undefined);
 
 export function HandyHubProvider({ children }: { children: ReactNode }) {
+  const [categories, setCategories] = useState<Category[]>(initialCategories);
   const [users, setUsers] = useState<User[]>(initialUsers);
   const [masterProfiles, setMasterProfiles] = useState<MasterProfile[]>(
     initialMasterProfiles
   );
   const [services, setServices] = useState<Service[]>(initialServices);
   const [reviews, setReviews] = useState<Review[]>(initialReviews);
-  const [currentUser] = useState<User | null>(initialCurrentUser);
+  const [currentUser, setCurrentUser] = useState<User | null>(initialCurrentUser);
+  const [isDatabaseReady, setIsDatabaseReady] = useState(false);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function loadFromDatabase() {
+      try {
+        await initializeDatabase();
+        const snapshot = await loadDatabaseSnapshot();
+
+        if (!isMounted) {
+          return;
+        }
+
+        setCategories(snapshot.categories);
+        setUsers(snapshot.users);
+        setMasterProfiles(snapshot.masterProfiles);
+        setServices(snapshot.services);
+        setReviews(snapshot.reviews);
+      } catch (error) {
+        console.warn('Failed to initialize HandyHub database', error);
+      } finally {
+        if (isMounted) {
+          setIsDatabaseReady(true);
+        }
+      }
+    }
+
+    loadFromDatabase();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const value = useMemo<HandyHubState>(() => {
+
     function getReviewsForMaster(masterId: number) {
       return reviews.filter((review) => review.masterId === masterId);
+    }
+
+    function hasMasterProfile(userId: number) {
+      return masterProfiles.some((master) => master.userId === userId);
     }
 
     function getRatingAvg(masterId: number) {
@@ -78,7 +137,7 @@ export function HandyHubProvider({ children }: { children: ReactNode }) {
       return masterProfiles.map((master) => {
         const user = users.find((item) => item.id === master.userId);
         const service = services.find((item) => item.masterId === master.id);
-        const category = initialCategories.find(
+        const category = categories.find(
           (item) => item.id === service?.categoryId
         );
         const masterReviews = getReviewsForMaster(master.id);
@@ -106,7 +165,7 @@ export function HandyHubProvider({ children }: { children: ReactNode }) {
       const user = users.find((item) => item.id === master.userId);
       const masterServices = services.filter((item) => item.masterId === master.id);
       const mainService = masterServices[0];
-      const mainCategory = initialCategories.find(
+      const mainCategory = categories.find(
         (item) => item.id === mainService?.categoryId
       );
 
@@ -135,9 +194,7 @@ export function HandyHubProvider({ children }: { children: ReactNode }) {
         ratingAvg: getRatingAvg(master.id),
         reviewsCount: masterReviews.length,
         services: masterServices.map((service) => {
-          const category = initialCategories.find(
-            (item) => item.id === service.categoryId
-          );
+          const category = categories.find((item) => item.id === service.categoryId);
 
           return {
             id: service.id,
@@ -168,6 +225,10 @@ export function HandyHubProvider({ children }: { children: ReactNode }) {
           comment: input.comment,
           createdAt: existingReview?.createdAt ?? new Date().toISOString(),
         };
+
+        insertReview(payload).catch((error) => {
+          console.warn('Failed to save review', error);
+        });
 
         if (existingReview) {
           return prevReviews.map((review) =>
@@ -223,20 +284,62 @@ export function HandyHubProvider({ children }: { children: ReactNode }) {
         updatedAt: timestamp,
       };
 
+      insertUser(newUser).catch((error) => {
+        console.warn('Failed to save user', error);
+      });
+      insertMasterProfile(newMaster).catch((error) => {
+        console.warn('Failed to save master profile', error);
+      });
+      insertService(newService).catch((error) => {
+        console.warn('Failed to save service', error);
+      });
+
       setUsers((prevUsers) => [...prevUsers, newUser]);
       setMasterProfiles((prevMasters) => [...prevMasters, newMaster]);
       setServices((prevServices) => [...prevServices, newService]);
     }
+    function login(email: string, password: string) {
+      const normalizedEmail = email.trim().toLowerCase();
+
+      const foundUser = users.find(
+        (user) =>
+          user.email.toLowerCase() === normalizedEmail &&
+          user.passwordHash === password
+      );
+
+      if (!foundUser) {
+        return false;
+      }
+
+      setCurrentUser(foundUser);
+      return true;
+    }
+
+    function logout() {
+      setCurrentUser(null);
+    }
 
     return {
-      categories: initialCategories,
+      categories,
       currentUser,
+      isDatabaseReady,
       getMasterCards,
       getMasterDetails,
       upsertReview,
       addMaster,
+      login,
+      logout,
+      hasMasterProfile,
     };
-  }, [currentUser, masterProfiles, reviews, services, users]);
+  }, [
+    categories,
+    currentUser,
+    isDatabaseReady,
+    masterProfiles,
+    reviews,
+    services,
+    users,
+  ]);
 
   return (
     <HandyHubContext.Provider value={value}>

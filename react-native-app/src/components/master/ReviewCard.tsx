@@ -1,4 +1,5 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { useState } from 'react';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { RatingStars } from '@/components/common/RatingStars';
 import type { MasterDetails } from '@/data/handyhub-data';
@@ -9,7 +10,14 @@ type ReviewCardProps = {
   review: ReviewItem;
 };
 
+const COLLAPSED_LINES = 2;
+
 export function ReviewCard({ review }: ReviewCardProps) {
+  const [expanded, setExpanded] = useState(false);
+  const [lineCount, setLineCount] = useState(0);
+
+  const isLongComment = lineCount > COLLAPSED_LINES;
+
   return (
     <View style={styles.card}>
       <View style={styles.header}>
@@ -17,9 +25,31 @@ export function ReviewCard({ review }: ReviewCardProps) {
         <RatingStars rating={review.rating} />
       </View>
 
-      <Text style={styles.comment} numberOfLines={2}>
-        {review.comment}
-      </Text>
+      <View>
+        <Text
+          style={styles.hiddenMeasureText}
+          onTextLayout={(event) => {
+            setLineCount(event.nativeEvent.lines.length);
+          }}
+        >
+          {review.comment}
+        </Text>
+
+        <Text
+          style={styles.comment}
+          numberOfLines={expanded ? undefined : COLLAPSED_LINES}
+        >
+          {review.comment}
+        </Text>
+      </View>
+
+      {isLongComment && (
+        <Pressable onPress={() => setExpanded((value) => !value)}>
+          <Text style={styles.toggleText}>
+            {expanded ? 'Collapse' : 'Expand'}
+          </Text>
+        </Pressable>
+      )}
     </View>
   );
 }
@@ -42,9 +72,24 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#111111',
   },
+  hiddenMeasureText: {
+    position: 'absolute',
+    opacity: 0,
+    zIndex: -1,
+    fontSize: 13,
+    lineHeight: 18,
+    color: '#3F3F3F',
+  },
   comment: {
     fontSize: 13,
     lineHeight: 18,
     color: '#3F3F3F',
+  },
+  toggleText: {
+    alignSelf: 'flex-start',
+    fontSize: 13,
+    color: '#111111',
+    textDecorationLine: 'underline',
+    marginTop: 2,
   },
 });

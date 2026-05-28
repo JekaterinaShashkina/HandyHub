@@ -1,15 +1,20 @@
 import { Feather } from '@expo/vector-icons';
 import { Image, Pressable, StyleSheet, View } from 'react-native';
+
 import { canAddMaster } from '@/data/handyhub-data';
 import { useHandyHub } from '@/state/HandyHubContext';
 
 type AppHeaderProps = {
   onAddMasterPress?: () => void;
+  onLoginPress?: () => void;
 };
 
-export function AppHeader({ onAddMasterPress }: AppHeaderProps) {
-  const { currentUser } = useHandyHub();
-  const showAddMaster = canAddMaster(currentUser);
+export function AppHeader({ onAddMasterPress, onLoginPress }: AppHeaderProps) {
+  const { currentUser, logout, hasMasterProfile } = useHandyHub();
+  const showAddMaster =
+    canAddMaster(currentUser) &&
+    currentUser !== null &&
+    !hasMasterProfile(currentUser.id);
 
   return (
     <View style={styles.header}>
@@ -26,13 +31,21 @@ export function AppHeader({ onAddMasterPress }: AppHeaderProps) {
           </Pressable>
         )}
 
-        <Pressable style={styles.iconButton}>
-          <Feather name="log-in" size={28} color="#111111" />
-        </Pressable>
+        {currentUser ? (
+          <>
+            <Pressable style={styles.iconButton} onPress={logout}>
+              <Feather name="log-out" size={28} color="#111111" />
+            </Pressable>
 
-        <Pressable style={styles.iconButton}>
-          <Feather name="user" size={28} color="#111111" />
-        </Pressable>
+            <Pressable style={styles.iconButton}>
+              <Feather name="user" size={28} color="#111111" />
+            </Pressable>
+          </>
+        ) : (
+          <Pressable style={styles.iconButton} onPress={onLoginPress}>
+            <Feather name="log-in" size={28} color="#111111" />
+          </Pressable>
+        )}
       </View>
     </View>
   );
