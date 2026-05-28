@@ -66,6 +66,7 @@ export type MasterCardItem = {
   priceFrom: number;
   ratingAvg: number;
   reviewsCount: number;
+  avatarUrl?: string;
 };
 
 const now = new Date().toISOString();
@@ -238,6 +239,7 @@ export type MasterDetails = {
   priceFrom: number;
   ratingAvg: number;
   reviewsCount: number;
+  avatarUrl?: string;
   services: Array<{
     id: number;
     title: string;
@@ -246,6 +248,7 @@ export type MasterDetails = {
     priceType: Service['priceType'];
     durationMin: number;
     categoryName: string;
+
   }>;
   reviews: Array<{
     id: number;

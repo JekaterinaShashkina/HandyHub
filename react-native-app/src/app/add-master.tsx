@@ -10,12 +10,16 @@ import {
   Text,
   TextInput,
   View,
+  Image,
 } from 'react-native';
 
 import {
   canAddMaster,
 } from '@/data/handyhub-data';
 import { useHandyHub } from '@/state/HandyHubContext';
+import * as FileSystem from 'expo-file-system/legacy';
+import * as ImagePicker from 'expo-image-picker';
+
 
 export default function AddMasterScreen() {
   const router = useRouter();
@@ -36,11 +40,43 @@ export default function AddMasterScreen() {
   const [passwordRepeat, setPasswordRepeat] = useState('');
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [passwordRepeatVisible, setPasswordRepeatVisible] = useState(false);
-  const [avatarName, setAvatarName] = useState('');
+  const [avatarUri, setAvatarUri] = useState('');
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
 
   const selectedCategory = categories.find((category) => category.id === categoryId);
+
+  async function handlePickAvatar() {
+  const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+  if (!permission.granted) {
+    setError('Permission to access photos is required.');
+    return;
+  }
+
+  const result = await ImagePicker.launchImageLibraryAsync({
+    mediaTypes: ImagePicker.MediaTypeOptions.Images,
+    allowsEditing: true,
+    aspect: [1, 1],
+    quality: 0.8,
+  });
+
+  if (result.canceled) {
+    return;
+  }
+
+  const asset = result.assets[0];
+  const fileName = `avatar-${Date.now()}.jpg`;
+  const destination = `${FileSystem.documentDirectory}${fileName}`;
+
+  await FileSystem.copyAsync({
+    from: asset.uri,
+    to: destination,
+  });
+
+  setAvatarUri(destination);
+  setError('');
+}
 
   function handleSubmit() {
     const requiredFields = [
@@ -73,19 +109,49 @@ export default function AddMasterScreen() {
       setError('Passwords do not match.');
       return;
     }
-    addMaster({
-    name: name.trim(),
-    surname: surname.trim(),
-    phone: phone.trim(),
-    email: email.trim(),
-    password,
-    categoryId,
-    priceType,
-    price: Number(price),
-    description: description.trim(),
+
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailPattern.test(email.trim())) {
+      setError('Please enter a valid email address.');
+      return;
+    }
+
+    if (phone.trim().length < 6) {
+      setError('Please enter a valid phone number.');
+      return;
+    }
+
+    if (!Number.isFinite(Number(price)) || Number(price) <= 0) {
+      setError('Please enter a valid price.');
+      return;
+    }
+
+    if (password.length < 4) {
+      setError('Password must be at least 4 characters.');
+      return;
+    }
+
+    const result = addMaster({
+      name: name.trim(),
+      surname: surname.trim(),
+      phone: phone.trim(),
+      email: email.trim(),
+      password,
+      categoryId,
+      priceType,
+      price: Number(price),
+      description: description.trim(),
+      avatarUrl: avatarUri || undefined,
     });
+
+    if (!result.success) {
+      setError(result.error ?? 'Specialist registration failed.');
+      return;
+    }
+
     setError('');
-    setSuccessMessage('Specialist profile saved locally.');
+    setSuccessMessage('Specialist profile saved.');
 
 
     setTimeout(() => {
@@ -231,14 +297,17 @@ export default function AddMasterScreen() {
         />
 
         <Text style={styles.label}>Set avatar</Text>
-        <Pressable
-          style={styles.uploadButton}
-          onPress={() => setAvatarName('avatar-selected.png')}
-        >
-          <Text style={styles.uploadButtonText}>
-            {avatarName || 'Upload file'}
-          </Text>
-        </Pressable>
+        <View style={styles.avatarRow}>
+          {avatarUri ? (
+            <Image source={{ uri: avatarUri }} style={styles.avatarPreview} />
+          ) : null}
+
+          <Pressable style={styles.uploadButton} onPress={handlePickAvatar}>
+            <Text style={styles.uploadButtonText}>
+              {avatarUri ? 'Change file' : 'Upload file'}
+            </Text>
+          </Pressable>
+        </View>
 
         {error ? <Text style={styles.errorText}>{error}</Text> : null}
         {successMessage ? <Text style={styles.successText}>{successMessage}</Text> : null}
@@ -419,8 +488,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 8,
-    marginBottom: 28,
   },
   uploadButtonText: {
     fontSize: 14,
@@ -494,5 +561,18 @@ backButtonLightText: {
   fontSize: 14,
   fontWeight: '700',
   color: '#111111',
+},
+avatarRow: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  gap: 12,
+  marginTop: 8,
+  marginBottom: 28,
+},
+avatarPreview: {
+  width: 52,
+  height: 52,
+  borderRadius: 26,
+  backgroundColor: '#D9DCE5',
 },
 });

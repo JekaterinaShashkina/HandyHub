@@ -48,6 +48,15 @@ type AddMasterInput = {
   priceType: Service['priceType'];
   price: number;
   description: string;
+  avatarUrl?: string;
+};
+type RegisterClientInput = {
+  name: string;
+  surname: string;
+  phone: string;
+  email: string;
+  password: string;
+  avatarUrl?: string;
 };
 
 type HandyHubState = {
@@ -57,11 +66,14 @@ type HandyHubState = {
   getMasterCards: () => MasterCardItem[];
   getMasterDetails: (masterId: number) => MasterDetails | undefined;
   upsertReview: (input: NewReviewInput) => void;
-  addMaster: (input: AddMasterInput) => void;
+  addMaster: (input: AddMasterInput) => { success: boolean; error?: string };
   login: (email: string, password: string) => boolean;
   logout: () => void;
   hasMasterProfile: (userId: number) => boolean;
+  registerClient: (input: RegisterClientInput) => { success: boolean; error?: string };
+  
 };
+
 
 const HandyHubContext = createContext<HandyHubState | undefined>(undefined);
 
@@ -151,6 +163,7 @@ export function HandyHubProvider({ children }: { children: ReactNode }) {
           priceFrom: master.priceFrom,
           ratingAvg: getRatingAvg(master.id),
           reviewsCount: masterReviews.length,
+          avatarUrl: user?.avatarUrl,
         };
       });
     }
@@ -179,6 +192,7 @@ export function HandyHubProvider({ children }: { children: ReactNode }) {
           rating: review.rating,
           comment: review.comment,
           createdAt: review.createdAt,
+          avatarUrl: user?.avatarUrl,
         };
       });
 
@@ -207,6 +221,7 @@ export function HandyHubProvider({ children }: { children: ReactNode }) {
           };
         }),
         reviews: masterReviews,
+        avatarUrl: user?.avatarUrl,
       };
     }
 
@@ -241,6 +256,49 @@ export function HandyHubProvider({ children }: { children: ReactNode }) {
     }
 
     function addMaster(input: AddMasterInput) {
+      const name = input.name.trim();
+      const surname = input.surname.trim();
+      const normalizedPhone = input.phone.trim();
+      const normalizedEmail = input.email.trim().toLowerCase();
+      const password = input.password.trim();
+      const description = input.description.trim();
+
+      if (
+        !name ||
+        !surname ||
+        !normalizedPhone ||
+        !normalizedEmail ||
+        !password ||
+        !description ||
+        !input.categoryId ||
+        !Number.isFinite(input.price) || input.price <= 0
+      ) {
+        return {
+          success: false,
+          error: 'Please fill in all fields correctly.',
+        };
+      }
+
+      const emailExists = users.some(
+        (user) => user.email.toLowerCase() === normalizedEmail
+      );
+
+      if (emailExists) {
+        return {
+          success: false,
+          error: 'User with this email already exists.',
+        };
+      }
+
+      const phoneExists = users.some((user) => user.phone.trim() === normalizedPhone);
+
+      if (phoneExists) {
+        return {
+          success: false,
+          error: 'User with this phone already exists.',
+        };
+      }
+
       const userId = Date.now();
       const masterId = userId + 1;
       const serviceId = userId + 2;
@@ -248,20 +306,22 @@ export function HandyHubProvider({ children }: { children: ReactNode }) {
 
       const newUser: User = {
         id: userId,
-        name: input.name,
-        surname: input.surname,
-        email: input.email,
-        phone: input.phone,
-        passwordHash: input.password,
+        name,
+        surname,
+        email: normalizedEmail,
+        phone: normalizedPhone,
+        passwordHash: password,
         roleId: 2,
+        avatarUrl: input.avatarUrl,
         createdAt: timestamp,
         updatedAt: timestamp,
+
       };
 
       const newMaster: MasterProfile = {
         id: masterId,
         userId,
-        description: input.description,
+        description,
         expYears: 0,
         priceFrom: input.price,
         ratingAvg: 0,
@@ -275,8 +335,8 @@ export function HandyHubProvider({ children }: { children: ReactNode }) {
         id: serviceId,
         masterId,
         categoryId: input.categoryId,
-        title: input.description.slice(0, 32) || 'Service',
-        description: input.description,
+        title: description.slice(0, 32) || 'Service',
+        description,
         price: input.price,
         priceType: input.priceType,
         durationMin: 60,
@@ -297,6 +357,68 @@ export function HandyHubProvider({ children }: { children: ReactNode }) {
       setUsers((prevUsers) => [...prevUsers, newUser]);
       setMasterProfiles((prevMasters) => [...prevMasters, newMaster]);
       setServices((prevServices) => [...prevServices, newService]);
+      setCurrentUser(newUser);
+
+      return { success: true };
+    }
+
+    function registerClient(input: RegisterClientInput) {
+      const name = input.name.trim();
+      const surname = input.surname.trim();
+      const normalizedEmail = input.email.trim().toLowerCase();
+      const normalizedPhone = input.phone.trim();
+      const password = input.password.trim();
+
+      if (!name || !surname || !normalizedEmail || !normalizedPhone || !password) {
+        return {
+          success: false,
+          error: 'Please fill in all fields.',
+        };
+      }
+
+      const emailExists = users.some(
+        (user) => user.email.toLowerCase() === normalizedEmail
+      );
+
+      if (emailExists) {
+        return {
+          success: false,
+          error: 'User with this email already exists.',
+        };
+      }
+
+      const phoneExists = users.some((user) => user.phone.trim() === normalizedPhone);
+
+      if (phoneExists) {
+        return {
+          success: false,
+          error: 'User with this phone already exists.',
+        };
+      }
+
+      const timestamp = new Date().toISOString();
+
+      const newUser: User = {
+        id: Date.now(),
+        name,
+        surname,
+        email: normalizedEmail,
+        phone: normalizedPhone,
+        passwordHash: password,
+        roleId: 1,
+        createdAt: timestamp,
+        updatedAt: timestamp,
+          avatarUrl: input.avatarUrl,
+      };
+
+      insertUser(newUser).catch((error) => {
+        console.warn('Failed to save client user', error);
+      });
+
+      setUsers((prevUsers) => [...prevUsers, newUser]);
+      setCurrentUser(newUser);
+
+      return { success: true };
     }
     function login(email: string, password: string) {
       const normalizedEmail = email.trim().toLowerCase();
@@ -330,6 +452,7 @@ export function HandyHubProvider({ children }: { children: ReactNode }) {
       login,
       logout,
       hasMasterProfile,
+      registerClient,
     };
   }, [
     categories,

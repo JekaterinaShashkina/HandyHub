@@ -115,3 +115,15 @@ Add shared HandyHub state
 Для отчёта это можно формулировать так:
 
 Both applications use the same domain model and SQLite schema, but each platform stores data locally in its own SQLite database.
+
+git commit -m "Add SQLite persistence and login flow"
+
+- Added expo-sqlite database layer with HandyHub schema and seed data
+- Connected shared HandyHub state to SQLite persistence
+- Persisted reviews and added masters across app restarts
+- Added login flow with role-based current user state
+- Added logout action and conditional header icons
+- Hid profile icon for guest users
+- Hid add-master action for masters that already have a profile
+- Added Back buttons to login and add-master screens
+- Added expandable review text for long comments

@@ -11,6 +11,7 @@ type AppHeaderProps = {
 
 export function AppHeader({ onAddMasterPress, onLoginPress }: AppHeaderProps) {
   const { currentUser, logout, hasMasterProfile } = useHandyHub();
+  console.log('HEADER USER AVATAR:', currentUser?.avatarUrl);
   const showAddMaster =
     canAddMaster(currentUser) &&
     currentUser !== null &&
@@ -38,7 +39,14 @@ export function AppHeader({ onAddMasterPress, onLoginPress }: AppHeaderProps) {
             </Pressable>
 
             <Pressable style={styles.iconButton}>
-              <Feather name="user" size={28} color="#111111" />
+              {currentUser.avatarUrl ? (
+                <Image
+                  source={{ uri: currentUser.avatarUrl }}
+                  style={styles.userAvatar}
+                />
+              ) : (
+                <Feather name="user" size={28} color="#111111" />
+              )}
             </Pressable>
           </>
         ) : (
@@ -74,4 +82,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  userAvatar: {
+  width: 32,
+  height: 32,
+  borderRadius: 16,
+  backgroundColor: '#D9DCE5',
+},
 });

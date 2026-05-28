@@ -58,7 +58,7 @@ export async function initializeDatabase() {
       name TEXT NOT NULL,
       surname TEXT NOT NULL,
       email TEXT NOT NULL UNIQUE,
-      phone TEXT NOT NULL,
+      phone TEXT NOT NULL UNIQUE,
       password_hash TEXT NOT NULL,
       role_id INTEGER NOT NULL,
       avatar_url TEXT,

@@ -7,6 +7,7 @@ import {
   StyleSheet,
   Text,
   View,
+  Image,
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { RatingStars } from '@/components/common/RatingStars';
@@ -150,9 +151,13 @@ function MailIcon() {
         <View style={styles.profileCard}>
           <View style={styles.profileTop}>
             <View style={styles.avatar}>
-              <Text style={styles.avatarText}>
-                {master.fullName.charAt(0).toUpperCase()}
-              </Text>
+              {selectedMaster.avatarUrl ? (
+                <Image source={{ uri: selectedMaster.avatarUrl }} style={styles.avatarImage} />
+              ) : (
+                <Text style={styles.avatarText}>
+                  {selectedMaster.fullName.charAt(0).toUpperCase()}
+                </Text>
+              )}
             </View>
 
             <Text style={styles.price}>from {master.priceFrom} EUR</Text>
@@ -371,6 +376,11 @@ const styles = StyleSheet.create({
     color: '#111111',
     marginBottom: 16,
   },
+  avatarImage: {
+  width: '100%',
+  height: '100%',
+  borderRadius: 23,
+},
 
 
 

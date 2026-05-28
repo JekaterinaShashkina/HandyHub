@@ -96,6 +96,12 @@ export default function LoginScreen() {
         <Pressable style={styles.submitButton} onPress={handleLogin}>
           <Text style={styles.submitButtonText}>Sign in</Text>
         </Pressable>
+        <Pressable
+            style={styles.registerButton}
+            onPress={() => router.push('/register' as never)}
+            >
+            <Text style={styles.registerButtonText}>Create account</Text>
+        </Pressable>
       </ScrollView>
     </KeyboardAvoidingView>
   );
@@ -181,5 +187,14 @@ backButtonText: {
   fontSize: 14,
   fontWeight: '700',
   color: '#111111',
+},
+registerButton: {
+  alignSelf: 'flex-end',
+  marginTop: 14,
+},
+registerButtonText: {
+  fontSize: 14,
+  color: '#111111',
+  textDecorationLine: 'underline',
 },
 });
