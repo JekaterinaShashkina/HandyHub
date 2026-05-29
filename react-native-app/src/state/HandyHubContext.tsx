@@ -35,91 +35,25 @@ import {
   updateUserProfileInDatabase,
   updateUserRoleInDatabase,
 } from '@/database/handyhub-db';
+import {
+  buildMasterCards,
+  buildMasterDetails,
+  buildMasterDetailsByUserId,
+  buildReviewsByUserId,
+  getActiveServicePrices,
+  hasMasterProfile as hasMasterProfileSelector,
+} from '@/state/handyhub-selectors';
+import type {
+  AddMasterInput,
+  AddServiceInput,
+  HandyHubState,
+  NewReviewInput,
+  RegisterClientInput,
+  SetServiceActiveInput,
+  UpdateMasterProfileInput,
+  UpdateProfileInput,
+} from '@/state/handyhub-types';
 import { isValidEmail } from '@/utils/validation';
-
-type UpdateMasterProfileInput = {
-  masterId: number;
-  serviceId: number;
-  categoryId: number;
-  title: string;
-  priceType: Service['priceType'];
-  price: number;
-  durationMin: number;
-  description: string;
-};
-
-type AddServiceInput = {
-  masterId: number;
-  categoryId: number;
-  title: string;
-  description: string;
-  priceType: Service['priceType'];
-  price: number;
-  durationMin: number;
-};
-
-type SetServiceActiveInput = {
-  serviceId: number;
-  isActive: boolean;
-};
-
-type NewReviewInput = {
-  masterId: number;
-  user: User;
-  rating: number;
-  comment: string;
-};
-
-type AddMasterInput = {
-  name: string;
-  surname: string;
-  phone: string;
-  email: string;
-  password: string;
-  categoryId: number;
-  priceType: Service['priceType'];
-  price: number;
-  description: string;
-  avatarUrl?: string;
-};
-type RegisterClientInput = {
-  name: string;
-  surname: string;
-  phone: string;
-  email: string;
-  password: string;
-  avatarUrl?: string;
-};
-
-type UpdateProfileInput = {
-  name: string;
-  surname: string;
-  phone: string;
-  email: string;
-  avatarUrl?: string;
-};
-
-type HandyHubState = {
-  categories: Category[];
-  currentUser: User | null;
-  isDatabaseReady: boolean;
-  getMasterCards: () => MasterCardItem[];
-  getMasterDetails: (masterId: number) => MasterDetails | undefined;
-  getMasterDetailsByUserId: (userId: number) => MasterDetails | undefined;
-  upsertReview: (input: NewReviewInput) => void;
-  addMaster: (input: AddMasterInput) => { success: boolean; error?: string };
-  login: (email: string, password: string) => boolean;
-  logout: () => void;
-  hasMasterProfile: (userId: number) => boolean;
-  registerClient: (input: RegisterClientInput) => { success: boolean; error?: string };
-  updateProfile: (input: UpdateProfileInput) => { success: boolean; error?: string };
-  updateUserRole: (userId: number, roleId: User['roleId']) => void;
-  updateMasterProfile: (  input: UpdateMasterProfileInput) => { success: boolean; error?: string };
-  addService: (input: AddServiceInput) => { success: boolean; error?: string };
-  setServiceActive: (input: SetServiceActiveInput) => { success: boolean; error?: string };
-  getReviewsByUserId: (userId: number) => UserReviewItem[];
-  
-};
 
 
 const HandyHubContext = createContext<HandyHubState | undefined>(undefined);
@@ -169,157 +103,51 @@ export function HandyHubProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const value = useMemo<HandyHubState>(() => {
-
-    function getReviewsForMaster(masterId: number) {
-      return reviews.filter((review) => review.masterId === masterId);
-    }
-
     function hasMasterProfile(userId: number) {
-      return masterProfiles.some((master) => master.userId === userId);
-    }
-
-    function getRatingAvg(masterId: number) {
-      const masterReviews = getReviewsForMaster(masterId);
-
-      if (masterReviews.length === 0) {
-        const profile = masterProfiles.find((master) => master.id === masterId);
-        return profile?.ratingAvg ?? 0;
-      }
-
-      return (
-        masterReviews.reduce((sum, review) => sum + review.rating, 0) /
-        masterReviews.length
-      );
+      return hasMasterProfileSelector(masterProfiles, userId);
     }
 
     function getMasterCards(): MasterCardItem[] {
-      return masterProfiles.map((master) => {
-        const user = users.find((item) => item.id === master.userId);
-        const masterServices = services.filter(
-          (item) => item.masterId === master.id && item.isActive
-        );
-        const service = masterServices[0];
-        const category = categories.find(
-          (item) => item.id === service?.categoryId
-        );
-        const masterReviews = getReviewsForMaster(master.id);
-        const serviceSearchText = masterServices
-          .map((item) => {
-            const serviceCategory = categories.find(
-              (categoryItem) => categoryItem.id === item.categoryId
-            );
-
-            return [
-              item.title,
-              item.description,
-              serviceCategory?.name ?? '',
-            ].join(' ');
-          })
-          .join(' ');
-
-        return {
-          id: master.id,
-          fullName: `${user?.name ?? ''} ${user?.surname ?? ''}`.trim(),
-          categoryName: category?.name ?? 'Specialist',
-          description: master.description,
-          searchText: serviceSearchText,
-          expYears: master.expYears,
-          priceFrom: master.priceFrom,
-          ratingAvg: getRatingAvg(master.id),
-          reviewsCount: masterReviews.length,
-          avatarUrl: user?.avatarUrl,
-        };
+      return buildMasterCards({
+        categories,
+        users,
+        masterProfiles,
+        services,
+        reviews,
       });
     }
 
     function getMasterDetails(masterId: number): MasterDetails | undefined {
-      const master = masterProfiles.find((item) => item.id === masterId);
-
-      if (!master) {
-        return undefined;
-      }
-
-      const user = users.find((item) => item.id === master.userId);
-      const masterServices = services.filter((item) => item.masterId === master.id);
-      const activeMasterServices = masterServices.filter((service) => service.isActive);
-      const mainService = activeMasterServices[0];
-      const mainCategory = categories.find(
-        (item) => item.id === mainService?.categoryId
-      );
-
-      const masterReviews = getReviewsForMaster(master.id).map((review) => {
-        const author = users.find((item) => item.id === review.userId);
-
-        return {
-          id: review.id,
-          userId: review.userId,
-          authorName: `${author?.name ?? 'Client'} ${author?.surname ?? ''}`.trim(),
-          rating: review.rating,
-          comment: review.comment,
-          createdAt: review.createdAt,
-          avatarUrl: user?.avatarUrl,
-        };
+      return buildMasterDetails({
+        categories,
+        users,
+        masterProfiles,
+        services,
+        reviews,
+        masterId,
       });
-
-            return {
-        id: master.id,
-        fullName: `${user?.name ?? ''} ${user?.surname ?? ''}`.trim(),
-        email: user?.email ?? '',
-        phone: user?.phone ?? '',
-        categoryName: mainCategory?.name ?? 'Specialist',
-        description: master.description,
-        expYears: master.expYears,
-        priceFrom: master.priceFrom,
-        ratingAvg: getRatingAvg(master.id),
-        reviewsCount: masterReviews.length,
-        services: masterServices.map((service) => {
-          const category = categories.find((item) => item.id === service.categoryId);
-
-          return {
-            id: service.id,
-            title: service.title,
-            description: service.description,
-            price: service.price,
-            priceType: service.priceType,
-            durationMin: service.durationMin,
-            isActive: service.isActive,
-            categoryName: category?.name ?? 'Service',
-          };
-        }),
-        reviews: masterReviews,
-        avatarUrl: user?.avatarUrl,
-      };
     }
 
     function getMasterDetailsByUserId(userId: number) {
-      const master = masterProfiles.find((item) => item.userId === userId);
-
-      if (!master) {
-        return undefined;
-      }
-
-      return getMasterDetails(master.id);
-}
+      return buildMasterDetailsByUserId({
+        categories,
+        users,
+        masterProfiles,
+        services,
+        reviews,
+        userId,
+      });
+    }
 
     function getReviewsByUserId(userId: number): UserReviewItem[] {
-      return reviews
-        .filter((review) => review.userId === userId)
-        .map((review) => {
-          const master = masterProfiles.find((item) => item.id === review.masterId);
-          const user = users.find((item) => item.id === master?.userId);
-          const service = services.find((item) => item.masterId === master?.id);
-          const category = categories.find((item) => item.id === service?.categoryId);
-
-          return {
-            id: review.id,
-            masterId: review.masterId,
-            masterName: `${user?.name ?? ''} ${user?.surname ?? ''}`.trim() || 'Master',
-            categoryName: category?.name ?? 'Service',
-            rating: review.rating,
-            comment: review.comment,
-            createdAt: review.createdAt,
-          };
-        });
+      return buildReviewsByUserId({
+        categories,
+        users,
+        masterProfiles,
+        services,
+        reviews,
+        userId,
+      });
     }
 
     function upsertReview(input: NewReviewInput) {
@@ -705,13 +533,13 @@ export function HandyHubProvider({ children }: { children: ReactNode }) {
       }
 
       const timestamp = new Date().toISOString();
-      const updatedServicePrices = services.map((item) =>
-        item.id === service.id ? input.price : item.price
+      const servicesAfterUpdate = services.map((item) =>
+        item.id === service.id ? { ...item, price: input.price } : item
       );
-      const masterServicePrices = updatedServicePrices.filter((_, index) => {
-        const item = services[index];
-        return item.masterId === master.id && item.isActive;
-      });
+      const masterServicePrices = getActiveServicePrices(
+        servicesAfterUpdate,
+        master.id
+      );
 
       const updatedMaster: MasterProfile = {
         ...master,
@@ -869,9 +697,7 @@ export function HandyHubProvider({ children }: { children: ReactNode }) {
       const servicesAfterUpdate = services.map((item) =>
         item.id === updatedService.id ? updatedService : item
       );
-      const activePrices = servicesAfterUpdate
-        .filter((item) => item.masterId === master.id && item.isActive)
-        .map((item) => item.price);
+      const activePrices = getActiveServicePrices(servicesAfterUpdate, master.id);
 
       const updatedMaster: MasterProfile = {
         ...master,

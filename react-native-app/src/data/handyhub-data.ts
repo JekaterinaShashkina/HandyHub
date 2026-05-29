@@ -72,6 +72,7 @@ export type MasterCardItem = {
   id: number;
   fullName: string;
   categoryName: string;
+  categoryIds: number[];
   description: string;
   searchText: string;
   expYears: number;
@@ -234,6 +235,7 @@ export function getMasterCards(): MasterCardItem[] {
       id: master.id,
       fullName: `${user?.name ?? ''} ${user?.surname ?? ''}`.trim(),
       categoryName: category?.name ?? 'Specialist',
+      categoryIds: masterServices.map((item) => item.categoryId),
       description: master.description,
       searchText: serviceSearchText,
       expYears: master.expYears,

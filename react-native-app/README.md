@@ -190,3 +190,13 @@ master/[id] разбит на отдельные компоненты карто
 login разбит на экран-логику и LoginForm;
 поведение не меняли;
 tsc --noEmit проходит.
+
+
+git commit -m "Refactor state selectors and fix category filtering"
+Что вошло:
+
+вынесли selectors из HandyHubContext;
+вынесли state/input типы;
+HandyHubContext стал короче и чище;
+исправили фильтр категорий: мастер теперь находится по любой активной услуге, а не только по первой категории;
+tsc --noEmit проходит.

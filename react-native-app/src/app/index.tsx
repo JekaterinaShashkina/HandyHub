@@ -25,10 +25,6 @@ export default function HomeScreen() {
 
   const filteredMasters: MasterCardItem[] = useMemo(() => {
     const query = searchText.trim().toLowerCase();
-    const selectedCategory = categories.find(
-      (category) => category.id === selectedCategoryId
-    );
-
     return masters.filter((master: MasterCardItem) => {
       const matchesSearch =
         master.fullName.toLowerCase().includes(query) ||
@@ -37,11 +33,12 @@ export default function HomeScreen() {
         master.searchText.toLowerCase().includes(query);
 
       const matchesCategory =
-        !selectedCategory || master.categoryName === selectedCategory.name;
+        selectedCategoryId === null ||
+        master.categoryIds.includes(selectedCategoryId);
 
       return matchesSearch && matchesCategory;
     });
-  }, [categories, masters, searchText, selectedCategoryId]);
+  }, [masters, searchText, selectedCategoryId]);
 
   return (
     <View style={styles.safeArea}>
