@@ -16,6 +16,16 @@ export type User = {
   updatedAt: string;
 };
 
+export type UserReviewItem = {
+  id: number;
+  masterId: number;
+  masterName: string;
+  categoryName: string;
+  rating: number;
+  comment: string;
+  createdAt: string;
+};
+
 export type MasterProfile = {
   id: number;
   userId: number;

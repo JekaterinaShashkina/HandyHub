@@ -21,6 +21,7 @@ import {
   type Review,
   type Service,
   type User,
+  type UserReviewItem,
 } from '@/data/handyhub-data';
 
 import {
@@ -96,6 +97,7 @@ type HandyHubState = {
   updateProfile: (input: UpdateProfileInput) => { success: boolean; error?: string };
   updateUserRole: (userId: number, roleId: User['roleId']) => void;
   updateMasterProfile: (  input: UpdateMasterProfileInput) => { success: boolean; error?: string };
+  getReviewsByUserId: (userId: number) => UserReviewItem[];
   
 };
 
@@ -259,6 +261,27 @@ export function HandyHubProvider({ children }: { children: ReactNode }) {
 
       return getMasterDetails(master.id);
 }
+
+    function getReviewsByUserId(userId: number): UserReviewItem[] {
+      return reviews
+        .filter((review) => review.userId === userId)
+        .map((review) => {
+          const master = masterProfiles.find((item) => item.id === review.masterId);
+          const user = users.find((item) => item.id === master?.userId);
+          const service = services.find((item) => item.masterId === master?.id);
+          const category = categories.find((item) => item.id === service?.categoryId);
+
+          return {
+            id: review.id,
+            masterId: review.masterId,
+            masterName: `${user?.name ?? ''} ${user?.surname ?? ''}`.trim() || 'Master',
+            categoryName: category?.name ?? 'Service',
+            rating: review.rating,
+            comment: review.comment,
+            createdAt: review.createdAt,
+          };
+        });
+    }
 
     function upsertReview(input: NewReviewInput) {
       setReviews((prevReviews) => {
@@ -710,7 +733,7 @@ export function HandyHubProvider({ children }: { children: ReactNode }) {
       updateProfile,
       updateMasterProfile,
       updateUserRole,
-
+      getReviewsByUserId,
     };
   }, [
     categories,

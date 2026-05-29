@@ -46,7 +46,7 @@ export function ReviewCard({ review }: ReviewCardProps) {
       {isLongComment && (
         <Pressable onPress={() => setExpanded((value) => !value)}>
           <Text style={styles.toggleText}>
-            {expanded ? 'Collapse' : 'Expand'}
+            {expanded ? 'Hide' : 'Show more'}
           </Text>
         </Pressable>
       )}
