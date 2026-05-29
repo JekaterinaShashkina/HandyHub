@@ -15,6 +15,21 @@ import {
   type User,
   
 } from '@/data/handyhub-data';
+import {
+  mapCategoryRow,
+  mapMasterProfileRow,
+  mapReviewRow,
+  mapRoleRow,
+  mapServiceRow,
+  mapUserRow,
+  type CategoryRow,
+  type MasterProfileRow,
+  type ReviewRow,
+  type RoleRow,
+  type ServiceRow,
+  type UserRow,
+} from '@/database/handyhub-db-mappers';
+import { CREATE_TABLES_SQL, migrateDatabase } from '@/database/handyhub-db-schema';
 
 const DATABASE_NAME = 'handyhub.db';
 
@@ -40,89 +55,10 @@ export function getDatabase() {
 export async function initializeDatabase() {
   const db = await getDatabase();
 
-  await db.execAsync(`
-    PRAGMA journal_mode = WAL;
+  await db.execAsync(CREATE_TABLES_SQL);
 
-    CREATE TABLE IF NOT EXISTS roles (
-      id INTEGER PRIMARY KEY NOT NULL,
-      role_name TEXT NOT NULL
-    );
-
-    CREATE TABLE IF NOT EXISTS categories (
-      id INTEGER PRIMARY KEY NOT NULL,
-      name TEXT NOT NULL,
-      icon_url TEXT NOT NULL
-    );
-
-    CREATE TABLE IF NOT EXISTS users (
-      id INTEGER PRIMARY KEY NOT NULL,
-      name TEXT NOT NULL,
-      surname TEXT NOT NULL,
-      email TEXT NOT NULL UNIQUE,
-      phone TEXT NOT NULL UNIQUE,
-      password_hash TEXT NOT NULL,
-      role_id INTEGER NOT NULL,
-      avatar_url TEXT,
-      created_at TEXT NOT NULL,
-      updated_at TEXT NOT NULL
-    );
-
-    CREATE TABLE IF NOT EXISTS master_profiles (
-      id INTEGER PRIMARY KEY NOT NULL,
-      user_id INTEGER NOT NULL,
-      description TEXT NOT NULL,
-      exp_years INTEGER NOT NULL,
-      price_from REAL NOT NULL,
-      rating_avg REAL NOT NULL,
-      reviews_count INTEGER NOT NULL,
-      is_active INTEGER NOT NULL,
-      created_at TEXT NOT NULL,
-      updated_at TEXT NOT NULL
-    );
-
-    CREATE TABLE IF NOT EXISTS services (
-      id INTEGER PRIMARY KEY NOT NULL,
-      master_id INTEGER NOT NULL,
-      category_id INTEGER NOT NULL,
-      title TEXT NOT NULL,
-      description TEXT NOT NULL,
-      price REAL NOT NULL,
-      price_type TEXT NOT NULL,
-      duration_min INTEGER NOT NULL,
-      is_active INTEGER NOT NULL DEFAULT 1,
-      created_at TEXT NOT NULL,
-      updated_at TEXT NOT NULL
-    );
-
-    CREATE TABLE IF NOT EXISTS reviews (
-      id INTEGER PRIMARY KEY NOT NULL,
-      user_id INTEGER NOT NULL,
-      master_id INTEGER NOT NULL,
-      rating INTEGER NOT NULL,
-      comment TEXT NOT NULL,
-      created_at TEXT NOT NULL,
-      UNIQUE(user_id, master_id)
-    );
-  `);
-
-  await migrateDatabase();
+  await migrateDatabase(db);
   await seedDatabaseIfEmpty();
-}
-
-async function migrateDatabase() {
-  const db = await getDatabase();
-  const serviceColumns = await db.getAllAsync<{ name: string }>(
-    'PRAGMA table_info(services)'
-  );
-  const hasServiceIsActive = serviceColumns.some(
-    (column) => column.name === 'is_active'
-  );
-
-  if (!hasServiceIsActive) {
-    await db.execAsync(
-      'ALTER TABLE services ADD COLUMN is_active INTEGER NOT NULL DEFAULT 1'
-    );
-  }
 }
 
 async function seedDatabaseIfEmpty() {
@@ -172,121 +108,26 @@ async function seedDatabaseIfEmpty() {
 export async function loadDatabaseSnapshot(): Promise<HandyHubDatabaseSnapshot> {
   const db = await getDatabase();
 
-  const dbRoles = await db.getAllAsync<{
-    id: number;
-    role_name: Role['roleName'];
-  }>('SELECT id, role_name FROM roles');
-
-  const dbCategories = await db.getAllAsync<{
-    id: number;
-    name: string;
-    icon_url: string;
-  }>('SELECT id, name, icon_url FROM categories');
-
-  const dbUsers = await db.getAllAsync<{
-    id: number;
-    name: string;
-    surname: string;
-    email: string;
-    phone: string;
-    password_hash: string;
-    role_id: number;
-    avatar_url: string | null;
-    created_at: string;
-    updated_at: string;
-  }>('SELECT * FROM users');
-
-  const dbMasters = await db.getAllAsync<{
-    id: number;
-    user_id: number;
-    description: string;
-    exp_years: number;
-    price_from: number;
-    rating_avg: number;
-    reviews_count: number;
-    is_active: number;
-    created_at: string;
-    updated_at: string;
-  }>('SELECT * FROM master_profiles');
-
-  const dbServices = await db.getAllAsync<{
-    id: number;
-    master_id: number;
-    category_id: number;
-    title: string;
-    description: string;
-    price: number;
-    price_type: Service['priceType'];
-    duration_min: number;
-    is_active: number;
-    created_at: string;
-    updated_at: string;
-  }>('SELECT * FROM services');
-
-  const dbReviews = await db.getAllAsync<{
-    id: number;
-    user_id: number;
-    master_id: number;
-    rating: number;
-    comment: string;
-    created_at: string;
-  }>('SELECT * FROM reviews');
+  const dbRoles = await db.getAllAsync<RoleRow>(
+    'SELECT id, role_name FROM roles'
+  );
+  const dbCategories = await db.getAllAsync<CategoryRow>(
+    'SELECT id, name, icon_url FROM categories'
+  );
+  const dbUsers = await db.getAllAsync<UserRow>('SELECT * FROM users');
+  const dbMasters = await db.getAllAsync<MasterProfileRow>(
+    'SELECT * FROM master_profiles'
+  );
+  const dbServices = await db.getAllAsync<ServiceRow>('SELECT * FROM services');
+  const dbReviews = await db.getAllAsync<ReviewRow>('SELECT * FROM reviews');
 
   return {
-    roles: dbRoles.map((role) => ({
-      id: role.id,
-      roleName: role.role_name,
-    })),
-    categories: dbCategories.map((category) => ({
-      id: category.id,
-      name: category.name,
-      iconUrl: category.icon_url,
-    })),
-    users: dbUsers.map((user) => ({
-      id: user.id,
-      name: user.name,
-      surname: user.surname,
-      email: user.email,
-      phone: user.phone,
-      passwordHash: user.password_hash,
-      roleId: user.role_id,
-      avatarUrl: user.avatar_url ?? undefined,
-      createdAt: user.created_at,
-      updatedAt: user.updated_at,
-    })),
-    masterProfiles: dbMasters.map((master) => ({
-      id: master.id,
-      userId: master.user_id,
-      description: master.description,
-      expYears: master.exp_years,
-      priceFrom: master.price_from,
-      ratingAvg: master.rating_avg,
-      reviewsCount: master.reviews_count,
-      isActive: Boolean(master.is_active),
-      createdAt: master.created_at,
-      updatedAt: master.updated_at,
-    })),
-    services: dbServices.map((service) => ({
-      id: service.id,
-      masterId: service.master_id,
-      categoryId: service.category_id,
-      title: service.title,
-      description: service.description,
-      price: service.price,
-      priceType: service.price_type,
-      durationMin: service.duration_min,
-      isActive: Boolean(service.is_active),
-      createdAt: service.created_at,
-      updatedAt: service.updated_at,
-    })),
-    reviews: dbReviews.map((review) => ({
-      id: review.id,
-      userId: review.user_id,
-      masterId: review.master_id,
-      rating: review.rating,
-      comment: review.comment,
-      createdAt: review.created_at,
-    })),
+    roles: dbRoles.map(mapRoleRow),
+    categories: dbCategories.map(mapCategoryRow),
+    users: dbUsers.map(mapUserRow),
+    masterProfiles: dbMasters.map(mapMasterProfileRow),
+    services: dbServices.map(mapServiceRow),
+    reviews: dbReviews.map(mapReviewRow),
   };
 }
 
