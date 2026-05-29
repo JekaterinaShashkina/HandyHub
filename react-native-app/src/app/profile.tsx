@@ -2,6 +2,7 @@ import { Feather } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
+import { HandyHubColors } from '@/constants/theme';
 import { ProfileActions } from '@/components/profile/ProfileActions';
 import { ProfileInfo } from '@/components/profile/ProfileInfo';
 import { UserReviewsSection } from '@/components/profile/UserReviewsSection';
@@ -21,7 +22,7 @@ export default function ProfileScreen() {
     return (
       <View style={styles.safeArea}>
         <Pressable style={styles.backButton} onPress={() => router.back()}>
-          <Feather name="arrow-left" size={24} color="#111111" />
+          <Feather name="arrow-left" size={24} color={HandyHubColors.text} />
         </Pressable>
 
         <View style={styles.emptyBlock}>
@@ -66,7 +67,7 @@ export default function ProfileScreen() {
         showsVerticalScrollIndicator={false}
       >
         <Pressable style={styles.backButton} onPress={() => router.back()}>
-          <Feather name="arrow-left" size={24} color="#111111" />
+          <Feather name="arrow-left" size={24} color={HandyHubColors.text} />
         </Pressable>
 
         <Text style={styles.title}>Profile</Text>
@@ -104,7 +105,7 @@ export default function ProfileScreen() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#F4F4F8',
+    backgroundColor: HandyHubColors.background,
     paddingTop: 40,
   },
   container: {
@@ -126,7 +127,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 22,
     fontWeight: '700',
-    color: '#111111',
+    color: HandyHubColors.text,
   },
   emptyBlock: {
     flex: 1,
@@ -137,18 +138,18 @@ const styles = StyleSheet.create({
     marginBottom: 18,
     textAlign: 'center',
     fontSize: 16,
-    color: '#6B6B6B',
+    color: HandyHubColors.muted,
   },
   primaryButton: {
     minHeight: 48,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 6,
-    backgroundColor: '#FFD51E',
+    backgroundColor: HandyHubColors.primary,
   },
   primaryButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#111111',
+    color: HandyHubColors.text,
   },
 });

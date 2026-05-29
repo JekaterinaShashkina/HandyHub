@@ -1,6 +1,8 @@
 import { Feather } from '@expo/vector-icons';
 import { Image, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 
+import { HandyHubColors } from '@/constants/theme';
+
 type EditProfileFormProps = {
   name: string;
   surname: string;
@@ -38,7 +40,7 @@ export function EditProfileForm({
     <>
       <View style={styles.header}>
         <Pressable style={styles.backIconButton} onPress={onBack}>
-          <Feather name="arrow-left" size={24} color="#111111" />
+          <Feather name="arrow-left" size={24} color={HandyHubColors.text} />
         </Pressable>
 
         <Text style={styles.title}>Edit profile</Text>
@@ -51,7 +53,7 @@ export function EditProfileForm({
           <Image source={{ uri: avatarUri }} style={styles.avatarPreview} />
         ) : (
           <View style={styles.avatarFallback}>
-            <Feather name="user" size={34} color="#111111" />
+            <Feather name="user" size={34} color={HandyHubColors.text} />
           </View>
         )}
 
@@ -134,7 +136,7 @@ const styles = StyleSheet.create({
   title: {
     flex: 1,
     fontSize: 18,
-    color: '#111111',
+    color: HandyHubColors.text,
     textAlign: 'center',
   },
   avatarBlock: {
@@ -145,14 +147,14 @@ const styles = StyleSheet.create({
     width: 92,
     height: 92,
     borderRadius: 46,
-    backgroundColor: '#D9DCE5',
+    backgroundColor: HandyHubColors.avatarBackground,
     marginBottom: 12,
   },
   avatarFallback: {
     width: 92,
     height: 92,
     borderRadius: 46,
-    backgroundColor: '#D9DCE5',
+    backgroundColor: HandyHubColors.avatarBackground,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 12,
@@ -163,43 +165,43 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     borderWidth: 1,
     borderColor: '#16D83E',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: HandyHubColors.surface,
     alignItems: 'center',
     justifyContent: 'center',
   },
   uploadButtonText: {
     fontSize: 14,
-    color: '#111111',
+    color: HandyHubColors.text,
   },
   label: {
     fontSize: 13,
-    color: '#3F3F3F',
+    color: HandyHubColors.textSecondary,
     marginBottom: 5,
   },
   input: {
     minHeight: 43,
     borderRadius: 8,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: HandyHubColors.surface,
     paddingHorizontal: 13,
     fontSize: 15,
-    color: '#111111',
+    color: HandyHubColors.text,
     marginBottom: 8,
   },
   errorText: {
     fontSize: 13,
-    color: '#C62828',
+    color: HandyHubColors.error,
     marginTop: 4,
   },
   successText: {
     fontSize: 13,
-    color: '#2E7D32',
+    color: HandyHubColors.success,
     marginTop: 4,
   },
   submitButton: {
     alignSelf: 'flex-end',
     minHeight: 38,
     borderRadius: 4,
-    backgroundColor: '#FFD51E',
+    backgroundColor: HandyHubColors.primary,
     paddingHorizontal: 22,
     alignItems: 'center',
     justifyContent: 'center',
@@ -207,6 +209,6 @@ const styles = StyleSheet.create({
   },
   submitButtonText: {
     fontSize: 14,
-    color: '#111111',
+    color: HandyHubColors.text,
   },
 });

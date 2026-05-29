@@ -1,6 +1,7 @@
 import { Feather } from '@expo/vector-icons';
 import { Image, StyleSheet, Text, View } from 'react-native';
 
+import { HandyHubColors } from '@/constants/theme';
 import type { User } from '@/data/handyhub-data';
 
 type ProfileInfoProps = {
@@ -47,7 +48,7 @@ function InfoRow({
 }) {
   return (
     <View style={styles.infoRow}>
-      <Feather name={icon} size={20} color="#4F64B8" />
+      <Feather name={icon} size={20} color={HandyHubColors.accent} />
       <View>
         <Text style={styles.infoLabel}>{label}</Text>
         <Text style={styles.infoValue}>{value}</Text>
@@ -66,7 +67,7 @@ const styles = StyleSheet.create({
     height: 92,
     borderRadius: 46,
     marginBottom: 12,
-    backgroundColor: '#D9DCE5',
+    backgroundColor: HandyHubColors.avatarBackground,
   },
   avatarFallback: {
     width: 92,
@@ -75,22 +76,22 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#D9DCE5',
+    backgroundColor: HandyHubColors.avatarBackground,
   },
   avatarText: {
     fontSize: 28,
     fontWeight: '700',
-    color: '#111111',
+    color: HandyHubColors.text,
   },
   name: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#111111',
+    color: HandyHubColors.text,
   },
   role: {
     marginTop: 4,
     fontSize: 15,
-    color: '#6B6B6B',
+    color: HandyHubColors.muted,
   },
   infoBlock: {
     gap: 14,
@@ -103,15 +104,15 @@ const styles = StyleSheet.create({
     gap: 12,
     paddingHorizontal: 16,
     borderRadius: 8,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: HandyHubColors.surface,
   },
   infoLabel: {
     marginBottom: 2,
     fontSize: 13,
-    color: '#6B6B6B',
+    color: HandyHubColors.muted,
   },
   infoValue: {
     fontSize: 16,
-    color: '#111111',
+    color: HandyHubColors.text,
   },
 });

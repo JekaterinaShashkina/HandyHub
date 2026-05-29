@@ -1,5 +1,7 @@
 import { Image, StyleSheet, Text, View } from 'react-native';
 
+import { HandyHubColors } from '@/constants/theme';
+
 export function AppFooter() {
   return (
     <View style={styles.footer}>
@@ -40,10 +42,10 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 16,
     lineHeight: 22,
-    color: '#111111',
+    color: HandyHubColors.text,
   },
   copyright: {
     fontSize: 15,
-    color: '#111111',
+    color: HandyHubColors.text,
   },
 });

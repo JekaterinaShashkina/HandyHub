@@ -1,5 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native';
 
+import { HandyHubColors } from '@/constants/theme';
 import type { UserReviewItem } from '@/data/handyhub-data';
 import { UserReviewCard } from '@/components/profile/UserReviewCard';
 
@@ -41,12 +42,12 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     fontSize: 18,
     fontWeight: '700',
-    color: '#111111',
+    color: HandyHubColors.text,
   },
   emptyText: {
     paddingVertical: 12,
     fontSize: 14,
-    color: '#6B6B6B',
+    color: HandyHubColors.muted,
   },
   reviewList: {
     gap: 10,

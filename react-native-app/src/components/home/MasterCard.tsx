@@ -1,6 +1,7 @@
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { RatingStars } from '@/components/common/RatingStars';
 import { Feather } from '@expo/vector-icons';
+import { HandyHubColors } from '@/constants/theme';
 import type { MasterCardItem } from '@/data/handyhub-data';
 
 
@@ -46,7 +47,9 @@ export function MasterCard({ master, onPress }: MasterCardProps) {
   );
 }
 function CommentIcon() {
-  return <Feather name="message-circle" size={16} color="#111111" />;
+  return (
+    <Feather name="message-circle" size={16} color={HandyHubColors.text} />
+  );
 }
 
 const styles = StyleSheet.create({
@@ -56,7 +59,7 @@ masterCard: {
   justifyContent: 'space-between',
   padding: 16,
   borderRadius: 20,
-  backgroundColor: '#FFFFFF',
+  backgroundColor: HandyHubColors.surface,
 },
 leftColumn: {
   alignItems: 'center',
@@ -68,18 +71,18 @@ avatar: {
   borderRadius: 42,
   alignItems: 'center',
   justifyContent: 'center',
-  backgroundColor: '#D9DCE5',
+  backgroundColor: HandyHubColors.avatarBackground,
   marginBottom: 12,
 },
 avatarText: {
   fontSize: 30,
   fontWeight: '800',
-  color: '#111111',
+  color: HandyHubColors.text,
 },
 masterCategory: {
   fontSize: 16,
   fontWeight: '700',
-  color: '#111111',
+  color: HandyHubColors.text,
   textAlign: 'center',
 },
 masterName: {
@@ -96,7 +99,7 @@ rightColumn: {
 price: {
   fontSize: 22,
   fontWeight: '700',
-  color: '#111111',
+  color: HandyHubColors.text,
 },
 ratingRow: {
   flexDirection: 'row',
@@ -116,7 +119,7 @@ reviewsRow: {
 
 reviews: {
   fontSize: 14,
-  color: '#111111',
+  color: HandyHubColors.text,
 },
 
 priceRow: {
@@ -127,13 +130,13 @@ priceRow: {
 pricePrefix: {
   fontSize: 13,
   lineHeight: 18,
-  color: '#6B6B6B',
+  color: HandyHubColors.muted,
 },
 priceValue: {
   fontSize: 24,
   lineHeight: 24,
   fontWeight: '700',
-  color: '#111111',
+  color: HandyHubColors.text,
 },
 avatarImage: {
   width: '100%',

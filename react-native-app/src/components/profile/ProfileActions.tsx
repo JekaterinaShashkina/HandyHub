@@ -1,5 +1,7 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
+import { HandyHubColors } from '@/constants/theme';
+
 type ProfileActionsProps = {
   isClient: boolean;
   isMaster: boolean;
@@ -69,25 +71,25 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 6,
-    backgroundColor: '#FFD51E',
+    backgroundColor: HandyHubColors.primary,
   },
   primaryButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#111111',
+    color: HandyHubColors.text,
   },
   secondaryButton: {
     minHeight: 48,
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
-    borderColor: '#D8DCE8',
+    borderColor: HandyHubColors.border,
     borderRadius: 6,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: HandyHubColors.surface,
   },
   secondaryButtonText: {
     fontSize: 16,
-    color: '#111111',
+    color: HandyHubColors.text,
   },
   logoutButton: {
     minHeight: 48,
@@ -101,11 +103,11 @@ const styles = StyleSheet.create({
   masterNotice: {
     padding: 14,
     borderRadius: 8,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: HandyHubColors.surface,
   },
   masterNoticeText: {
     textAlign: 'center',
     fontSize: 15,
-    color: '#111111',
+    color: HandyHubColors.text,
   },
 });

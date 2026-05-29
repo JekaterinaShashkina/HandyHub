@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { RatingStars } from '@/components/common/RatingStars';
+import { HandyHubColors } from '@/constants/theme';
 import type { UserReviewItem } from '@/data/handyhub-data';
 
 type UserReviewCardProps = {
@@ -68,7 +69,7 @@ const styles = StyleSheet.create({
   reviewCard: {
     padding: 14,
     borderRadius: 8,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: HandyHubColors.surface,
   },
   reviewHeader: {
     flexDirection: 'row',
@@ -83,23 +84,23 @@ const styles = StyleSheet.create({
   reviewLabel: {
     marginBottom: 2,
     fontSize: 12,
-    color: '#6B6B6B',
+    color: HandyHubColors.muted,
   },
   reviewMasterName: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#111111',
+    color: HandyHubColors.text,
   },
   reviewCategory: {
     marginTop: 2,
     fontSize: 13,
-    color: '#6B6B6B',
+    color: HandyHubColors.muted,
   },
   myCommentLabel: {
     marginBottom: 4,
     fontSize: 12,
     fontWeight: '700',
-    color: '#6B6B6B',
+    color: HandyHubColors.muted,
   },
   hiddenMeasureText: {
     position: 'absolute',
@@ -107,17 +108,17 @@ const styles = StyleSheet.create({
     zIndex: -1,
     fontSize: 14,
     lineHeight: 20,
-    color: '#3F3F3F',
+    color: HandyHubColors.textSecondary,
   },
   reviewComment: {
     fontSize: 14,
     lineHeight: 20,
-    color: '#3F3F3F',
+    color: HandyHubColors.textSecondary,
   },
   expandText: {
     marginTop: 4,
     fontSize: 13,
-    color: '#111111',
+    color: HandyHubColors.text,
     textDecorationLine: 'underline',
   },
   openMasterButton: {
@@ -126,7 +127,7 @@ const styles = StyleSheet.create({
   },
   openMasterText: {
     fontSize: 13,
-    color: '#111111',
+    color: HandyHubColors.text,
     textDecorationLine: 'underline',
   },
 });

@@ -2,6 +2,7 @@ import { Feather } from '@expo/vector-icons';
 import { useState } from 'react';
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 
+import { HandyHubColors } from '@/constants/theme';
 import type { Category } from '@/data/handyhub-data';
 
 type ExpandableCategoriesProps = {
@@ -42,7 +43,7 @@ export function ExpandableCategories({
         <Feather
           name={expanded ? 'chevron-up' : 'chevron-down'}
           size={20}
-          color="#111111"
+          color={HandyHubColors.text}
         />
       </Pressable>
 
@@ -53,7 +54,7 @@ export function ExpandableCategories({
             onPress={onShowAllPress}
           >
             <View style={styles.allIcon}>
-              <Feather name="grid" size={18} color="#111111" />
+              <Feather name="grid" size={18} color={HandyHubColors.text} />
             </View>
 
             <Text
@@ -66,7 +67,7 @@ export function ExpandableCategories({
             </Text>
 
             {allCategoriesSelected && (
-              <Feather name="check" size={18} color="#111111" />
+              <Feather name="check" size={18} color={HandyHubColors.text} />
             )}
           </Pressable>
 
@@ -90,7 +91,7 @@ export function ExpandableCategories({
                 </Text>
 
                 {isSelected && (
-                  <Feather name="check" size={18} color="#111111" />
+                  <Feather name="check" size={18} color={HandyHubColors.text} />
                 )}
               </Pressable>
             );
@@ -116,7 +117,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#111111',
+    color: HandyHubColors.text,
     marginRight: 8,
   },
   list: {
@@ -131,7 +132,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
   },
   rowSelected: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: HandyHubColors.surface,
   },
   icon: {
     width: 24,
@@ -149,7 +150,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 16,
     lineHeight: 24,
-    color: '#111111',
+    color: HandyHubColors.text,
   },
   nameSelected: {
     fontWeight: '700',

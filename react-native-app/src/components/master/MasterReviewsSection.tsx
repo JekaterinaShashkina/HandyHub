@@ -1,6 +1,7 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { ReviewCard } from '@/components/master/ReviewCard';
+import { HandyHubColors } from '@/constants/theme';
 import type { MasterDetails } from '@/data/handyhub-data';
 
 type ReviewItem = MasterDetails['reviews'][number];
@@ -49,7 +50,7 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 18,
-    color: '#111111',
+    color: HandyHubColors.text,
     marginBottom: 12,
   },
   reviewList: {
@@ -61,11 +62,11 @@ const styles = StyleSheet.create({
   },
   allReviewsText: {
     fontSize: 13,
-    color: '#111111',
+    color: HandyHubColors.text,
     textDecorationLine: 'underline',
   },
   emptyText: {
     paddingVertical: 12,
-    color: '#6B6B6B',
+    color: HandyHubColors.muted,
   },
 });

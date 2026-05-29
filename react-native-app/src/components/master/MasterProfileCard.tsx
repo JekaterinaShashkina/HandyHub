@@ -2,6 +2,7 @@ import { Feather } from '@expo/vector-icons';
 import { Image, StyleSheet, Text, View } from 'react-native';
 
 import { RatingStars } from '@/components/common/RatingStars';
+import { HandyHubColors } from '@/constants/theme';
 import type { MasterDetails } from '@/data/handyhub-data';
 
 type MasterProfileCardProps = {
@@ -38,18 +39,18 @@ export function MasterProfileCard({
 
         <View style={styles.ratingWithReviews}>
           <RatingStars rating={ratingAvg} />
-          <Feather name="message-circle" size={16} color="#111111" />
+          <Feather name="message-circle" size={16} color={HandyHubColors.text} />
           <Text style={styles.reviewsCount}>{reviewsCount}</Text>
         </View>
       </View>
 
       <View style={styles.contactRow}>
-        <Feather name="phone" size={20} color="#5368C9" />
+        <Feather name="phone" size={20} color={HandyHubColors.accent} />
         <Text style={styles.contactText}>{master.phone}</Text>
       </View>
 
       <View style={styles.contactRow}>
-        <Feather name="mail" size={20} color="#5368C9" />
+        <Feather name="mail" size={20} color={HandyHubColors.accent} />
         <Text style={styles.contactText}>{master.email}</Text>
       </View>
     </View>
@@ -60,7 +61,7 @@ const styles = StyleSheet.create({
   profileCard: {
     padding: 16,
     borderRadius: 6,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: HandyHubColors.surface,
     marginBottom: 22,
   },
   profileTop: {
@@ -73,7 +74,7 @@ const styles = StyleSheet.create({
     width: 46,
     height: 46,
     borderRadius: 23,
-    backgroundColor: '#D9DCE5',
+    backgroundColor: HandyHubColors.avatarBackground,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -85,16 +86,16 @@ const styles = StyleSheet.create({
   avatarText: {
     fontSize: 20,
     fontWeight: '800',
-    color: '#111111',
+    color: HandyHubColors.text,
   },
   price: {
     fontSize: 17,
-    color: '#111111',
+    color: HandyHubColors.text,
     marginTop: 6,
   },
   category: {
     fontSize: 17,
-    color: '#111111',
+    color: HandyHubColors.text,
     marginBottom: 10,
   },
   nameRatingRow: {
@@ -114,7 +115,7 @@ const styles = StyleSheet.create({
   },
   reviewsCount: {
     fontSize: 13,
-    color: '#111111',
+    color: HandyHubColors.text,
   },
   contactRow: {
     flexDirection: 'row',

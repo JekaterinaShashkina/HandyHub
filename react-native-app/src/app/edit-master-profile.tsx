@@ -13,6 +13,7 @@ import { useState } from 'react';
 
 import { AddServiceForm } from '@/components/master-profile/AddServiceForm';
 import { CurrentServicesSection } from '@/components/master-profile/CurrentServicesSection';
+import { HandyHubColors } from '@/constants/theme';
 import type {
   MasterService,
   ServiceFormValues,
@@ -112,7 +113,7 @@ export default function EditMasterProfileScreen() {
     return (
       <View style={styles.safeArea}>
         <Pressable style={styles.backIconButton} onPress={() => router.back()}>
-          <Feather name="arrow-left" size={24} color="#111111" />
+          <Feather name="arrow-left" size={24} color={HandyHubColors.text} />
         </Pressable>
 
         <Text style={styles.title}>Edit master profile</Text>
@@ -134,7 +135,7 @@ export default function EditMasterProfileScreen() {
       >
         <View style={styles.header}>
           <Pressable style={styles.backIconButton} onPress={() => router.back()}>
-            <Feather name="arrow-left" size={24} color="#111111" />
+            <Feather name="arrow-left" size={24} color={HandyHubColors.text} />
           </Pressable>
 
           <Text style={styles.title}>Edit master profile</Text>
@@ -164,7 +165,7 @@ export default function EditMasterProfileScreen() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#F4F4F8',
+    backgroundColor: HandyHubColors.background,
     paddingTop: 40,
   },
   content: {
@@ -188,18 +189,18 @@ const styles = StyleSheet.create({
   title: {
     flex: 1,
     fontSize: 18,
-    color: '#111111',
+    color: HandyHubColors.text,
     textAlign: 'center',
   },
   noticeText: {
     paddingHorizontal: 16,
     textAlign: 'center',
     fontSize: 16,
-    color: '#6B6B6B',
+    color: HandyHubColors.muted,
   },
   statusText: {
     fontSize: 13,
-    color: '#2E7D32',
+    color: HandyHubColors.success,
     marginTop: 4,
   },
 });

@@ -13,6 +13,7 @@ import {
 import { AddMasterForm } from '@/components/add-master/AddMasterForm';
 import { AddMasterNotice } from '@/components/add-master/AddMasterNotice';
 import type { PriceType } from '@/components/add-master/types';
+import { HandyHubColors } from '@/constants/theme';
 import { canAddMaster } from '@/data/handyhub-data';
 import { useHandyHub } from '@/state/HandyHubContext';
 import { isValidEmail } from '@/utils/validation';
@@ -262,7 +263,7 @@ export default function AddMasterScreen() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#F4F4F8',
+    backgroundColor: HandyHubColors.background,
     paddingTop: 40,
   },
   container: {

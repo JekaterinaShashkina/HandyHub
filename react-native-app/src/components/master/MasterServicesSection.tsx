@@ -1,5 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native';
 
+import { HandyHubColors } from '@/constants/theme';
 import type { MasterDetails } from '@/data/handyhub-data';
 
 type MasterService = MasterDetails['services'][number];
@@ -43,7 +44,7 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 18,
-    color: '#111111',
+    color: HandyHubColors.text,
     marginBottom: 12,
   },
   servicesList: {
@@ -52,7 +53,7 @@ const styles = StyleSheet.create({
   serviceCard: {
     padding: 14,
     borderRadius: 6,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: HandyHubColors.surface,
   },
   serviceHeader: {
     flexDirection: 'row',
@@ -65,30 +66,30 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 15,
     fontWeight: '700',
-    color: '#111111',
+    color: HandyHubColors.text,
   },
   servicePrice: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#111111',
+    color: HandyHubColors.text,
   },
   serviceCategory: {
     marginBottom: 6,
     fontSize: 13,
-    color: '#5368C9',
+    color: HandyHubColors.accent,
   },
   serviceDescription: {
     fontSize: 13,
     lineHeight: 19,
-    color: '#3F3F3F',
+    color: HandyHubColors.textSecondary,
   },
   serviceDuration: {
     marginTop: 8,
     fontSize: 13,
-    color: '#6B6B6B',
+    color: HandyHubColors.muted,
   },
   emptyText: {
     paddingVertical: 12,
-    color: '#6B6B6B',
+    color: HandyHubColors.muted,
   },
 });

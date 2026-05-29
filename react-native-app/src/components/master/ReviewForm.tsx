@@ -1,6 +1,7 @@
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 
 import { InteractiveRating } from '@/components/master/InteractiveRating';
+import { HandyHubColors } from '@/constants/theme';
 import type { MasterDetails, User } from '@/data/handyhub-data';
 
 type ReviewItem = MasterDetails['reviews'][number];
@@ -87,21 +88,21 @@ const styles = StyleSheet.create({
   updateHint: {
     fontSize: 13,
     lineHeight: 18,
-    color: '#6B6B6B',
+    color: HandyHubColors.muted,
     marginBottom: 12,
   },
   inputLabel: {
     fontSize: 13,
-    color: '#3F3F3F',
+    color: HandyHubColors.textSecondary,
     marginBottom: 5,
   },
   input: {
     minHeight: 44,
     borderRadius: 6,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: HandyHubColors.surface,
     paddingHorizontal: 14,
     fontSize: 15,
-    color: '#111111',
+    color: HandyHubColors.text,
     marginBottom: 10,
   },
   commentInput: {
@@ -110,7 +111,7 @@ const styles = StyleSheet.create({
   },
   errorText: {
     fontSize: 13,
-    color: '#C62828',
+    color: HandyHubColors.error,
     marginTop: -4,
     marginBottom: 8,
   },
@@ -118,7 +119,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
     minHeight: 34,
     borderRadius: 4,
-    backgroundColor: '#FFD51E',
+    backgroundColor: HandyHubColors.primary,
     paddingHorizontal: 18,
     alignItems: 'center',
     justifyContent: 'center',
@@ -126,7 +127,7 @@ const styles = StyleSheet.create({
   },
   publishButtonText: {
     fontSize: 13,
-    color: '#111111',
+    color: HandyHubColors.text,
   },
   formStars: {
     alignSelf: 'flex-end',

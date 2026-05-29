@@ -9,6 +9,7 @@ import { MasterCard } from '@/components/home/MasterCard';
 import { SearchBar } from '@/components/home/SearchBar';
 import { AppFooter } from '@/components/home/AppFooter';
 
+import { HandyHubColors } from '@/constants/theme';
 import type { MasterCardItem } from '@/data/handyhub-data';
 import { useHandyHub } from '@/state/HandyHubContext';
 
@@ -48,9 +49,6 @@ export default function HomeScreen() {
         showsVerticalScrollIndicator={false}
       >
       <AppHeader
-        onAddMasterPress={() => {
-          router.push('/add-master' as never);
-        }}
         onLoginPress={() => {
           router.push('/login' as never);
         }}
@@ -102,7 +100,7 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
 safeArea: {
   flex: 1,
-  backgroundColor: '#F4F4F8',
+  backgroundColor: HandyHubColors.background,
   paddingTop: 40,
 },
   container: {
@@ -115,7 +113,7 @@ safeArea: {
   sectionTitle: {
     fontSize: 22,
     fontWeight: '700',
-    color: '#111111',
+    color: HandyHubColors.text,
     marginBottom: 12,
   },
 
@@ -125,6 +123,6 @@ safeArea: {
   emptyText: {
     paddingVertical: 24,
     textAlign: 'center',
-    color: '#6B6B6B',
+    color: HandyHubColors.muted,
   },
 });

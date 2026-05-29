@@ -13,6 +13,7 @@ import {
   View,
 } from 'react-native';
 
+import { HandyHubColors } from '@/constants/theme';
 import { EditProfileForm } from '@/components/profile/EditProfileForm';
 import { useHandyHub } from '@/state/HandyHubContext';
 
@@ -88,7 +89,7 @@ export default function EditProfileScreen() {
     return (
       <View style={styles.safeArea}>
         <Pressable style={styles.backIconButton} onPress={() => router.back()}>
-          <Feather name="arrow-left" size={24} color="#111111" />
+          <Feather name="arrow-left" size={24} color={HandyHubColors.text} />
         </Pressable>
 
         <Text style={styles.title}>Edit profile</Text>
@@ -134,7 +135,7 @@ export default function EditProfileScreen() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#F4F4F8',
+    backgroundColor: HandyHubColors.background,
     paddingTop: 40,
   },
   content: {
@@ -150,13 +151,13 @@ const styles = StyleSheet.create({
   title: {
     flex: 1,
     fontSize: 18,
-    color: '#111111',
+    color: HandyHubColors.text,
     textAlign: 'center',
   },
   noticeText: {
     paddingHorizontal: 16,
     textAlign: 'center',
     fontSize: 16,
-    color: '#6B6B6B',
+    color: HandyHubColors.muted,
   },
 });

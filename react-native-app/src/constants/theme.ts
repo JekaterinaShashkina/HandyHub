@@ -24,6 +24,20 @@ export const Colors = {
   },
 } as const;
 
+export const HandyHubColors = {
+  background: '#F4F4F8',
+  surface: '#FFFFFF',
+  text: '#111111',
+  textSecondary: '#3F3F3F',
+  muted: '#6B6B6B',
+  border: '#D8DCE8',
+  primary: '#FFD51E',
+  success: '#2E7D32',
+  error: '#C62828',
+  accent: '#5368C9',
+  avatarBackground: '#D9DCE5',
+} as const;
+
 export type ThemeColor = keyof typeof Colors.light & keyof typeof Colors.dark;
 
 export const Fonts = Platform.select({

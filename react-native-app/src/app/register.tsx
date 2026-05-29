@@ -7,6 +7,7 @@ import {
   StyleSheet,
 } from 'react-native';
 
+import { HandyHubColors } from '@/constants/theme';
 import { RegisterForm } from '@/components/register/RegisterForm';
 import { useHandyHub } from '@/state/HandyHubContext';
 import { isValidEmail } from '@/utils/validation';
@@ -159,7 +160,7 @@ export default function RegisterScreen() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#F4F4F8',
+    backgroundColor: HandyHubColors.background,
     paddingTop: 40,
   },
   content: {

@@ -7,6 +7,7 @@ import {
   StyleSheet,
 } from 'react-native';
 
+import { HandyHubColors } from '@/constants/theme';
 import { LoginForm } from '@/components/login/LoginForm';
 import { useHandyHub } from '@/state/HandyHubContext';
 
@@ -76,7 +77,7 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#F4F4F8',
+    backgroundColor: HandyHubColors.background,
     paddingTop: 40,
   },
   content: {

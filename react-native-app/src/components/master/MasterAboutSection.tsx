@@ -1,5 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native';
 
+import { HandyHubColors } from '@/constants/theme';
+
 type MasterAboutSectionProps = {
   description: string;
 };
@@ -19,12 +21,12 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 18,
-    color: '#111111',
+    color: HandyHubColors.text,
     marginBottom: 12,
   },
   aboutText: {
     fontSize: 13,
     lineHeight: 20,
-    color: '#3F3F3F',
+    color: HandyHubColors.textSecondary,
   },
 });

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { RatingStars } from '@/components/common/RatingStars';
+import { HandyHubColors } from '@/constants/theme';
 import type { MasterDetails } from '@/data/handyhub-data';
 
 type ReviewItem = MasterDetails['reviews'][number];
@@ -59,7 +60,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     paddingVertical: 12,
     borderRadius: 6,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: HandyHubColors.surface,
   },
   header: {
     flexDirection: 'row',
@@ -70,7 +71,7 @@ const styles = StyleSheet.create({
   author: {
     flex: 1,
     fontSize: 14,
-    color: '#111111',
+    color: HandyHubColors.text,
   },
   hiddenMeasureText: {
     position: 'absolute',
@@ -78,17 +79,17 @@ const styles = StyleSheet.create({
     zIndex: -1,
     fontSize: 13,
     lineHeight: 18,
-    color: '#3F3F3F',
+    color: HandyHubColors.textSecondary,
   },
   comment: {
     fontSize: 13,
     lineHeight: 18,
-    color: '#3F3F3F',
+    color: HandyHubColors.textSecondary,
   },
   toggleText: {
     alignSelf: 'flex-start',
     fontSize: 13,
-    color: '#111111',
+    color: HandyHubColors.text,
     textDecorationLine: 'underline',
     marginTop: 2,
   },

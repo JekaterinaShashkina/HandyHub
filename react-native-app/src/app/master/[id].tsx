@@ -17,6 +17,7 @@ import { MasterReviewsSection } from '@/components/master/MasterReviewsSection';
 import { MasterServicesSection } from '@/components/master/MasterServicesSection';
 import { ReviewForm } from '@/components/master/ReviewForm';
 import { ReviewNotice } from '@/components/master/ReviewNotice';
+import { HandyHubColors } from '@/constants/theme';
 import { canLeaveReview } from '@/data/handyhub-data';
 import { useHandyHub } from '@/state/HandyHubContext';
 
@@ -43,7 +44,7 @@ export default function MasterDetailsScreen() {
           <Text style={styles.emptyTitle}>Specialist not found</Text>
 
           <Pressable style={styles.backIconButton} onPress={() => router.back()}>
-            <Feather name="arrow-left" size={24} color="#111111" />
+            <Feather name="arrow-left" size={24} color={HandyHubColors.text} />
           </Pressable>
         </View>
       </View>
@@ -130,7 +131,7 @@ export default function MasterDetailsScreen() {
         keyboardDismissMode="interactive"
       >
         <Pressable style={styles.backIconButton} onPress={() => router.back()}>
-          <Feather name="arrow-left" size={24} color="#111111" />
+          <Feather name="arrow-left" size={24} color={HandyHubColors.text} />
         </Pressable>
 
         <MasterProfileCard
@@ -176,7 +177,7 @@ export default function MasterDetailsScreen() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#F4F4F8',
+    backgroundColor: HandyHubColors.background,
     paddingTop: 40,
   },
   container: {
@@ -202,7 +203,7 @@ const styles = StyleSheet.create({
   emptyTitle: {
     fontSize: 22,
     fontWeight: '800',
-    color: '#111111',
+    color: HandyHubColors.text,
     marginBottom: 16,
   },
 });
