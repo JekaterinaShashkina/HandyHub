@@ -30,6 +30,7 @@ fun AppHeader(
     showLogo: Boolean = false,
     showBack: Boolean = false,
     isLoggedIn: Boolean = false,
+    showAuthActions: Boolean = false,
     onBackClick: () -> Unit = {},
     onLoginClick: () -> Unit = {},
     onLogoutClick: () -> Unit = {},
@@ -68,34 +69,29 @@ fun AppHeader(
                 )
             }
         }
+        if (showAuthActions) {
+            Row {
+                IconButton(
+                    onClick = if (isLoggedIn) onLogoutClick else onLoginClick
+                ) {
+                    Icon(
+                        imageVector = if (isLoggedIn) {
+                            Icons.Outlined.Logout
+                        } else {
+                            Icons.Outlined.Login
+                        },
+                        contentDescription = if (isLoggedIn) "Logout" else "Login",
+                        modifier = Modifier.size(28.dp)
+                    )
 
-//        Image(
-//            painter = painterResource(id = R.drawable.handyhub_logo2),
-//            contentDescription = "HandyHub Logo",
-//            modifier = Modifier.height(46.dp)
-//        )
-
-        Row {
-            IconButton(
-                onClick = if (isLoggedIn) onLogoutClick else onLoginClick
-            ) {
-                Icon(
-                    imageVector = if (isLoggedIn) {
-                        Icons.Outlined.Logout
-                    } else {
-                        Icons.Outlined.Login
-                    },
-                    contentDescription = if (isLoggedIn) "Logout" else "Login",
-                    modifier = Modifier.size(28.dp)
-                )
-
-            }
-            IconButton(onClick = onProfileClick) {
-                Icon(
-                    imageVector = Icons.Outlined.Person,
-                    contentDescription = "Profile" ,
-                    modifier = Modifier.size(32.dp)
-                )
+                }
+                IconButton(onClick = onProfileClick) {
+                    Icon(
+                        imageVector = Icons.Outlined.Person,
+                        contentDescription = "Profile",
+                        modifier = Modifier.size(32.dp)
+                    )
+                }
             }
         }
     }

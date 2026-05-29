@@ -46,8 +46,6 @@ fun HomeScreen (
         matchesSearch && matchesCategory
 
     }
-
-
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(24.dp, 32.dp)
@@ -57,6 +55,7 @@ fun HomeScreen (
             AppHeader(
                 showLogo = true,
                 isLoggedIn = false,
+                showAuthActions = true,
                 onLoginClick = onLoginClick ,
                 onProfileClick = {TODO()}
             )

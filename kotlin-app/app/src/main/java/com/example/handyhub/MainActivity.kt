@@ -4,20 +4,11 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import com.example.handyhub.data.local.DatabaseProvider
 import com.example.handyhub.data.repository.HandyHubRepository
 import com.example.handyhub.data.sample.SampleData
 import com.example.handyhub.navigation.AppNavigation
-import com.example.handyhub.ui.screens.HomeScreen
-import com.example.handyhub.ui.theme.HandyHubTheme
+import com.example.handyhub.viewmodel.AuthViewModel
 import com.example.handyhub.viewmodel.HomeViewModel
 import com.example.handyhub.viewmodel.MasterDetailViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -39,11 +30,13 @@ class MainActivity : ComponentActivity() {
         setContent {
             val homeViewModel = HomeViewModel(repository)
             val masterDetailViewModel = MasterDetailViewModel(repository)
+            val authViewModel = AuthViewModel(repository)
             homeViewModel.loadData()
 
             AppNavigation(
                 homeViewModel = homeViewModel,
-                masterDetailViewModel = masterDetailViewModel
+                masterDetailViewModel = masterDetailViewModel,
+                authViewModel = authViewModel
             )
 
         }

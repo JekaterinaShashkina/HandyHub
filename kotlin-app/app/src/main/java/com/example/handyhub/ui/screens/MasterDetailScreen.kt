@@ -48,6 +48,7 @@ fun MasterDetailScreen(
                 title = "Master details",
                 showBack = true,
                 isLoggedIn = false,
+                showAuthActions = true,
                 onBackClick = onBackClick,
                 onLoginClick = onLoginClick,
                 onProfileClick = { TODO() }

@@ -37,7 +37,7 @@ class MasterDetailViewModel(
             val category = firstService?.let {
                 repository.getCategoryById(it.categoryId)
             }
-            val reviewList = repository.getReviewsByMasterId(masterId)
+            val reviewList = repository.getReviewsByMaster(masterId)
             _reviews.value = reviewList
             _reviewsWithUsers.value = reviewList.mapNotNull { review ->
                 val user = repository.getUserById(review.userId)
