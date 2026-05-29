@@ -13,6 +13,7 @@ import {
   type Role,
   type Service,
   type User,
+  
 } from '@/data/handyhub-data';
 
 const DATABASE_NAME = 'handyhub.db';
@@ -342,5 +343,37 @@ export async function insertReview(review: Review) {
     review.rating,
     review.comment,
     review.createdAt
+  );
+}
+
+export async function updateUserRoleInDatabase(
+  userId: number,
+  roleId: number,
+  updatedAt: string
+) {
+  const db = await getDatabase();
+
+  await db.runAsync(
+    'UPDATE users SET role_id = ?, updated_at = ? WHERE id = ?',
+    roleId,
+    updatedAt,
+    userId
+  );
+}
+
+export async function updateUserProfileInDatabase(user: User) {
+  const db = await getDatabase();
+
+  await db.runAsync(
+    `UPDATE users
+     SET name = ?, surname = ?, email = ?, phone = ?, avatar_url = ?, updated_at = ?
+     WHERE id = ?`,
+    user.name,
+    user.surname,
+    user.email,
+    user.phone,
+    user.avatarUrl ?? null,
+    user.updatedAt,
+    user.id
   );
 }

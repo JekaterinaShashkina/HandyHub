@@ -130,8 +130,8 @@ export default function RegisterScreen() {
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode="interactive"
       >
-        <Pressable style={styles.backButton} onPress={() => router.back()}>
-          <Text style={styles.backButtonText}>Back</Text>
+        <Pressable style={styles.backIconButton} onPress={() => router.back()}>
+          <Feather name="arrow-left" size={24} color="#111111" />
         </Pressable>
 
         <Text style={styles.title}>Create account</Text>
@@ -245,20 +245,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 13,
     paddingBottom: 32,
   },
-  backButton: {
-    alignSelf: 'flex-start',
-    minHeight: 38,
-    paddingHorizontal: 14,
-    borderRadius: 19,
-    backgroundColor: '#FFFFFF',
+  backIconButton: {
+    width: 42,
+    height: 42,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 14,
-  },
-  backButtonText: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: '#111111',
+    marginBottom: 8,
   },
   title: {
     fontSize: 18,

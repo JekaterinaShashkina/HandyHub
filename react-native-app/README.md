@@ -127,3 +127,14 @@ git commit -m "Add SQLite persistence and login flow"
 - Hid add-master action for masters that already have a profile
 - Added Back buttons to login and add-master screens
 - Added expandable review text for long comments
+
+
+git commit -m "Add user registration and avatars"
+
+- Added client registration screen
+- Added duplicate email and phone validation
+- Added avatar selection for client and master registration
+- Persisted avatar URLs in SQLite through user records
+- Displayed logged-in user avatar in the header
+- Fixed master registration role assignment
+- Improved role-based header actions

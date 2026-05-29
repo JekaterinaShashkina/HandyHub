@@ -26,6 +26,8 @@ export default function AddMasterScreen() {
   const { categories, currentUser, addMaster } = useHandyHub();
   const allowed = canAddMaster(currentUser);
 
+  const isExistingUser = currentUser !== null;
+
   const [name, setName] = useState(currentUser?.name ?? '');
   const [surname, setSurname] = useState(currentUser?.surname ?? '');
   const [phone, setPhone] = useState(currentUser?.phone ?? '');
@@ -79,16 +81,14 @@ export default function AddMasterScreen() {
 }
 
   function handleSubmit() {
-    const requiredFields = [
-      name.trim(),
-      surname.trim(),
-      phone.trim(),
-      email.trim(),
-      price.trim(),
-      description.trim(),
-      password.trim(),
-      passwordRepeat.trim(),
-    ];
+      const requiredFields = [
+        name.trim(),
+        surname.trim(),
+        phone.trim(),
+        email.trim(),
+        price.trim(),
+        description.trim(),
+      ];
 
     if (!allowed) {
       setError('Only masters can register a specialist profile.');
@@ -105,7 +105,12 @@ export default function AddMasterScreen() {
       return;
     }
 
-    if (password !== passwordRepeat) {
+    if (!isExistingUser && (!password.trim() || !passwordRepeat.trim())) {
+      setError('Please fill in all fields.');
+      return;
+    }
+
+    if (!isExistingUser && password !== passwordRepeat) {
       setError('Passwords do not match.');
       return;
     }
@@ -127,7 +132,7 @@ export default function AddMasterScreen() {
       return;
     }
 
-    if (password.length < 4) {
+    if (!isExistingUser && password.length < 4) {
       setError('Password must be at least 4 characters.');
       return;
     }
@@ -137,7 +142,7 @@ export default function AddMasterScreen() {
       surname: surname.trim(),
       phone: phone.trim(),
       email: email.trim(),
-      password,
+      password: password.trim(),
       categoryId,
       priceType,
       price: Number(price),
@@ -195,7 +200,15 @@ export default function AddMasterScreen() {
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode="interactive"
       >
-        <Text style={styles.title}>Specialist registration</Text>
+        <View style={styles.header}>
+          <Pressable style={styles.backIconButton} onPress={() => router.back()}>
+            <Feather name="arrow-left" size={24} color="#111111" />
+          </Pressable>
+
+          <Text style={styles.title}>Specialist registration</Text>
+
+          <View style={styles.headerSpacer} />
+        </View>
 
         <Field label="Name" value={name} onChangeText={setName} />
         <Field label="Surname" value={surname} onChangeText={setSurname} />
@@ -278,23 +291,27 @@ export default function AddMasterScreen() {
           textAlignVertical="top"
         />
 
-        <View style={styles.spacer} />
+        {!isExistingUser && (
+          <>
+            <View style={styles.spacer} />
 
-        <PasswordField
-          label="Password"
-          value={password}
-          onChangeText={setPassword}
-          visible={passwordVisible}
-          onToggleVisible={() => setPasswordVisible((value) => !value)}
-        />
+            <PasswordField
+              label="Password"
+              value={password}
+              onChangeText={setPassword}
+              visible={passwordVisible}
+              onToggleVisible={() => setPasswordVisible((value) => !value)}
+            />
 
-        <PasswordField
-          label="Repeat password"
-          value={passwordRepeat}
-          onChangeText={setPasswordRepeat}
-          visible={passwordRepeatVisible}
-          onToggleVisible={() => setPasswordRepeatVisible((value) => !value)}
-        />
+            <PasswordField
+              label="Repeat password"
+              value={passwordRepeat}
+              onChangeText={setPasswordRepeat}
+              visible={passwordRepeatVisible}
+              onToggleVisible={() => setPasswordRepeatVisible((value) => !value)}
+            />
+          </>
+        )}
 
         <Text style={styles.label}>Set avatar</Text>
         <View style={styles.avatarRow}>
@@ -387,12 +404,6 @@ const styles = StyleSheet.create({
   content: {
     paddingHorizontal: 13,
     paddingBottom: 32,
-  },
-  title: {
-    fontSize: 18,
-    color: '#111111',
-    textAlign: 'center',
-    marginBottom: 24,
   },
   label: {
     fontSize: 13,
@@ -574,5 +585,25 @@ avatarPreview: {
   height: 52,
   borderRadius: 26,
   backgroundColor: '#D9DCE5',
+},
+header: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  marginBottom: 18,
+},
+backIconButton: {
+  width: 42,
+  height: 42,
+  alignItems: 'center',
+  justifyContent: 'center',
+},
+headerSpacer: {
+  width: 42,
+},
+title: {
+  flex: 1,
+  fontSize: 18,
+  color: '#111111',
+  textAlign: 'center',
 },
 });

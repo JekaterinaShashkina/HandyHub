@@ -56,6 +56,9 @@ export default function HomeScreen() {
         onLoginPress={() => {
           router.push('/login' as never);
         }}
+        onProfilePress={() => {
+          router.push('/profile' as never);
+        }}
       />
 
         <SearchBar value={searchText} onChangeText={setSearchText} />
