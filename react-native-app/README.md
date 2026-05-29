@@ -181,3 +181,12 @@ All categories возвращает общий список мастеров;
 добавлена строгая проверка email;
 TypeScript starter-ошибки очищены, tsc --noEmit теперь проходит;
 register и edit-profile разбиты на отдельные form-компоненты.
+
+
+git commit -m "Refactor login and master details screens"
+Что в нём:
+
+master/[id] разбит на отдельные компоненты карточки, about, services и reviews;
+login разбит на экран-логику и LoginForm;
+поведение не меняли;
+tsc --noEmit проходит.
