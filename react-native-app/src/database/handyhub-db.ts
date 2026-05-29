@@ -377,3 +377,33 @@ export async function updateUserProfileInDatabase(user: User) {
     user.id
   );
 }
+
+export async function updateMasterProfileInDatabase(
+  master: MasterProfile,
+  service: Service
+) {
+  const db = await getDatabase();
+
+  await db.runAsync(
+    `UPDATE master_profiles
+     SET description = ?, price_from = ?, updated_at = ?
+     WHERE id = ?`,
+    master.description,
+    master.priceFrom,
+    master.updatedAt,
+    master.id
+  );
+
+  await db.runAsync(
+    `UPDATE services
+     SET category_id = ?, title = ?, description = ?, price = ?, price_type = ?, updated_at = ?
+     WHERE id = ?`,
+    service.categoryId,
+    service.title,
+    service.description,
+    service.price,
+    service.priceType,
+    service.updatedAt,
+    service.id
+  );
+}

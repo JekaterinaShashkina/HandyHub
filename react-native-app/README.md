@@ -138,3 +138,17 @@ git commit -m "Add user registration and avatars"
 - Displayed logged-in user avatar in the header
 - Fixed master registration role assignment
 - Improved role-based header actions
+
+Add profile screen and profile editing
+
+Added Profile screen for logged-in users.
+Added profile navigation from the header avatar/user icon.
+Added logout from profile.
+Added Become a master flow for client users.
+Fixed master registration flow so existing users are not duplicated.
+Added client profile editing screen.
+Added profile update persistence in SQLite.
+Added avatar update for profile editing.
+Added duplicate email and phone validation when editing profile.
+Replaced text Back buttons with arrow icons on login, registration, and master details screens.
+

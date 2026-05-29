@@ -113,12 +113,21 @@ export default function ProfileScreen() {
           )}
 
           {isMaster && hasProfile && (
-            <View style={styles.masterNotice}>
-              <Text style={styles.masterNoticeText}>
-                Your master profile is active.
-              </Text>
-            </View>
-          )}
+            <>
+                <View style={styles.masterNotice}>
+                <Text style={styles.masterNoticeText}>
+                    Your master profile is active.
+                </Text>
+                </View>
+
+                <Pressable
+                style={styles.primaryButton}
+                onPress={() => router.push('/edit-master-profile' as never)}
+                >
+                <Text style={styles.primaryButtonText}>Edit master profile</Text>
+                </Pressable>
+            </>
+            )}
 
           <Pressable style={styles.logoutButton} onPress={handleLogout}>
             <Text style={styles.logoutButtonText}>Log out</Text>
