@@ -92,3 +92,38 @@ Refactor master details review flow
 - Added ReviewCard, ReviewNotice, InteractiveRating and ReviewForm components
 - Cleaned up the master details screen structure
 
+Add shared HandyHub state
+
+- Added HandyHub context provider for shared app state
+- Moved master cards and master details data to shared state
+- Added shared review upsert logic
+- Updated home and details screens to reflect review changes immediately
+- Added shared add master flow so new specialists appear on home
+- Connected Add Master screen and header action to shared state
+
+
+
+Что должно быть общим:
+
+одинаковая структура базы
+одинаковые таблицы
+одинаковые связи
+одинаковые seed/sample данные
+одинаковая бизнес-логика
+То есть вы с Катей делаете две реализации одного приложения, а не один общий runtime.
+
+Для отчёта это можно формулировать так:
+
+Both applications use the same domain model and SQLite schema, but each platform stores data locally in its own SQLite database.
+
+git commit -m "Add SQLite persistence and login flow"
+
+- Added expo-sqlite database layer with HandyHub schema and seed data
+- Connected shared HandyHub state to SQLite persistence
+- Persisted reviews and added masters across app restarts
+- Added login flow with role-based current user state
+- Added logout action and conditional header icons
+- Hid profile icon for guest users
+- Hid add-master action for masters that already have a profile
+- Added Back buttons to login and add-master screens
+- Added expandable review text for long comments

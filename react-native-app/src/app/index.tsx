@@ -53,6 +53,9 @@ export default function HomeScreen() {
         onAddMasterPress={() => {
           router.push('/add-master' as never);
         }}
+        onLoginPress={() => {
+          router.push('/login' as never);
+        }}
       />
 
         <SearchBar value={searchText} onChangeText={setSearchText} />

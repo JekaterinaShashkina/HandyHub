@@ -1,7 +1,8 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { RatingStars } from '@/components/common/RatingStars';
 import { Feather } from '@expo/vector-icons';
 import type { MasterCardItem } from '@/data/handyhub-data';
+
 
 type MasterCardProps = {
   master: MasterCardItem;
@@ -12,11 +13,15 @@ export function MasterCard({ master, onPress }: MasterCardProps) {
   return (
 <Pressable style={styles.masterCard} onPress={onPress}>
   <View style={styles.leftColumn}>
-    <View style={styles.avatar}>
+  <View style={styles.avatar}>
+    {master.avatarUrl ? (
+      <Image source={{ uri: master.avatarUrl }} style={styles.avatarImage} />
+    ) : (
       <Text style={styles.avatarText}>
         {master.fullName.charAt(0).toUpperCase()}
       </Text>
-    </View>
+    )}
+  </View>
 
     <Text style={styles.masterCategory}>{master.categoryName}</Text>
     <Text style={styles.masterName}>{master.fullName}</Text>
@@ -129,5 +134,10 @@ priceValue: {
   lineHeight: 24,
   fontWeight: '700',
   color: '#111111',
+},
+avatarImage: {
+  width: '100%',
+  height: '100%',
+  borderRadius: 42,
 },
 });

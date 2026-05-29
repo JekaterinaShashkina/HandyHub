@@ -7,6 +7,8 @@ export default function RootLayout() {
     <HandyHubProvider>
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="index" />
+        <Stack.Screen name="login" />
+        <Stack.Screen name="register" />
         <Stack.Screen name="add-master" />
         <Stack.Screen name="master/[id]" />
       </Stack>
