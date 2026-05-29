@@ -52,8 +52,8 @@ export default function LoginScreen() {
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode="interactive"
       >
-        <Pressable style={styles.backButton} onPress={() => router.back()}>
-            <Text style={styles.backButtonText}>Back</Text>
+        <Pressable style={styles.backIconButton} onPress={() => router.back()}>
+          <Feather name="arrow-left" size={24} color="#111111" />
         </Pressable>
 
         <Text style={styles.title}>Sign in</Text>
@@ -173,20 +173,12 @@ const styles = StyleSheet.create({
     color: '#C62828',
     marginTop: 4,
   },
-  backButton: {
-  alignSelf: 'flex-start',
-  minHeight: 38,
-  paddingHorizontal: 14,
-  borderRadius: 19,
-  backgroundColor: '#FFFFFF',
+backIconButton: {
+  width: 42,
+  height: 42,
   alignItems: 'center',
   justifyContent: 'center',
-  marginBottom: 14,
-},
-backButtonText: {
-  fontSize: 14,
-  fontWeight: '700',
-  color: '#111111',
+  marginBottom: 8,
 },
 registerButton: {
   alignSelf: 'flex-end',

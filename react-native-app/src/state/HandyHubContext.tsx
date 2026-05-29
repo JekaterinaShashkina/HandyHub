@@ -22,6 +22,7 @@ import {
   type Service,
   type User,
 } from '@/data/handyhub-data';
+
 import {
   initializeDatabase,
   insertMasterProfile,
@@ -29,6 +30,8 @@ import {
   insertService,
   insertUser,
   loadDatabaseSnapshot,
+  updateUserProfileInDatabase,
+  updateUserRoleInDatabase,
 } from '@/database/handyhub-db';
 
 type NewReviewInput = {
@@ -59,6 +62,14 @@ type RegisterClientInput = {
   avatarUrl?: string;
 };
 
+type UpdateProfileInput = {
+  name: string;
+  surname: string;
+  phone: string;
+  email: string;
+  avatarUrl?: string;
+};
+
 type HandyHubState = {
   categories: Category[];
   currentUser: User | null;
@@ -71,6 +82,8 @@ type HandyHubState = {
   logout: () => void;
   hasMasterProfile: (userId: number) => boolean;
   registerClient: (input: RegisterClientInput) => { success: boolean; error?: string };
+  updateProfile: (input: UpdateProfileInput) => { success: boolean; error?: string };
+  updateUserRole: (userId: number, roleId: User['roleId']) => void;
   
 };
 
@@ -268,7 +281,7 @@ export function HandyHubProvider({ children }: { children: ReactNode }) {
         !surname ||
         !normalizedPhone ||
         !normalizedEmail ||
-        !password ||
+        (!currentUser && !password) ||
         !description ||
         !input.categoryId ||
         !Number.isFinite(input.price) || input.price <= 0
@@ -279,8 +292,12 @@ export function HandyHubProvider({ children }: { children: ReactNode }) {
         };
       }
 
+      const existingUserId = currentUser?.id;
+
       const emailExists = users.some(
-        (user) => user.email.toLowerCase() === normalizedEmail
+        (user) =>
+          user.id !== existingUserId &&
+          user.email.toLowerCase() === normalizedEmail
       );
 
       if (emailExists) {
@@ -290,7 +307,10 @@ export function HandyHubProvider({ children }: { children: ReactNode }) {
         };
       }
 
-      const phoneExists = users.some((user) => user.phone.trim() === normalizedPhone);
+      const phoneExists = users.some(
+        (user) =>
+          user.id !== existingUserId && user.phone.trim() === normalizedPhone
+      );
 
       if (phoneExists) {
         return {
@@ -299,10 +319,20 @@ export function HandyHubProvider({ children }: { children: ReactNode }) {
         };
       }
 
-      const userId = Date.now();
-      const masterId = userId + 1;
-      const serviceId = userId + 2;
+      if (currentUser && hasMasterProfile(currentUser.id)) {
+        return {
+          success: false,
+          error: 'Master profile already exists.',
+        };
+      }
+
+      const timestampId = Date.now();
+      const userId = currentUser?.id ?? timestampId;
+      const masterId = timestampId + 1;
+      const serviceId = timestampId + 2;
       const timestamp = new Date().toISOString();
+
+
 
       const newUser: User = {
         id: userId,
@@ -310,10 +340,10 @@ export function HandyHubProvider({ children }: { children: ReactNode }) {
         surname,
         email: normalizedEmail,
         phone: normalizedPhone,
-        passwordHash: password,
+        passwordHash: password || currentUser?.passwordHash || '',
         roleId: 2,
-        avatarUrl: input.avatarUrl,
-        createdAt: timestamp,
+        avatarUrl: input.avatarUrl ?? currentUser?.avatarUrl,
+        createdAt: currentUser?.createdAt ?? timestamp,
         updatedAt: timestamp,
 
       };
@@ -354,7 +384,17 @@ export function HandyHubProvider({ children }: { children: ReactNode }) {
         console.warn('Failed to save service', error);
       });
 
-      setUsers((prevUsers) => [...prevUsers, newUser]);
+      setUsers((prevUsers) => {
+        const userExists = prevUsers.some((user) => user.id === newUser.id);
+
+        if (userExists) {
+          return prevUsers.map((user) =>
+            user.id === newUser.id ? newUser : user
+          );
+        }
+
+        return [...prevUsers, newUser];
+      });
       setMasterProfiles((prevMasters) => [...prevMasters, newMaster]);
       setServices((prevServices) => [...prevServices, newService]);
       setCurrentUser(newUser);
@@ -415,11 +455,108 @@ export function HandyHubProvider({ children }: { children: ReactNode }) {
         console.warn('Failed to save client user', error);
       });
 
-      setUsers((prevUsers) => [...prevUsers, newUser]);
+      setUsers((prevUsers) => {
+        const userExists = prevUsers.some((user) => user.id === newUser.id);
+
+        if (userExists) {
+          return prevUsers.map((user) =>
+            user.id === newUser.id ? newUser : user
+          );
+        }
+
+        return [...prevUsers, newUser];
+      });
+
       setCurrentUser(newUser);
 
       return { success: true };
     }
+
+ function updateProfile(input: UpdateProfileInput) {
+  if (!currentUser) {
+    return {
+      success: false,
+      error: 'Log in to edit your profile.',
+    };
+  }
+
+  const name = input.name.trim();
+  const surname = input.surname.trim();
+  const normalizedEmail = input.email.trim().toLowerCase();
+  const normalizedPhone = input.phone.trim();
+
+  if (!name || !surname || !normalizedEmail || !normalizedPhone) {
+    return {
+      success: false,
+      error: 'Please fill in all fields.',
+    };
+  }
+
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  if (!emailPattern.test(normalizedEmail)) {
+    return {
+      success: false,
+      error: 'Please enter a valid email address.',
+    };
+  }
+
+  if (normalizedPhone.length < 6) {
+    return {
+      success: false,
+      error: 'Please enter a valid phone number.',
+    };
+  }
+
+  const emailExists = users.some(
+    (user) =>
+      user.id !== currentUser.id &&
+      user.email.toLowerCase() === normalizedEmail
+  );
+
+  if (emailExists) {
+    return {
+      success: false,
+      error: 'User with this email already exists.',
+    };
+  }
+
+  const phoneExists = users.some(
+    (user) =>
+      user.id !== currentUser.id && user.phone.trim() === normalizedPhone
+  );
+
+  if (phoneExists) {
+    return {
+      success: false,
+      error: 'User with this phone already exists.',
+    };
+  }
+
+  const updatedUser: User = {
+    ...currentUser,
+    name,
+    surname,
+    email: normalizedEmail,
+    phone: normalizedPhone,
+    avatarUrl: input.avatarUrl ?? currentUser.avatarUrl,
+    updatedAt: new Date().toISOString(),
+  };
+
+  updateUserProfileInDatabase(updatedUser).catch((error) => {
+    console.warn('Failed to update user profile', error);
+  });
+
+  setUsers((prevUsers) =>
+    prevUsers.map((user) =>
+      user.id === updatedUser.id ? updatedUser : user
+    )
+  );
+  setCurrentUser(updatedUser);
+
+  return { success: true };
+}
+    
     function login(email: string, password: string) {
       const normalizedEmail = email.trim().toLowerCase();
 
@@ -441,6 +578,28 @@ export function HandyHubProvider({ children }: { children: ReactNode }) {
       setCurrentUser(null);
     }
 
+    function updateUserRole(userId: number, roleId: User['roleId']) {
+      const timestamp = new Date().toISOString();
+
+      setUsers((prevUsers) =>
+        prevUsers.map((user) =>
+          user.id === userId
+            ? { ...user, roleId, updatedAt: timestamp }
+            : user
+        )
+      );
+
+      setCurrentUser((prevUser) =>
+        prevUser?.id === userId
+          ? { ...prevUser, roleId, updatedAt: timestamp }
+          : prevUser
+      );
+
+      updateUserRoleInDatabase(userId, roleId, timestamp).catch((error) => {
+        console.warn('Failed to update user role', error);
+      });
+    }
+
     return {
       categories,
       currentUser,
@@ -453,6 +612,8 @@ export function HandyHubProvider({ children }: { children: ReactNode }) {
       logout,
       hasMasterProfile,
       registerClient,
+      updateProfile,
+      updateUserRole,
     };
   }, [
     categories,
