@@ -33,7 +33,8 @@ export default function HomeScreen() {
       const matchesSearch =
         master.fullName.toLowerCase().includes(query) ||
         master.description.toLowerCase().includes(query) ||
-        master.categoryName.toLowerCase().includes(query);
+        master.categoryName.toLowerCase().includes(query) ||
+        master.searchText.toLowerCase().includes(query);
 
       const matchesCategory =
         !selectedCategory || master.categoryName === selectedCategory.name;

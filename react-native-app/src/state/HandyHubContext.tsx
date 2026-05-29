@@ -203,12 +203,26 @@ export function HandyHubProvider({ children }: { children: ReactNode }) {
           (item) => item.id === service?.categoryId
         );
         const masterReviews = getReviewsForMaster(master.id);
+        const serviceSearchText = masterServices
+          .map((item) => {
+            const serviceCategory = categories.find(
+              (categoryItem) => categoryItem.id === item.categoryId
+            );
+
+            return [
+              item.title,
+              item.description,
+              serviceCategory?.name ?? '',
+            ].join(' ');
+          })
+          .join(' ');
 
         return {
           id: master.id,
           fullName: `${user?.name ?? ''} ${user?.surname ?? ''}`.trim(),
           categoryName: category?.name ?? 'Specialist',
           description: master.description,
+          searchText: serviceSearchText,
           expYears: master.expYears,
           priceFrom: master.priceFrom,
           ratingAvg: getRatingAvg(master.id),

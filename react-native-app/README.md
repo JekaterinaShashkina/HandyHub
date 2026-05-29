@@ -170,3 +170,14 @@ git commit -m "Add master service management"
 All categories на главной;
 рефактор add-master и edit-master-profile;
 более строгая проверка email.
+
+git commit -m "Improve services, search, and form structure"
+Что вошло:
+
+поиск на главной теперь ищет по активным услугам;
+All categories возвращает общий список мастеров;
+на странице мастера сначала показываются 3 последних отзыва, остальные раскрываются через All reviews;
+убран дубль Service added.;
+добавлена строгая проверка email;
+TypeScript starter-ошибки очищены, tsc --noEmit теперь проходит;
+register и edit-profile разбиты на отдельные form-компоненты.

@@ -73,6 +73,7 @@ export type MasterCardItem = {
   fullName: string;
   categoryName: string;
   description: string;
+  searchText: string;
   expYears: number;
   priceFrom: number;
   ratingAvg: number;
@@ -210,14 +211,31 @@ export const reviews: Review[] = [
 export function getMasterCards(): MasterCardItem[] {
   return masterProfiles.map((master) => {
     const user = users.find((item) => item.id === master.userId);
-    const service = services.find((item) => item.masterId === master.id);
+    const masterServices = services.filter(
+      (item) => item.masterId === master.id && item.isActive
+    );
+    const service = masterServices[0];
     const category = categories.find((item) => item.id === service?.categoryId);
+    const serviceSearchText = masterServices
+      .map((item) => {
+        const serviceCategory = categories.find(
+          (categoryItem) => categoryItem.id === item.categoryId
+        );
+
+        return [
+          item.title,
+          item.description,
+          serviceCategory?.name ?? '',
+        ].join(' ');
+      })
+      .join(' ');
 
     return {
       id: master.id,
       fullName: `${user?.name ?? ''} ${user?.surname ?? ''}`.trim(),
       categoryName: category?.name ?? 'Specialist',
       description: master.description,
+      searchText: serviceSearchText,
       expYears: master.expYears,
       priceFrom: master.priceFrom,
       ratingAvg: master.ratingAvg,
