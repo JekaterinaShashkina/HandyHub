@@ -35,14 +35,32 @@ import {
   updateUserProfileInDatabase,
   updateUserRoleInDatabase,
 } from '@/database/handyhub-db';
+import { isValidEmail } from '@/utils/validation';
 
 type UpdateMasterProfileInput = {
   masterId: number;
   serviceId: number;
   categoryId: number;
+  title: string;
   priceType: Service['priceType'];
   price: number;
+  durationMin: number;
   description: string;
+};
+
+type AddServiceInput = {
+  masterId: number;
+  categoryId: number;
+  title: string;
+  description: string;
+  priceType: Service['priceType'];
+  price: number;
+  durationMin: number;
+};
+
+type SetServiceActiveInput = {
+  serviceId: number;
+  isActive: boolean;
 };
 
 type NewReviewInput = {
@@ -97,6 +115,8 @@ type HandyHubState = {
   updateProfile: (input: UpdateProfileInput) => { success: boolean; error?: string };
   updateUserRole: (userId: number, roleId: User['roleId']) => void;
   updateMasterProfile: (  input: UpdateMasterProfileInput) => { success: boolean; error?: string };
+  addService: (input: AddServiceInput) => { success: boolean; error?: string };
+  setServiceActive: (input: SetServiceActiveInput) => { success: boolean; error?: string };
   getReviewsByUserId: (userId: number) => UserReviewItem[];
   
 };
@@ -175,7 +195,10 @@ export function HandyHubProvider({ children }: { children: ReactNode }) {
     function getMasterCards(): MasterCardItem[] {
       return masterProfiles.map((master) => {
         const user = users.find((item) => item.id === master.userId);
-        const service = services.find((item) => item.masterId === master.id);
+        const masterServices = services.filter(
+          (item) => item.masterId === master.id && item.isActive
+        );
+        const service = masterServices[0];
         const category = categories.find(
           (item) => item.id === service?.categoryId
         );
@@ -204,7 +227,8 @@ export function HandyHubProvider({ children }: { children: ReactNode }) {
 
       const user = users.find((item) => item.id === master.userId);
       const masterServices = services.filter((item) => item.masterId === master.id);
-      const mainService = masterServices[0];
+      const activeMasterServices = masterServices.filter((service) => service.isActive);
+      const mainService = activeMasterServices[0];
       const mainCategory = categories.find(
         (item) => item.id === mainService?.categoryId
       );
@@ -244,6 +268,7 @@ export function HandyHubProvider({ children }: { children: ReactNode }) {
             price: service.price,
             priceType: service.priceType,
             durationMin: service.durationMin,
+            isActive: service.isActive,
             categoryName: category?.name ?? 'Service',
           };
         }),
@@ -337,6 +362,13 @@ export function HandyHubProvider({ children }: { children: ReactNode }) {
         };
       }
 
+      if (!isValidEmail(normalizedEmail)) {
+        return {
+          success: false,
+          error: 'Please enter a valid email address.',
+        };
+      }
+
       const existingUserId = currentUser?.id;
 
       const emailExists = users.some(
@@ -415,6 +447,7 @@ export function HandyHubProvider({ children }: { children: ReactNode }) {
         price: input.price,
         priceType: input.priceType,
         durationMin: 60,
+        isActive: true,
         createdAt: timestamp,
         updatedAt: timestamp,
       };
@@ -458,6 +491,13 @@ export function HandyHubProvider({ children }: { children: ReactNode }) {
         return {
           success: false,
           error: 'Please fill in all fields.',
+        };
+      }
+
+      if (!isValidEmail(normalizedEmail)) {
+        return {
+          success: false,
+          error: 'Please enter a valid email address.',
         };
       }
 
@@ -537,9 +577,7 @@ export function HandyHubProvider({ children }: { children: ReactNode }) {
         };
       }
 
-      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-      if (!emailPattern.test(normalizedEmail)) {
+      if (!isValidEmail(normalizedEmail)) {
         return {
           success: false,
           error: 'Please enter a valid email address.',
@@ -613,6 +651,15 @@ export function HandyHubProvider({ children }: { children: ReactNode }) {
         };
       }
 
+      const title = input.title.trim();
+
+      if (!title) {
+        return {
+          success: false,
+          error: 'Please enter service title.',
+        };
+      }
+
       if (!input.categoryId) {
         return {
           success: false,
@@ -627,6 +674,13 @@ export function HandyHubProvider({ children }: { children: ReactNode }) {
         };
       }
 
+      if (!Number.isFinite(input.durationMin) || input.durationMin <= 0) {
+        return {
+          success: false,
+          error: 'Please enter a valid duration.',
+        };
+      }
+
       const description = input.description.trim();
 
       if (!description) {
@@ -637,21 +691,30 @@ export function HandyHubProvider({ children }: { children: ReactNode }) {
       }
 
       const timestamp = new Date().toISOString();
+      const updatedServicePrices = services.map((item) =>
+        item.id === service.id ? input.price : item.price
+      );
+      const masterServicePrices = updatedServicePrices.filter((_, index) => {
+        const item = services[index];
+        return item.masterId === master.id && item.isActive;
+      });
 
       const updatedMaster: MasterProfile = {
         ...master,
         description,
-        priceFrom: input.price,
+        priceFrom: Math.min(...masterServicePrices),
         updatedAt: timestamp,
       };
 
       const updatedService: Service = {
         ...service,
         categoryId: input.categoryId,
-        title: description.slice(0, 32) || 'Service',
+        title,
         description,
         price: input.price,
         priceType: input.priceType,
+        durationMin: input.durationMin,
+        isActive: service.isActive,
         updatedAt: timestamp,
       };
 
@@ -668,6 +731,152 @@ export function HandyHubProvider({ children }: { children: ReactNode }) {
       setServices((prevServices) =>
         prevServices.map((item) =>
           item.id === updatedService.id ? updatedService : item
+        )
+      );
+
+      return { success: true };
+    }
+
+    function addService(input: AddServiceInput) {
+      const master = masterProfiles.find((item) => item.id === input.masterId);
+
+      if (!master) {
+        return {
+          success: false,
+          error: 'Master profile not found.',
+        };
+      }
+
+      const title = input.title.trim();
+      const description = input.description.trim();
+
+      if (!input.categoryId || !title || !description) {
+        return {
+          success: false,
+          error: 'Please fill in all service fields.',
+        };
+      }
+
+      if (!Number.isFinite(input.price) || input.price <= 0) {
+        return {
+          success: false,
+          error: 'Please enter a valid price.',
+        };
+      }
+
+      if (!Number.isFinite(input.durationMin) || input.durationMin <= 0) {
+        return {
+          success: false,
+          error: 'Please enter a valid duration.',
+        };
+      }
+
+      const timestamp = new Date().toISOString();
+
+      const newService: Service = {
+        id: Date.now(),
+        masterId: input.masterId,
+        categoryId: input.categoryId,
+        title,
+        description,
+        price: input.price,
+        priceType: input.priceType,
+        durationMin: input.durationMin,
+        isActive: true,
+        createdAt: timestamp,
+        updatedAt: timestamp,
+      };
+
+      const masterServicePrices = services
+        .filter((service) => service.masterId === input.masterId)
+        .map((service) => service.price);
+
+      const updatedMaster: MasterProfile = {
+        ...master,
+        priceFrom: Math.min(...masterServicePrices, input.price),
+        updatedAt: timestamp,
+      };
+
+      insertService(newService).catch((error) => {
+        console.warn('Failed to save service', error);
+      });
+
+      insertMasterProfile(updatedMaster).catch((error) => {
+        console.warn('Failed to update master profile price', error);
+      });
+
+      setServices((prevServices) => [...prevServices, newService]);
+      setMasterProfiles((prevMasters) =>
+        prevMasters.map((item) =>
+          item.id === updatedMaster.id ? updatedMaster : item
+        )
+      );
+
+      return { success: true };
+    }
+
+    function setServiceActive(input: SetServiceActiveInput) {
+      const service = services.find((item) => item.id === input.serviceId);
+
+      if (!service) {
+        return {
+          success: false,
+          error: 'Service not found.',
+        };
+      }
+
+      const master = masterProfiles.find((item) => item.id === service.masterId);
+
+      if (!master) {
+        return {
+          success: false,
+          error: 'Master profile not found.',
+        };
+      }
+
+      const activeServices = services.filter(
+        (item) => item.masterId === service.masterId && item.isActive
+      );
+
+      if (!input.isActive && activeServices.length <= 1 && service.isActive) {
+        return {
+          success: false,
+          error: 'At least one active service is required.',
+        };
+      }
+
+      const timestamp = new Date().toISOString();
+      const updatedService: Service = {
+        ...service,
+        isActive: input.isActive,
+        updatedAt: timestamp,
+      };
+
+      const servicesAfterUpdate = services.map((item) =>
+        item.id === updatedService.id ? updatedService : item
+      );
+      const activePrices = servicesAfterUpdate
+        .filter((item) => item.masterId === master.id && item.isActive)
+        .map((item) => item.price);
+
+      const updatedMaster: MasterProfile = {
+        ...master,
+        priceFrom: Math.min(...activePrices),
+        updatedAt: timestamp,
+      };
+
+      insertService(updatedService).catch((error) => {
+        console.warn('Failed to update service status', error);
+      });
+
+      insertMasterProfile(updatedMaster).catch((error) => {
+        console.warn('Failed to update master profile price', error);
+      });
+
+      setServices(servicesAfterUpdate);
+      setMasterProfiles((prevMasters) =>
+        prevMasters.map((item) =>
+          item.id === updatedMaster.id ? updatedMaster : item
         )
       );
 
@@ -732,6 +941,8 @@ export function HandyHubProvider({ children }: { children: ReactNode }) {
       registerClient,
       updateProfile,
       updateMasterProfile,
+      addService,
+      setServiceActive,
       updateUserRole,
       getReviewsByUserId,
     };

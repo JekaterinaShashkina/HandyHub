@@ -89,6 +89,7 @@ export async function initializeDatabase() {
       price REAL NOT NULL,
       price_type TEXT NOT NULL,
       duration_min INTEGER NOT NULL,
+      is_active INTEGER NOT NULL DEFAULT 1,
       created_at TEXT NOT NULL,
       updated_at TEXT NOT NULL
     );
@@ -104,7 +105,24 @@ export async function initializeDatabase() {
     );
   `);
 
+  await migrateDatabase();
   await seedDatabaseIfEmpty();
+}
+
+async function migrateDatabase() {
+  const db = await getDatabase();
+  const serviceColumns = await db.getAllAsync<{ name: string }>(
+    'PRAGMA table_info(services)'
+  );
+  const hasServiceIsActive = serviceColumns.some(
+    (column) => column.name === 'is_active'
+  );
+
+  if (!hasServiceIsActive) {
+    await db.execAsync(
+      'ALTER TABLE services ADD COLUMN is_active INTEGER NOT NULL DEFAULT 1'
+    );
+  }
 }
 
 async function seedDatabaseIfEmpty() {
@@ -200,6 +218,7 @@ export async function loadDatabaseSnapshot(): Promise<HandyHubDatabaseSnapshot> 
     price: number;
     price_type: Service['priceType'];
     duration_min: number;
+    is_active: number;
     created_at: string;
     updated_at: string;
   }>('SELECT * FROM services');
@@ -256,6 +275,7 @@ export async function loadDatabaseSnapshot(): Promise<HandyHubDatabaseSnapshot> 
       price: service.price,
       priceType: service.price_type,
       durationMin: service.duration_min,
+      isActive: Boolean(service.is_active),
       createdAt: service.created_at,
       updatedAt: service.updated_at,
     })),
@@ -315,8 +335,8 @@ export async function insertService(service: Service) {
 
   await db.runAsync(
     `INSERT OR REPLACE INTO services
-      (id, master_id, category_id, title, description, price, price_type, duration_min, created_at, updated_at)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      (id, master_id, category_id, title, description, price, price_type, duration_min, is_active, created_at, updated_at)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     service.id,
     service.masterId,
     service.categoryId,
@@ -325,6 +345,7 @@ export async function insertService(service: Service) {
     service.price,
     service.priceType,
     service.durationMin,
+    service.isActive ? 1 : 0,
     service.createdAt,
     service.updatedAt
   );
@@ -396,13 +417,15 @@ export async function updateMasterProfileInDatabase(
 
   await db.runAsync(
     `UPDATE services
-     SET category_id = ?, title = ?, description = ?, price = ?, price_type = ?, updated_at = ?
+     SET category_id = ?, title = ?, description = ?, price = ?, price_type = ?, duration_min = ?, is_active = ?, updated_at = ?
      WHERE id = ?`,
     service.categoryId,
     service.title,
     service.description,
     service.price,
     service.priceType,
+    service.durationMin,
+    service.isActive ? 1 : 0,
     service.updatedAt,
     service.id
   );

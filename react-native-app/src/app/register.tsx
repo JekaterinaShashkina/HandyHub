@@ -14,6 +14,7 @@ import {
 } from 'react-native';
 
 import { useHandyHub } from '@/state/HandyHubContext';
+import { isValidEmail } from '@/utils/validation';
 import * as FileSystem from 'expo-file-system/legacy';
 import * as ImagePicker from 'expo-image-picker';
 
@@ -52,9 +53,7 @@ export default function RegisterScreen() {
       return;
     }
 
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    if (!emailPattern.test(email.trim())) {
+    if (!isValidEmail(email)) {
     setError('Please enter a valid email address.');
     return;
     }

@@ -40,7 +40,7 @@ export default function HomeScreen() {
 
       return matchesSearch && matchesCategory;
     });
-  }, [masters, searchText, selectedCategoryId]);
+  }, [categories, masters, searchText, selectedCategoryId]);
 
   return (
     <View style={styles.safeArea}>
@@ -66,6 +66,7 @@ export default function HomeScreen() {
         <ExpandableCategories
           categories={categories}
           selectedCategoryId={selectedCategoryId}
+          onShowAllPress={() => setSelectedCategoryId(null)}
           onCategoryPress={(category) =>
             setSelectedCategoryId(
               selectedCategoryId === category.id ? null : category.id

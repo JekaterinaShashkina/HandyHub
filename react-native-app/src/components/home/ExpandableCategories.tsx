@@ -8,6 +8,7 @@ type ExpandableCategoriesProps = {
   categories: Category[];
   selectedCategoryId: number | null;
   onCategoryPress: (category: Category) => void;
+  onShowAllPress: () => void;
 };
 
 const categoryIcons: Record<string, number> = {
@@ -29,8 +30,10 @@ export function ExpandableCategories({
   categories,
   selectedCategoryId,
   onCategoryPress,
+  onShowAllPress,
 }: ExpandableCategoriesProps) {
   const [expanded, setExpanded] = useState(false);
+  const allCategoriesSelected = selectedCategoryId === null;
 
   return (
     <View style={styles.container}>
@@ -45,6 +48,28 @@ export function ExpandableCategories({
 
       {expanded && (
         <View style={styles.list}>
+          <Pressable
+            style={[styles.row, allCategoriesSelected && styles.rowSelected]}
+            onPress={onShowAllPress}
+          >
+            <View style={styles.allIcon}>
+              <Feather name="grid" size={18} color="#111111" />
+            </View>
+
+            <Text
+              style={[
+                styles.name,
+                allCategoriesSelected && styles.nameSelected,
+              ]}
+            >
+              All categories
+            </Text>
+
+            {allCategoriesSelected && (
+              <Feather name="check" size={18} color="#111111" />
+            )}
+          </Pressable>
+
           {categories.map((category) => {
             const isSelected = selectedCategoryId === category.id;
 
@@ -112,6 +137,13 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     marginRight: 16,
+  },
+  allIcon: {
+    width: 24,
+    height: 24,
+    marginRight: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   name: {
     flex: 1,

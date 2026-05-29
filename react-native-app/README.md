@@ -152,3 +152,21 @@ Added avatar update for profile editing.
 Added duplicate email and phone validation when editing profile.
 Replaced text Back buttons with arrow icons on login, registration, and master details screens.
 
+git add react-native-app
+git commit -m "Add user reviews to profile"
+Что вошло в коммит:
+
+Added user review list to Profile.
+Added getReviewsByUserId helper.
+Added review cards with master name, category, rating, and comment.
+Added expand/collapse for long review comments.
+Split Profile screen into smaller profile components.
+
+git commit -m "Add master service management"
+
+управление услугами мастера: add/edit/hide/restore;
+отображение услуг на странице мастера;
+показ 3 последних отзывов с раскрытием всех;
+All categories на главной;
+рефактор add-master и edit-master-profile;
+более строгая проверка email.

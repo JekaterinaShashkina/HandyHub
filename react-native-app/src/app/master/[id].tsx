@@ -38,6 +38,7 @@ export default function MasterDetailsScreen() {
     const [commentText, setCommentText] = useState('');
     const [selectedRating, setSelectedRating] = useState(0);
     const [reviewError, setReviewError] = useState('');
+    const [showAllReviews, setShowAllReviews] = useState(false);
 
   if (!master) {
     return (
@@ -55,7 +56,16 @@ export default function MasterDetailsScreen() {
     );
   }
   const selectedMaster = master;
-const displayedReviews = selectedMaster.reviews;
+const activeServices = selectedMaster.services.filter((service) => service.isActive);
+const displayedReviews = [...selectedMaster.reviews].sort(
+  (firstReview, secondReview) =>
+    new Date(secondReview.createdAt).getTime() -
+    new Date(firstReview.createdAt).getTime()
+);
+const visibleReviews = showAllReviews
+  ? displayedReviews
+  : displayedReviews.slice(0, 3);
+const hasHiddenReviews = displayedReviews.length > 3;
 
 const currentUserId = currentUser?.id;
 
@@ -192,10 +202,39 @@ function MailIcon() {
         </View>
 
         <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Services</Text>
+
+          <View style={styles.servicesList}>
+            {activeServices.map((service) => (
+              <View key={service.id} style={styles.serviceCard}>
+                <View style={styles.serviceHeader}>
+                  <Text style={styles.serviceTitle}>{service.title}</Text>
+                  <Text style={styles.servicePrice}>
+                    {service.priceType} {service.price} EUR
+                  </Text>
+                </View>
+
+                <Text style={styles.serviceCategory}>{service.categoryName}</Text>
+                <Text style={styles.serviceDescription}>
+                  {service.description}
+                </Text>
+                <Text style={styles.serviceDuration}>
+                  {service.durationMin} min
+                </Text>
+              </View>
+            ))}
+
+            {activeServices.length === 0 && (
+              <Text style={styles.emptyText}>No active services</Text>
+            )}
+          </View>
+        </View>
+
+        <View style={styles.section}>
           <Text style={styles.sectionTitle}>Reviews</Text>
 
           <View style={styles.reviewList}>
-            {displayedReviews.map((review) => (
+            {visibleReviews.map((review) => (
             <ReviewCard key={review.id} review={review} />
             ))}
 
@@ -204,9 +243,16 @@ function MailIcon() {
             )}
           </View>
 
-          <Pressable style={styles.allReviewsButton}>
-            <Text style={styles.allReviewsText}>All reviews</Text>
-          </Pressable>
+          {hasHiddenReviews && (
+            <Pressable
+              style={styles.allReviewsButton}
+              onPress={() => setShowAllReviews((value) => !value)}
+            >
+              <Text style={styles.allReviewsText}>
+                {showAllReviews ? 'Hide reviews' : 'All reviews'}
+              </Text>
+            </Pressable>
+          )}
         </View>
 
         {reviewAllowed && currentUser ? (
@@ -336,6 +382,47 @@ const styles = StyleSheet.create({
     fontSize: 13,
     lineHeight: 20,
     color: '#3F3F3F',
+  },
+  servicesList: {
+    gap: 10,
+  },
+  serviceCard: {
+    padding: 14,
+    borderRadius: 6,
+    backgroundColor: '#FFFFFF',
+  },
+  serviceHeader: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+    gap: 12,
+    marginBottom: 6,
+  },
+  serviceTitle: {
+    flex: 1,
+    fontSize: 15,
+    fontWeight: '700',
+    color: '#111111',
+  },
+  servicePrice: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: '#111111',
+  },
+  serviceCategory: {
+    marginBottom: 6,
+    fontSize: 13,
+    color: '#5368C9',
+  },
+  serviceDescription: {
+    fontSize: 13,
+    lineHeight: 19,
+    color: '#3F3F3F',
+  },
+  serviceDuration: {
+    marginTop: 8,
+    fontSize: 13,
+    color: '#6B6B6B',
   },
   reviewList: {
     gap: 10,

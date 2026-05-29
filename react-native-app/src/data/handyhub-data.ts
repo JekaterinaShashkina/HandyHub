@@ -54,6 +54,7 @@ export type Service = {
   price: number;
   priceType: 'fixed' | 'from' | 'hourly';
   durationMin: number;
+  isActive: boolean;
   createdAt: string;
   updatedAt: string;
 };
@@ -168,6 +169,7 @@ export const services: Service[] = [
     price: 30,
     priceType: 'fixed',
     durationMin: 90,
+    isActive: true,
     createdAt: now,
     updatedAt: now,
   },
@@ -180,6 +182,7 @@ export const services: Service[] = [
     price: 45,
     priceType: 'hourly',
     durationMin: 60,
+    isActive: true,
     createdAt: now,
     updatedAt: now,
   },
@@ -257,6 +260,7 @@ export type MasterDetails = {
     price: number;
     priceType: Service['priceType'];
     durationMin: number;
+    isActive: boolean;
     categoryName: string;
 
   }>;
@@ -318,6 +322,7 @@ export function getMasterDetails(masterId: number): MasterDetails | undefined {
         price: service.price,
         priceType: service.priceType,
         durationMin: service.durationMin,
+        isActive: service.isActive,
         categoryName: category?.name ?? 'Service',
       };
     }),
