@@ -15,6 +15,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.handyhub.model.User
 import com.example.handyhub.ui.components.AppHeader
 import com.example.handyhub.ui.components.MasterInfoCard
 import com.example.handyhub.ui.components.MasterProfileCard
@@ -24,10 +25,14 @@ import com.example.handyhub.viewmodel.MasterDetailViewModel
 @Composable
 fun MasterDetailScreen(
     masterId: Int,
+    avatarUrl: Int?,
+    isLoggedIn: Boolean,
     viewModel: MasterDetailViewModel,
     onBackClick: () -> Unit,
     onAddReviewClick: () -> Unit,
-    onLoginClick: () -> Unit
+    onLoginClick: () -> Unit,
+    onLogoutClick: () -> Unit,
+    onProfileClick: () -> Unit
 ) {
     LaunchedEffect(masterId) {
         viewModel.loadMaster(masterId)
@@ -46,12 +51,14 @@ fun MasterDetailScreen(
         item {
             AppHeader(
                 title = "Master details",
+                avatarUrl = avatarUrl,
                 showBack = true,
-                isLoggedIn = false,
+                isLoggedIn = isLoggedIn,
                 showAuthActions = true,
                 onBackClick = onBackClick,
                 onLoginClick = onLoginClick,
-                onProfileClick = { TODO() }
+                onLogoutClick = onLogoutClick,
+                onProfileClick = onProfileClick
             )
         }
         master?.let { item ->

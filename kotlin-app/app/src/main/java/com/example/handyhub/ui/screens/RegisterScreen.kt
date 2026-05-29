@@ -94,8 +94,8 @@ fun RegisterScreen(
                 onRegisterClick(
                     name,
                     surname,
-                    email,
                     phone,
+                    email,
                     password,
                     repeatPassword
                 )

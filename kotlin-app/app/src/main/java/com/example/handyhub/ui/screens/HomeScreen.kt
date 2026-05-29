@@ -20,13 +20,18 @@ import com.example.handyhub.ui.components.AppExpandableCategories
 import com.example.handyhub.ui.components.AppHeader
 import com.example.handyhub.ui.components.AppSearchBar
 import com.example.handyhub.ui.components.MasterCard
+import com.example.handyhub.viewmodel.AuthViewModel
 import com.example.handyhub.viewmodel.HomeViewModel
 
 @Composable
 fun HomeScreen (
     viewModel: HomeViewModel,
     onMasterClick: (Int) -> Unit,
-    onLoginClick: () -> Unit
+    onLoginClick: () -> Unit,
+    onLogoutClick: () -> Unit,
+    onProfileClick: () -> Unit,
+    isLoggedIn: Boolean,
+    avatarUrl: Int?
 ){
     val categories by viewModel.categories.collectAsState()
 
@@ -53,11 +58,13 @@ fun HomeScreen (
     ) {
         item {
             AppHeader(
+                avatarUrl = avatarUrl,
                 showLogo = true,
-                isLoggedIn = false,
+                isLoggedIn = isLoggedIn,
                 showAuthActions = true,
                 onLoginClick = onLoginClick ,
-                onProfileClick = {TODO()}
+                onLogoutClick = onLogoutClick,
+                onProfileClick = onProfileClick
             )
         }
         item {
