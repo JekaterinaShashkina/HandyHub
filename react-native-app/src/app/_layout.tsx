@@ -12,6 +12,7 @@ export default function RootLayout() {
         <Stack.Screen name="profile" />
         <Stack.Screen name="edit-profile" />
         <Stack.Screen name="add-master" />
+        <Stack.Screen name="edit-master-profile" />
         <Stack.Screen name="master/[id]" />
         
       </Stack>

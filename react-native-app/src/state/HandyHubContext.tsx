@@ -30,9 +30,19 @@ import {
   insertService,
   insertUser,
   loadDatabaseSnapshot,
+  updateMasterProfileInDatabase,
   updateUserProfileInDatabase,
   updateUserRoleInDatabase,
 } from '@/database/handyhub-db';
+
+type UpdateMasterProfileInput = {
+  masterId: number;
+  serviceId: number;
+  categoryId: number;
+  priceType: Service['priceType'];
+  price: number;
+  description: string;
+};
 
 type NewReviewInput = {
   masterId: number;
@@ -76,6 +86,7 @@ type HandyHubState = {
   isDatabaseReady: boolean;
   getMasterCards: () => MasterCardItem[];
   getMasterDetails: (masterId: number) => MasterDetails | undefined;
+  getMasterDetailsByUserId: (userId: number) => MasterDetails | undefined;
   upsertReview: (input: NewReviewInput) => void;
   addMaster: (input: AddMasterInput) => { success: boolean; error?: string };
   login: (email: string, password: string) => boolean;
@@ -84,6 +95,7 @@ type HandyHubState = {
   registerClient: (input: RegisterClientInput) => { success: boolean; error?: string };
   updateProfile: (input: UpdateProfileInput) => { success: boolean; error?: string };
   updateUserRole: (userId: number, roleId: User['roleId']) => void;
+  updateMasterProfile: (  input: UpdateMasterProfileInput) => { success: boolean; error?: string };
   
 };
 
@@ -209,7 +221,7 @@ export function HandyHubProvider({ children }: { children: ReactNode }) {
         };
       });
 
-      return {
+            return {
         id: master.id,
         fullName: `${user?.name ?? ''} ${user?.surname ?? ''}`.trim(),
         email: user?.email ?? '',
@@ -237,6 +249,16 @@ export function HandyHubProvider({ children }: { children: ReactNode }) {
         avatarUrl: user?.avatarUrl,
       };
     }
+
+    function getMasterDetailsByUserId(userId: number) {
+      const master = masterProfiles.find((item) => item.userId === userId);
+
+      if (!master) {
+        return undefined;
+      }
+
+      return getMasterDetails(master.id);
+}
 
     function upsertReview(input: NewReviewInput) {
       setReviews((prevReviews) => {
@@ -472,90 +494,162 @@ export function HandyHubProvider({ children }: { children: ReactNode }) {
       return { success: true };
     }
 
- function updateProfile(input: UpdateProfileInput) {
-  if (!currentUser) {
-    return {
-      success: false,
-      error: 'Log in to edit your profile.',
-    };
-  }
+    function updateProfile(input: UpdateProfileInput) {
+      if (!currentUser) {
+        return {
+          success: false,
+          error: 'Log in to edit your profile.',
+        };
+      }
 
-  const name = input.name.trim();
-  const surname = input.surname.trim();
-  const normalizedEmail = input.email.trim().toLowerCase();
-  const normalizedPhone = input.phone.trim();
+      const name = input.name.trim();
+      const surname = input.surname.trim();
+      const normalizedEmail = input.email.trim().toLowerCase();
+      const normalizedPhone = input.phone.trim();
 
-  if (!name || !surname || !normalizedEmail || !normalizedPhone) {
-    return {
-      success: false,
-      error: 'Please fill in all fields.',
-    };
-  }
+      if (!name || !surname || !normalizedEmail || !normalizedPhone) {
+        return {
+          success: false,
+          error: 'Please fill in all fields.',
+        };
+      }
 
-  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-  if (!emailPattern.test(normalizedEmail)) {
-    return {
-      success: false,
-      error: 'Please enter a valid email address.',
-    };
-  }
+      if (!emailPattern.test(normalizedEmail)) {
+        return {
+          success: false,
+          error: 'Please enter a valid email address.',
+        };
+      }
 
-  if (normalizedPhone.length < 6) {
-    return {
-      success: false,
-      error: 'Please enter a valid phone number.',
-    };
-  }
+      if (normalizedPhone.length < 6) {
+        return {
+          success: false,
+          error: 'Please enter a valid phone number.',
+        };
+      }
 
-  const emailExists = users.some(
-    (user) =>
-      user.id !== currentUser.id &&
-      user.email.toLowerCase() === normalizedEmail
-  );
+      const emailExists = users.some(
+        (user) =>
+          user.id !== currentUser.id &&
+          user.email.toLowerCase() === normalizedEmail
+      );
 
-  if (emailExists) {
-    return {
-      success: false,
-      error: 'User with this email already exists.',
-    };
-  }
+      if (emailExists) {
+        return {
+          success: false,
+          error: 'User with this email already exists.',
+        };
+      }
 
-  const phoneExists = users.some(
-    (user) =>
-      user.id !== currentUser.id && user.phone.trim() === normalizedPhone
-  );
+      const phoneExists = users.some(
+        (user) =>
+          user.id !== currentUser.id && user.phone.trim() === normalizedPhone
+      );
 
-  if (phoneExists) {
-    return {
-      success: false,
-      error: 'User with this phone already exists.',
-    };
-  }
+      if (phoneExists) {
+        return {
+          success: false,
+          error: 'User with this phone already exists.',
+        };
+      }
 
-  const updatedUser: User = {
-    ...currentUser,
-    name,
-    surname,
-    email: normalizedEmail,
-    phone: normalizedPhone,
-    avatarUrl: input.avatarUrl ?? currentUser.avatarUrl,
-    updatedAt: new Date().toISOString(),
-  };
+      const updatedUser: User = {
+        ...currentUser,
+        name,
+        surname,
+        email: normalizedEmail,
+        phone: normalizedPhone,
+        avatarUrl: input.avatarUrl ?? currentUser.avatarUrl,
+        updatedAt: new Date().toISOString(),
+      };
 
-  updateUserProfileInDatabase(updatedUser).catch((error) => {
-    console.warn('Failed to update user profile', error);
-  });
+      updateUserProfileInDatabase(updatedUser).catch((error) => {
+        console.warn('Failed to update user profile', error);
+      });
 
-  setUsers((prevUsers) =>
-    prevUsers.map((user) =>
-      user.id === updatedUser.id ? updatedUser : user
-    )
-  );
-  setCurrentUser(updatedUser);
+      setUsers((prevUsers) =>
+        prevUsers.map((user) =>
+          user.id === updatedUser.id ? updatedUser : user
+        )
+      );
+      setCurrentUser(updatedUser);
 
-  return { success: true };
-}
+      return { success: true };
+    }
+
+    function updateMasterProfile(input: UpdateMasterProfileInput) {
+      const master = masterProfiles.find((item) => item.id === input.masterId);
+      const service = services.find((item) => item.id === input.serviceId);
+
+      if (!master || !service) {
+        return {
+          success: false,
+          error: 'Master profile not found.',
+        };
+      }
+
+      if (!input.categoryId) {
+        return {
+          success: false,
+          error: 'Please select a category.',
+        };
+      }
+
+      if (!Number.isFinite(input.price) || input.price <= 0) {
+        return {
+          success: false,
+          error: 'Please enter a valid price.',
+        };
+      }
+
+      const description = input.description.trim();
+
+      if (!description) {
+        return {
+          success: false,
+          error: 'Please enter service description.',
+        };
+      }
+
+      const timestamp = new Date().toISOString();
+
+      const updatedMaster: MasterProfile = {
+        ...master,
+        description,
+        priceFrom: input.price,
+        updatedAt: timestamp,
+      };
+
+      const updatedService: Service = {
+        ...service,
+        categoryId: input.categoryId,
+        title: description.slice(0, 32) || 'Service',
+        description,
+        price: input.price,
+        priceType: input.priceType,
+        updatedAt: timestamp,
+      };
+
+      updateMasterProfileInDatabase(updatedMaster, updatedService).catch((error) => {
+        console.warn('Failed to update master profile', error);
+      });
+
+      setMasterProfiles((prevMasters) =>
+        prevMasters.map((item) =>
+          item.id === updatedMaster.id ? updatedMaster : item
+        )
+      );
+
+      setServices((prevServices) =>
+        prevServices.map((item) =>
+          item.id === updatedService.id ? updatedService : item
+        )
+      );
+
+      return { success: true };
+    }
     
     function login(email: string, password: string) {
       const normalizedEmail = email.trim().toLowerCase();
@@ -606,6 +700,7 @@ export function HandyHubProvider({ children }: { children: ReactNode }) {
       isDatabaseReady,
       getMasterCards,
       getMasterDetails,
+      getMasterDetailsByUserId,
       upsertReview,
       addMaster,
       login,
@@ -613,7 +708,9 @@ export function HandyHubProvider({ children }: { children: ReactNode }) {
       hasMasterProfile,
       registerClient,
       updateProfile,
+      updateMasterProfile,
       updateUserRole,
+
     };
   }, [
     categories,
@@ -624,6 +721,8 @@ export function HandyHubProvider({ children }: { children: ReactNode }) {
     services,
     users,
   ]);
+
+
 
   return (
     <HandyHubContext.Provider value={value}>
