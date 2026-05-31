@@ -21,14 +21,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import com.example.handyhub.ui.components.ConfirmDialog
+import com.example.handyhub.ui.screens.BecomeMasterScreen
 import com.example.handyhub.ui.screens.ProfileScreen
 import com.example.handyhub.ui.screens.RegisterScreen
+import com.example.handyhub.viewmodel.MasterViewModel
 
 @Composable
 fun AppNavigation(
     homeViewModel: HomeViewModel,
     masterDetailViewModel: MasterDetailViewModel,
-    authViewModel: AuthViewModel
+    authViewModel: AuthViewModel,
+    masterViewModel: MasterViewModel
 ) {
     val navController = rememberNavController()
     val currentUser by authViewModel.currentUser.collectAsState()
@@ -205,6 +208,59 @@ fun AppNavigation(
                 },
                 onProfileClick = {
                     navController.navigate(Routes.PROFILE)
+                }
+            )
+        }
+        composable(Routes.BECOME_MASTER) {
+            BecomeMasterScreen(
+                onBackClick = {
+                    navController.popBackStack()
+                },
+                onRegisterMasterClick = { categoryId, priceFrom, expYears, description, serviceTitle, servicePrice ->
+                    // подключим к БД следующим шагом
+                }
+            )
+        }
+        composable(Routes.BECOME_MASTER) {
+            val context = LocalContext.current
+
+            BecomeMasterScreen(
+                onBackClick = {
+                    navController.popBackStack()
+                },
+                onRegisterMasterClick = { categoryId, priceFrom, expYears, description, serviceTitle, servicePrice ->
+
+                    val userId = currentUser?.id
+
+                    if (userId == null) {
+                        Toast.makeText(context, "Please login first", Toast.LENGTH_SHORT).show()
+                        navController.navigate(Routes.LOGIN)
+                        return@BecomeMasterScreen
+                    } else {
+
+                        masterViewModel.becomeMaster(
+                            userId = userId,
+                            categoryId = categoryId,
+                            priceFrom = priceFrom,
+                            expYears = expYears,
+                            description = description,
+                            serviceTitle = serviceTitle,
+                            servicePrice = servicePrice,
+                            onSuccess = {
+                                Toast.makeText(
+                                    context,
+                                    "Master profile created",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                homeViewModel.loadData()
+                                authViewModel.refreshCurrentUser()
+                                navController.popBackStack()
+                            },
+                            onError = { message ->
+                                Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                            }
+                        )
+                    }
                 }
             )
         }

@@ -96,4 +96,12 @@ class AuthViewModel(
     fun logout() {
         _currentUser.value = null
     }
+
+    fun refreshCurrentUser() {
+        val userId = _currentUser.value?.id ?: return
+
+        viewModelScope.launch {
+            _currentUser.value = repository.getUserById(userId)
+        }
+    }
 }

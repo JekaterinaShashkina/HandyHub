@@ -41,11 +41,11 @@ class HandyHubRepository(
     suspend fun insertCategory(category: Category) {
         database.categoryDao().insertCategory(category)
     }
-    suspend fun insertMasterProfile(master: MasterProfile) {
-        database.masterProfileDao().insertMasterProfile(master)
+    suspend fun insertMasterProfile(master: MasterProfile) : Long {
+       return database.masterProfileDao().insertMasterProfile(master)
     }
-    suspend fun insertService(service: Service) {
-        database.serviceDao().insertService(service)
+    suspend fun insertService(service: Service) : Long {
+       return database.serviceDao().insertService(service)
     }
     suspend fun insertReview(review: Review) {
         database.reviewDao().insertReview(review)
@@ -55,5 +55,12 @@ class HandyHubRepository(
     }
     suspend fun insertRole(role: Role) {
         database.roleDao().insertRole(role)
+    }
+    suspend fun updateUserRole(userId: Int, roleId: Int) {
+        database.userDao().updateUserRole(
+            userId = userId,
+            roleId = roleId,
+            updatedAt = System.currentTimeMillis()
+        )
     }
 }
