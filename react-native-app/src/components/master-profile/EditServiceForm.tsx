@@ -18,14 +18,8 @@ export function EditServiceForm({
   service,
   onSave,
 }: EditServiceFormProps) {
-  const initialCategory = categories.find(
-    (category) => category.name === service.categoryName
-  );
-
   const [title, setTitle] = useState(service.title);
-  const [categoryId, setCategoryId] = useState<number | null>(
-    initialCategory?.id ?? null
-  );
+  const [categoryId, setCategoryId] = useState<number | null>(service.categoryId);
   const [categoryOpen, setCategoryOpen] = useState(false);
   const [priceType, setPriceType] = useState(service.priceType);
   const [priceOpen, setPriceOpen] = useState(false);
@@ -33,12 +27,17 @@ export function EditServiceForm({
   const [duration, setDuration] = useState(String(service.durationMin));
   const [description, setDescription] = useState(service.description);
   const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
 
   function clearError() {
     setError('');
+    setSuccessMessage('');
   }
 
   function handleSave() {
+    setCategoryOpen(false);
+    setPriceOpen(false);
+
     if (!title.trim()) {
       setError('Please enter service title.');
       return;
@@ -83,6 +82,7 @@ export function EditServiceForm({
     }
 
     setError('');
+    setSuccessMessage('Service saved.');
   }
 
   return (
@@ -128,6 +128,11 @@ export function EditServiceForm({
       />
 
       <FormMessage message={error} type="error" style={styles.errorText} />
+      <FormMessage
+        message={successMessage}
+        type="success"
+        style={styles.successText}
+      />
 
       <PrimaryButton
         title="Save changes"
@@ -156,6 +161,9 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   errorText: {
+    marginTop: 4,
+  },
+  successText: {
     marginTop: 4,
   },
 });

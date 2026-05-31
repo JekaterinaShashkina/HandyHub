@@ -10,6 +10,7 @@ import {
 import { useState } from 'react';
 
 import { BackButton } from '@/components/common/BackButton';
+import { ScreenHeader } from '@/components/common/ScreenHeader';
 import { AddServiceForm } from '@/components/master-profile/AddServiceForm';
 import { CurrentServicesSection } from '@/components/master-profile/CurrentServicesSection';
 import { HandyHubColors } from '@/constants/theme';
@@ -89,6 +90,7 @@ export default function EditMasterProfileScreen() {
 
     if (result.success) {
       setSelectedServiceId(null);
+      setStatusMessage('Service added.');
     }
 
     return result;
@@ -130,13 +132,10 @@ export default function EditMasterProfileScreen() {
         keyboardDismissMode="interactive"
         showsVerticalScrollIndicator={false}
       >
-        <View style={styles.header}>
-          <BackButton onPress={() => router.back()} marginBottom={0} />
-
-          <Text style={styles.title}>Edit master profile</Text>
-
-          <View style={styles.headerSpacer} />
-        </View>
+        <ScreenHeader
+          title="Edit master profile"
+          onBack={() => router.back()}
+        />
 
         <CurrentServicesSection
           categories={categories}
@@ -166,14 +165,6 @@ const styles = StyleSheet.create({
   content: {
     paddingHorizontal: 13,
     paddingBottom: 32,
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 18,
-  },
-  headerSpacer: {
-    width: 42,
   },
   title: {
     flex: 1,

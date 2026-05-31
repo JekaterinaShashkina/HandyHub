@@ -1,7 +1,23 @@
 import { Feather } from '@expo/vector-icons';
-import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import {
+  Pressable,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+  type StyleProp,
+  type ViewStyle,
+} from 'react-native';
 
+import { FormTextInput } from '@/components/common/FormTextInput';
+import { HandyHubColors } from '@/constants/theme';
 import type { Category, Service } from '@/data/handyhub-data';
+
+const priceTypes: Service['priceType'][] = ['from', 'fixed', 'hourly'];
+const priceOptions = priceTypes.map((type) => ({
+  label: type,
+  value: type,
+}));
 
 type ServiceFormFieldsProps = {
   categories: Category[];
@@ -46,125 +62,224 @@ export function ServiceFormFields({
 
   return (
     <>
-      <Text style={styles.label}>Title</Text>
-      <TextInput value={title} onChangeText={onTitleChange} style={styles.input} />
+      <FormTextInput
+        label="Title"
+        value={title}
+        onChangeText={onTitleChange}
+        inputStyle={styles.borderedInput}
+      />
 
-      <Text style={styles.label}>Category</Text>
-      <Pressable
-        style={styles.select}
-        onPress={() => onCategoryOpenChange(!categoryOpen)}
-      >
-        <Text style={[styles.selectText, !selectedCategory && styles.placeholder]}>
-          {selectedCategory?.name ?? 'Select category'}
-        </Text>
-        <Feather
-          name={categoryOpen ? 'chevron-up' : 'chevron-down'}
-          size={22}
-          color="#111111"
-        />
-      </Pressable>
+      <SelectField
+        label="Category"
+        open={categoryOpen}
+        selectedLabel={selectedCategory?.name}
+        placeholder="Select category"
+        options={categories.map((category) => ({
+          label: category.name,
+          value: category.id,
+        }))}
+        onOpenChange={onCategoryOpenChange}
+        onSelect={onCategoryChange}
+      />
 
-      {categoryOpen && (
-        <View style={styles.dropdown}>
-          {categories.map((category) => (
-            <Pressable
-              key={category.id}
-              style={styles.dropdownItem}
-              onPress={() => {
-                onCategoryChange(category.id);
-                onCategoryOpenChange(false);
-              }}
-            >
-              <Text style={styles.dropdownText}>{category.name}</Text>
-            </Pressable>
-          ))}
-        </View>
-      )}
+      <PriceField
+        priceType={priceType}
+        priceOpen={priceOpen}
+        price={price}
+        onPriceTypeChange={onPriceTypeChange}
+        onPriceOpenChange={onPriceOpenChange}
+        onPriceChange={onPriceChange}
+      />
 
+      <FormTextInput
+        label="Duration, min"
+        value={duration}
+        onChangeText={onDurationChange}
+        keyboardType="numeric"
+        inputStyle={styles.borderedInput}
+      />
+
+      <FormTextInput
+        label="Service description"
+        value={description}
+        onChangeText={onDescriptionChange}
+        multiline
+        inputStyle={[styles.borderedInput, styles.descriptionInput]}
+      />
+    </>
+  );
+}
+
+type SelectOption<TValue extends string | number> = {
+  label: string;
+  value: TValue;
+};
+
+type PriceFieldProps = {
+  priceType: Service['priceType'];
+  priceOpen: boolean;
+  price: string;
+  onPriceTypeChange: (value: Service['priceType']) => void;
+  onPriceOpenChange: (value: boolean) => void;
+  onPriceChange: (value: string) => void;
+};
+
+function PriceField({
+  priceType,
+  priceOpen,
+  price,
+  onPriceTypeChange,
+  onPriceOpenChange,
+  onPriceChange,
+}: PriceFieldProps) {
+  return (
+    <>
       <Text style={styles.label}>Price</Text>
       <View style={styles.priceRow}>
-        <Pressable
-          style={[styles.select, styles.priceTypeSelect]}
-          onPress={() => onPriceOpenChange(!priceOpen)}
-        >
-          <Text style={styles.selectText}>{priceType}</Text>
-          <Feather
-            name={priceOpen ? 'chevron-up' : 'chevron-down'}
-            size={22}
-            color="#111111"
-          />
-        </Pressable>
+        <SelectField
+          open={priceOpen}
+          selectedLabel={priceType}
+          options={priceOptions}
+          onOpenChange={onPriceOpenChange}
+          onSelect={onPriceTypeChange}
+          selectStyle={styles.priceTypeSelect}
+          renderDropdown={false}
+        />
 
         <TextInput
           value={price}
           onChangeText={onPriceChange}
           placeholder="service price"
-          placeholderTextColor="#C3C3C3"
+          placeholderTextColor={HandyHubColors.placeholder}
           keyboardType="numeric"
           style={[styles.input, styles.priceInput]}
         />
       </View>
 
       {priceOpen && (
-        <View style={[styles.dropdown, styles.priceDropdown]}>
-          {(['from', 'fixed', 'hourly'] as const).map((type) => (
-            <Pressable
-              key={type}
-              style={styles.dropdownItem}
-              onPress={() => {
-                onPriceTypeChange(type);
-                onPriceOpenChange(false);
-              }}
-            >
-              <Text style={styles.dropdownText}>{type}</Text>
-            </Pressable>
-          ))}
-        </View>
+        <SelectDropdown
+          options={priceOptions}
+          onSelect={(type) => {
+            onPriceTypeChange(type);
+            onPriceOpenChange(false);
+          }}
+          style={styles.priceDropdown}
+        />
       )}
-
-      <Text style={styles.label}>Duration, min</Text>
-      <TextInput
-        value={duration}
-        onChangeText={onDurationChange}
-        keyboardType="numeric"
-        style={styles.input}
-      />
-
-      <Text style={styles.label}>Service description</Text>
-      <TextInput
-        value={description}
-        onChangeText={onDescriptionChange}
-        style={[styles.input, styles.descriptionInput]}
-        multiline
-        textAlignVertical="top"
-      />
     </>
+  );
+}
+
+type SelectFieldProps<TValue extends string | number> = {
+  label?: string;
+  open: boolean;
+  selectedLabel?: string;
+  placeholder?: string;
+  options: SelectOption<TValue>[];
+  onOpenChange: (value: boolean) => void;
+  onSelect: (value: TValue) => void;
+  selectStyle?: StyleProp<ViewStyle>;
+  dropdownStyle?: StyleProp<ViewStyle>;
+  renderDropdown?: boolean;
+};
+
+function SelectField<TValue extends string | number>({
+  label,
+  open,
+  selectedLabel,
+  placeholder,
+  options,
+  onOpenChange,
+  onSelect,
+  selectStyle,
+  dropdownStyle,
+  renderDropdown = true,
+}: SelectFieldProps<TValue>) {
+  return (
+    <>
+      {label ? <Text style={styles.label}>{label}</Text> : null}
+
+      <Pressable
+        style={[styles.select, selectStyle]}
+        onPress={() => onOpenChange(!open)}
+      >
+        <Text style={[styles.selectText, !selectedLabel && styles.placeholder]}>
+          {selectedLabel ?? placeholder}
+        </Text>
+        <Feather
+          name={open ? 'chevron-up' : 'chevron-down'}
+          size={22}
+          color={HandyHubColors.text}
+        />
+      </Pressable>
+
+      {open && renderDropdown && (
+        <SelectDropdown
+          options={options}
+          onSelect={(value) => {
+            onSelect(value);
+            onOpenChange(false);
+          }}
+          style={dropdownStyle}
+        />
+      )}
+    </>
+  );
+}
+
+type SelectDropdownProps<TValue extends string | number> = {
+  options: SelectOption<TValue>[];
+  onSelect: (value: TValue) => void;
+  style?: StyleProp<ViewStyle>;
+};
+
+function SelectDropdown<TValue extends string | number>({
+  options,
+  onSelect,
+  style,
+}: SelectDropdownProps<TValue>) {
+  return (
+    <View style={[styles.dropdown, style]}>
+      {options.map((option) => (
+        <Pressable
+          key={String(option.value)}
+          style={styles.dropdownItem}
+          onPress={() => onSelect(option.value)}
+        >
+          <Text style={styles.dropdownText}>{option.label}</Text>
+        </Pressable>
+      ))}
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   label: {
     fontSize: 13,
-    color: '#3F3F3F',
+    color: HandyHubColors.textSecondary,
     marginBottom: 5,
   },
   input: {
     minHeight: 43,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#D8DCE8',
-    backgroundColor: '#FFFFFF',
+    borderColor: HandyHubColors.border,
+    backgroundColor: HandyHubColors.surface,
     paddingHorizontal: 13,
     fontSize: 15,
-    color: '#111111',
+    color: HandyHubColors.text,
     marginBottom: 8,
+  },
+  borderedInput: {
+    borderWidth: 1,
+    borderColor: HandyHubColors.border,
   },
   select: {
     minHeight: 43,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#D8DCE8',
-    backgroundColor: '#FFFFFF',
+    borderColor: HandyHubColors.border,
+    backgroundColor: HandyHubColors.surface,
     paddingHorizontal: 13,
     flexDirection: 'row',
     alignItems: 'center',
@@ -173,14 +288,14 @@ const styles = StyleSheet.create({
   selectText: {
     flex: 1,
     fontSize: 14,
-    color: '#111111',
+    color: HandyHubColors.text,
   },
   placeholder: {
-    color: '#C3C3C3',
+    color: HandyHubColors.placeholder,
   },
   dropdown: {
     borderRadius: 8,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: HandyHubColors.surface,
     marginTop: -4,
     marginBottom: 8,
     overflow: 'hidden',
@@ -192,7 +307,7 @@ const styles = StyleSheet.create({
   },
   dropdownText: {
     fontSize: 14,
-    color: '#111111',
+    color: HandyHubColors.text,
   },
   priceRow: {
     flexDirection: 'row',

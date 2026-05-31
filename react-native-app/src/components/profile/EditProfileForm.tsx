@@ -1,11 +1,10 @@
-import { Feather } from '@expo/vector-icons';
-import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 
-import { BackButton } from '@/components/common/BackButton';
+import { AvatarPicker } from '@/components/add-master/AvatarPicker';
 import { FormMessage } from '@/components/common/FormMessage';
 import { FormTextInput } from '@/components/common/FormTextInput';
 import { PrimaryButton } from '@/components/common/PrimaryButton';
-import { HandyHubColors } from '@/constants/theme';
+import { ScreenHeader } from '@/components/common/ScreenHeader';
 
 type EditProfileFormProps = {
   name: string;
@@ -42,29 +41,15 @@ export function EditProfileForm({
 }: EditProfileFormProps) {
   return (
     <>
-      <View style={styles.header}>
-        <BackButton onPress={onBack} marginBottom={0} />
+      <ScreenHeader title="Edit profile" onBack={onBack} />
 
-        <Text style={styles.title}>Edit profile</Text>
-
-        <View style={styles.headerSpacer} />
-      </View>
-
-      <View style={styles.avatarBlock}>
-        {avatarUri ? (
-          <Image source={{ uri: avatarUri }} style={styles.avatarPreview} />
-        ) : (
-          <View style={styles.avatarFallback}>
-            <Feather name="user" size={34} color={HandyHubColors.text} />
-          </View>
-        )}
-
-        <Pressable style={styles.uploadButton} onPress={onPickAvatar}>
-          <Text style={styles.uploadButtonText}>
-            {avatarUri ? 'Change avatar' : 'Upload avatar'}
-          </Text>
-        </Pressable>
-      </View>
+      <AvatarPicker
+        avatarUri={avatarUri}
+        onPickAvatar={onPickAvatar}
+        mode="large"
+        uploadText="Upload avatar"
+        changeText="Change avatar"
+      />
 
       <FormTextInput label="Name" value={name} onChangeText={onNameChange} />
       <FormTextInput
@@ -98,54 +83,6 @@ export function EditProfileForm({
 }
 
 const styles = StyleSheet.create({
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 18,
-  },
-  headerSpacer: {
-    width: 42,
-  },
-  title: {
-    flex: 1,
-    fontSize: 18,
-    color: HandyHubColors.text,
-    textAlign: 'center',
-  },
-  avatarBlock: {
-    alignItems: 'center',
-    marginBottom: 24,
-  },
-  avatarPreview: {
-    width: 92,
-    height: 92,
-    borderRadius: 46,
-    backgroundColor: HandyHubColors.avatarBackground,
-    marginBottom: 12,
-  },
-  avatarFallback: {
-    width: 92,
-    height: 92,
-    borderRadius: 46,
-    backgroundColor: HandyHubColors.avatarBackground,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 12,
-  },
-  uploadButton: {
-    minHeight: 34,
-    paddingHorizontal: 18,
-    borderRadius: 4,
-    borderWidth: 1,
-    borderColor: '#16D83E',
-    backgroundColor: HandyHubColors.surface,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  uploadButtonText: {
-    fontSize: 14,
-    color: HandyHubColors.text,
-  },
   errorText: {
     marginTop: 4,
   },

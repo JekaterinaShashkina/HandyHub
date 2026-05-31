@@ -18,7 +18,13 @@ type HandyHubCollections = {
 };
 
 export function getReviewsForMaster(reviews: Review[], masterId: number) {
-  return reviews.filter((review) => review.masterId === masterId);
+  return reviews
+    .filter((review) => review.masterId === masterId)
+    .sort(
+      (firstReview, secondReview) =>
+        new Date(secondReview.createdAt).getTime() -
+        new Date(firstReview.createdAt).getTime()
+    );
 }
 
 export function hasMasterProfile(
@@ -155,6 +161,7 @@ export function buildMasterDetails({
 
       return {
         id: service.id,
+        categoryId: service.categoryId,
         title: service.title,
         description: service.description,
         price: service.price,

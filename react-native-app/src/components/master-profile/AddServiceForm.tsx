@@ -24,11 +24,9 @@ export function AddServiceForm({ categories, onAdd }: AddServiceFormProps) {
   const [duration, setDuration] = useState('60');
   const [description, setDescription] = useState('');
   const [error, setError] = useState('');
-  const [successMessage, setSuccessMessage] = useState('');
 
   function clearMessages() {
     setError('');
-    setSuccessMessage('');
   }
 
   function resetForm() {
@@ -53,7 +51,6 @@ export function AddServiceForm({ categories, onAdd }: AddServiceFormProps) {
     });
 
     if (!result.success) {
-      setSuccessMessage('');
       setError(result.error ?? 'Service creation failed.');
       return;
     }
@@ -61,7 +58,6 @@ export function AddServiceForm({ categories, onAdd }: AddServiceFormProps) {
     resetForm();
     setOpen(false);
     setError('');
-    setSuccessMessage('Service added.');
   }
 
   return (
@@ -133,11 +129,6 @@ export function AddServiceForm({ categories, onAdd }: AddServiceFormProps) {
         </View>
       )}
 
-      <FormMessage
-        message={successMessage}
-        type="success"
-        style={styles.successText}
-      />
     </>
   );
 }
@@ -180,9 +171,6 @@ const styles = StyleSheet.create({
     marginTop: 12,
   },
   errorText: {
-    marginTop: 4,
-  },
-  successText: {
     marginTop: 4,
   },
 });

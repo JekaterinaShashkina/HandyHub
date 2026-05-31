@@ -30,6 +30,7 @@ export const HandyHubColors = {
   text: '#111111',
   textSecondary: '#3F3F3F',
   muted: '#6B6B6B',
+  placeholder: '#C3C3C3',
   border: '#D8DCE8',
   primary: '#FFD51E',
   success: '#2E7D32',

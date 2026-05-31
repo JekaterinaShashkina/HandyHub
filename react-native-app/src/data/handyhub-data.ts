@@ -275,6 +275,7 @@ export type MasterDetails = {
   avatarUrl?: string;
   services: Array<{
     id: number;
+    categoryId: number;
     title: string;
     description: string;
     price: number;
@@ -337,6 +338,7 @@ export function getMasterDetails(masterId: number): MasterDetails | undefined {
 
       return {
         id: service.id,
+        categoryId: service.categoryId,
         title: service.title,
         description: service.description,
         price: service.price,

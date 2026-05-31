@@ -1,9 +1,9 @@
 import { Feather } from '@expo/vector-icons';
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 
-import { BackButton } from '@/components/common/BackButton';
 import { FormMessage } from '@/components/common/FormMessage';
 import { PrimaryButton } from '@/components/common/PrimaryButton';
+import { ScreenHeader } from '@/components/common/ScreenHeader';
 import { AvatarPicker } from '@/components/add-master/AvatarPicker';
 import { CategorySelect } from '@/components/add-master/CategorySelect';
 import { FormField } from '@/components/add-master/FormField';
@@ -91,13 +91,7 @@ export function AddMasterForm({
 }: AddMasterFormProps) {
   return (
     <>
-      <View style={styles.header}>
-        <BackButton onPress={onBack} marginBottom={0} />
-
-        <Text style={styles.title}>Specialist registration</Text>
-
-        <View style={styles.headerSpacer} />
-      </View>
+      <ScreenHeader title="Specialist registration" onBack={onBack} />
 
       <FormField label="Name" value={name} onChangeText={onNameChange} />
       <FormField label="Surname" value={surname} onChangeText={onSurnameChange} />
@@ -179,20 +173,6 @@ export function AddMasterForm({
 }
 
 const styles = StyleSheet.create({
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 18,
-  },
-  headerSpacer: {
-    width: 42,
-  },
-  title: {
-    flex: 1,
-    fontSize: 18,
-    color: '#111111',
-    textAlign: 'center',
-  },
   label: {
     fontSize: 13,
     color: '#3F3F3F',

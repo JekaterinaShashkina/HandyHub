@@ -163,7 +163,7 @@ export function HandyHubProvider({ children }: { children: ReactNode }) {
           masterId: input.masterId,
           rating: input.rating,
           comment: input.comment,
-          createdAt: existingReview?.createdAt ?? new Date().toISOString(),
+          createdAt: new Date().toISOString(),
         };
 
         insertReview(payload).catch((error) => {
@@ -171,9 +171,10 @@ export function HandyHubProvider({ children }: { children: ReactNode }) {
         });
 
         if (existingReview) {
-          return prevReviews.map((review) =>
-            review.id === existingReview.id ? payload : review
-          );
+          return [
+            payload,
+            ...prevReviews.filter((review) => review.id !== existingReview.id),
+          ];
         }
 
         return [payload, ...prevReviews];
