@@ -1,5 +1,7 @@
-import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { StyleSheet, Text, TextInput, View } from 'react-native';
 
+import { FormMessage } from '@/components/common/FormMessage';
+import { PrimaryButton } from '@/components/common/PrimaryButton';
 import { InteractiveRating } from '@/components/master/InteractiveRating';
 import { HandyHubColors } from '@/constants/theme';
 import type { MasterDetails, User } from '@/data/handyhub-data';
@@ -64,15 +66,17 @@ export function ReviewForm({
         textAlignVertical="top"
       />
 
-      {reviewError ? (
-        <Text style={styles.errorText}>{reviewError}</Text>
-      ) : null}
+      <FormMessage
+        message={reviewError}
+        type="error"
+        style={styles.errorText}
+      />
 
-      <Pressable style={styles.publishButton} onPress={onSubmit}>
-        <Text style={styles.publishButtonText}>
-          {currentUserReview ? 'Update review' : 'Publish review'}
-        </Text>
-      </Pressable>
+      <PrimaryButton
+        title={currentUserReview ? 'Update review' : 'Publish review'}
+        onPress={onSubmit}
+        style={styles.publishButton}
+      />
 
       <View style={styles.formStars}>
         <InteractiveRating rating={selectedRating} onChange={onRatingChange} />
@@ -110,24 +114,11 @@ const styles = StyleSheet.create({
     paddingTop: 12,
   },
   errorText: {
-    fontSize: 13,
-    color: HandyHubColors.error,
     marginTop: -4,
     marginBottom: 8,
   },
   publishButton: {
-    alignSelf: 'flex-end',
-    minHeight: 34,
-    borderRadius: 4,
-    backgroundColor: HandyHubColors.primary,
-    paddingHorizontal: 18,
-    alignItems: 'center',
-    justifyContent: 'center',
     marginTop: 20,
-  },
-  publishButtonText: {
-    fontSize: 13,
-    color: HandyHubColors.text,
   },
   formStars: {
     alignSelf: 'flex-end',

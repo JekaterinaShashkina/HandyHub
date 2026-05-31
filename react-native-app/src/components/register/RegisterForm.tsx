@@ -1,5 +1,10 @@
-import { Feather } from '@expo/vector-icons';
-import { Image, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
+
+import { BackButton } from '@/components/common/BackButton';
+import { FormMessage } from '@/components/common/FormMessage';
+import { FormTextInput } from '@/components/common/FormTextInput';
+import { PasswordField } from '@/components/common/PasswordField';
+import { PrimaryButton } from '@/components/common/PrimaryButton';
 
 type RegisterFormProps = {
   name: string;
@@ -50,21 +55,23 @@ export function RegisterForm({
 }: RegisterFormProps) {
   return (
     <>
-      <Pressable style={styles.backIconButton} onPress={onBack}>
-        <Feather name="arrow-left" size={24} color="#111111" />
-      </Pressable>
+      <BackButton onPress={onBack} />
 
       <Text style={styles.title}>Create account</Text>
 
-      <Field label="Name" value={name} onChangeText={onNameChange} />
-      <Field label="Surname" value={surname} onChangeText={onSurnameChange} />
-      <Field
+      <FormTextInput label="Name" value={name} onChangeText={onNameChange} />
+      <FormTextInput
+        label="Surname"
+        value={surname}
+        onChangeText={onSurnameChange}
+      />
+      <FormTextInput
         label="Phone"
         value={phone}
         onChangeText={onPhoneChange}
         keyboardType="phone-pad"
       />
-      <Field
+      <FormTextInput
         label="E-mail"
         value={email}
         onChangeText={onEmailChange}
@@ -100,84 +107,14 @@ export function RegisterForm({
         </Pressable>
       </View>
 
-      {error ? <Text style={styles.errorText}>{error}</Text> : null}
+      <FormMessage message={error} type="error" style={styles.errorText} />
 
-      <Pressable style={styles.submitButton} onPress={onSubmit}>
-        <Text style={styles.submitButtonText}>Register</Text>
-      </Pressable>
-    </>
-  );
-}
-
-type FieldProps = {
-  label: string;
-  value: string;
-  onChangeText: (value: string) => void;
-  keyboardType?: 'default' | 'phone-pad' | 'email-address';
-};
-
-function Field({
-  label,
-  value,
-  onChangeText,
-  keyboardType = 'default',
-}: FieldProps) {
-  return (
-    <>
-      <Text style={styles.label}>{label}</Text>
-      <TextInput
-        value={value}
-        onChangeText={onChangeText}
-        keyboardType={keyboardType}
-        autoCapitalize={keyboardType === 'email-address' ? 'none' : 'sentences'}
-        style={styles.input}
-      />
-    </>
-  );
-}
-
-type PasswordFieldProps = {
-  label: string;
-  value: string;
-  visible: boolean;
-  onChangeText: (value: string) => void;
-  onToggleVisible: () => void;
-};
-
-function PasswordField({
-  label,
-  value,
-  visible,
-  onChangeText,
-  onToggleVisible,
-}: PasswordFieldProps) {
-  return (
-    <>
-      <Text style={styles.label}>{label}</Text>
-      <View style={styles.passwordInput}>
-        <TextInput
-          value={value}
-          onChangeText={onChangeText}
-          secureTextEntry={!visible}
-          style={styles.passwordTextInput}
-        />
-
-        <Pressable onPress={onToggleVisible}>
-          <Feather name={visible ? 'eye' : 'eye-off'} size={22} color="#B9B9B9" />
-        </Pressable>
-      </View>
+      <PrimaryButton title="Register" onPress={onSubmit} />
     </>
   );
 }
 
 const styles = StyleSheet.create({
-  backIconButton: {
-    width: 42,
-    height: 42,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 8,
-  },
   title: {
     fontSize: 18,
     color: '#111111',
@@ -188,32 +125,6 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: '#3F3F3F',
     marginBottom: 5,
-  },
-  input: {
-    minHeight: 43,
-    borderRadius: 8,
-    backgroundColor: '#FFFFFF',
-    paddingHorizontal: 13,
-    fontSize: 15,
-    color: '#111111',
-    marginBottom: 8,
-  },
-  passwordInput: {
-    minHeight: 43,
-    borderRadius: 8,
-    backgroundColor: '#FFFFFF',
-    paddingLeft: 13,
-    paddingRight: 13,
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 8,
-  },
-  passwordTextInput: {
-    flex: 1,
-    height: '100%',
-    fontSize: 15,
-    color: '#111111',
-    padding: 0,
   },
   avatarRow: {
     flexDirection: 'row',
@@ -244,22 +155,6 @@ const styles = StyleSheet.create({
     color: '#111111',
   },
   errorText: {
-    fontSize: 13,
-    color: '#C62828',
     marginTop: 4,
-  },
-  submitButton: {
-    alignSelf: 'flex-end',
-    minHeight: 34,
-    borderRadius: 4,
-    backgroundColor: '#FFD51E',
-    paddingHorizontal: 22,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 20,
-  },
-  submitButtonText: {
-    fontSize: 14,
-    color: '#111111',
   },
 });

@@ -1,4 +1,3 @@
-import { Feather } from '@expo/vector-icons';
 import * as FileSystem from 'expo-file-system/legacy';
 import * as ImagePicker from 'expo-image-picker';
 import { Stack, useRouter } from 'expo-router';
@@ -6,13 +5,13 @@ import { useState } from 'react';
 import {
   KeyboardAvoidingView,
   Platform,
-  Pressable,
   ScrollView,
   StyleSheet,
   Text,
   View,
 } from 'react-native';
 
+import { BackButton } from '@/components/common/BackButton';
 import { HandyHubColors } from '@/constants/theme';
 import { EditProfileForm } from '@/components/profile/EditProfileForm';
 import { useHandyHub } from '@/state/HandyHubContext';
@@ -88,9 +87,7 @@ export default function EditProfileScreen() {
   if (!currentUser) {
     return (
       <View style={styles.safeArea}>
-        <Pressable style={styles.backIconButton} onPress={() => router.back()}>
-          <Feather name="arrow-left" size={24} color={HandyHubColors.text} />
-        </Pressable>
+        <BackButton onPress={() => router.back()} marginBottom={0} />
 
         <Text style={styles.title}>Edit profile</Text>
         <Text style={styles.noticeText}>Log in to edit your profile.</Text>
@@ -141,12 +138,6 @@ const styles = StyleSheet.create({
   content: {
     paddingHorizontal: 13,
     paddingBottom: 32,
-  },
-  backIconButton: {
-    width: 42,
-    height: 42,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   title: {
     flex: 1,

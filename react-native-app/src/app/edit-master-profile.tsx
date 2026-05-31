@@ -1,9 +1,7 @@
-import { Feather } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import {
   KeyboardAvoidingView,
   Platform,
-  Pressable,
   ScrollView,
   StyleSheet,
   Text,
@@ -11,6 +9,7 @@ import {
 } from 'react-native';
 import { useState } from 'react';
 
+import { BackButton } from '@/components/common/BackButton';
 import { AddServiceForm } from '@/components/master-profile/AddServiceForm';
 import { CurrentServicesSection } from '@/components/master-profile/CurrentServicesSection';
 import { HandyHubColors } from '@/constants/theme';
@@ -112,9 +111,7 @@ export default function EditMasterProfileScreen() {
   if (!currentUser || !master) {
     return (
       <View style={styles.safeArea}>
-        <Pressable style={styles.backIconButton} onPress={() => router.back()}>
-          <Feather name="arrow-left" size={24} color={HandyHubColors.text} />
-        </Pressable>
+        <BackButton onPress={() => router.back()} />
 
         <Text style={styles.title}>Edit master profile</Text>
         <Text style={styles.noticeText}>Master profile not found.</Text>
@@ -134,9 +131,7 @@ export default function EditMasterProfileScreen() {
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.header}>
-          <Pressable style={styles.backIconButton} onPress={() => router.back()}>
-            <Feather name="arrow-left" size={24} color={HandyHubColors.text} />
-          </Pressable>
+          <BackButton onPress={() => router.back()} marginBottom={0} />
 
           <Text style={styles.title}>Edit master profile</Text>
 
@@ -176,12 +171,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 18,
-  },
-  backIconButton: {
-    width: 42,
-    height: 42,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   headerSpacer: {
     width: 42,

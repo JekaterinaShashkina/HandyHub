@@ -1,6 +1,10 @@
 import { Feather } from '@expo/vector-icons';
-import { Image, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 
+import { BackButton } from '@/components/common/BackButton';
+import { FormMessage } from '@/components/common/FormMessage';
+import { FormTextInput } from '@/components/common/FormTextInput';
+import { PrimaryButton } from '@/components/common/PrimaryButton';
 import { HandyHubColors } from '@/constants/theme';
 
 type EditProfileFormProps = {
@@ -39,9 +43,7 @@ export function EditProfileForm({
   return (
     <>
       <View style={styles.header}>
-        <Pressable style={styles.backIconButton} onPress={onBack}>
-          <Feather name="arrow-left" size={24} color={HandyHubColors.text} />
-        </Pressable>
+        <BackButton onPress={onBack} marginBottom={0} />
 
         <Text style={styles.title}>Edit profile</Text>
 
@@ -64,56 +66,33 @@ export function EditProfileForm({
         </Pressable>
       </View>
 
-      <Field label="Name" value={name} onChangeText={onNameChange} />
-      <Field label="Surname" value={surname} onChangeText={onSurnameChange} />
-      <Field
+      <FormTextInput label="Name" value={name} onChangeText={onNameChange} />
+      <FormTextInput
+        label="Surname"
+        value={surname}
+        onChangeText={onSurnameChange}
+      />
+      <FormTextInput
         label="Phone"
         value={phone}
         onChangeText={onPhoneChange}
         keyboardType="phone-pad"
       />
-      <Field
+      <FormTextInput
         label="E-mail"
         value={email}
         onChangeText={onEmailChange}
         keyboardType="email-address"
       />
 
-      {error ? <Text style={styles.errorText}>{error}</Text> : null}
-      {successMessage ? (
-        <Text style={styles.successText}>{successMessage}</Text>
-      ) : null}
-
-      <Pressable style={styles.submitButton} onPress={onSubmit}>
-        <Text style={styles.submitButtonText}>Save changes</Text>
-      </Pressable>
-    </>
-  );
-}
-
-type FieldProps = {
-  label: string;
-  value: string;
-  onChangeText: (value: string) => void;
-  keyboardType?: 'default' | 'phone-pad' | 'email-address';
-};
-
-function Field({
-  label,
-  value,
-  onChangeText,
-  keyboardType = 'default',
-}: FieldProps) {
-  return (
-    <>
-      <Text style={styles.label}>{label}</Text>
-      <TextInput
-        value={value}
-        onChangeText={onChangeText}
-        keyboardType={keyboardType}
-        autoCapitalize={keyboardType === 'email-address' ? 'none' : 'sentences'}
-        style={styles.input}
+      <FormMessage message={error} type="error" style={styles.errorText} />
+      <FormMessage
+        message={successMessage}
+        type="success"
+        style={styles.successText}
       />
+
+      <PrimaryButton title="Save changes" onPress={onSubmit} />
     </>
   );
 }
@@ -123,12 +102,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 18,
-  },
-  backIconButton: {
-    width: 42,
-    height: 42,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   headerSpacer: {
     width: 42,
@@ -173,42 +146,10 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: HandyHubColors.text,
   },
-  label: {
-    fontSize: 13,
-    color: HandyHubColors.textSecondary,
-    marginBottom: 5,
-  },
-  input: {
-    minHeight: 43,
-    borderRadius: 8,
-    backgroundColor: HandyHubColors.surface,
-    paddingHorizontal: 13,
-    fontSize: 15,
-    color: HandyHubColors.text,
-    marginBottom: 8,
-  },
   errorText: {
-    fontSize: 13,
-    color: HandyHubColors.error,
     marginTop: 4,
   },
   successText: {
-    fontSize: 13,
-    color: HandyHubColors.success,
     marginTop: 4,
-  },
-  submitButton: {
-    alignSelf: 'flex-end',
-    minHeight: 38,
-    borderRadius: 4,
-    backgroundColor: HandyHubColors.primary,
-    paddingHorizontal: 22,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 20,
-  },
-  submitButtonText: {
-    fontSize: 14,
-    color: HandyHubColors.text,
   },
 });

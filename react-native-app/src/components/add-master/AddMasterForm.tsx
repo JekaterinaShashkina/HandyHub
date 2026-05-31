@@ -1,6 +1,9 @@
 import { Feather } from '@expo/vector-icons';
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 
+import { BackButton } from '@/components/common/BackButton';
+import { FormMessage } from '@/components/common/FormMessage';
+import { PrimaryButton } from '@/components/common/PrimaryButton';
 import { AvatarPicker } from '@/components/add-master/AvatarPicker';
 import { CategorySelect } from '@/components/add-master/CategorySelect';
 import { FormField } from '@/components/add-master/FormField';
@@ -89,9 +92,7 @@ export function AddMasterForm({
   return (
     <>
       <View style={styles.header}>
-        <Pressable style={styles.backIconButton} onPress={onBack}>
-          <Feather name="arrow-left" size={24} color="#111111" />
-        </Pressable>
+        <BackButton onPress={onBack} marginBottom={0} />
 
         <Text style={styles.title}>Specialist registration</Text>
 
@@ -165,12 +166,14 @@ export function AddMasterForm({
 
       <AvatarPicker avatarUri={avatarUri} onPickAvatar={onPickAvatar} />
 
-      {error ? <Text style={styles.errorText}>{error}</Text> : null}
-      {successMessage ? <Text style={styles.successText}>{successMessage}</Text> : null}
+      <FormMessage message={error} type="error" style={styles.errorText} />
+      <FormMessage
+        message={successMessage}
+        type="success"
+        style={styles.successText}
+      />
 
-      <Pressable style={styles.submitButton} onPress={onSubmit}>
-        <Text style={styles.submitButtonText}>Register</Text>
-      </Pressable>
+      <PrimaryButton title="Register" onPress={onSubmit} />
     </>
   );
 }
@@ -180,12 +183,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 18,
-  },
-  backIconButton: {
-    width: 42,
-    height: 42,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   headerSpacer: {
     width: 42,
@@ -217,27 +214,10 @@ const styles = StyleSheet.create({
     minHeight: 76,
     paddingTop: 12,
   },
-  submitButton: {
-    alignSelf: 'flex-end',
-    minHeight: 34,
-    borderRadius: 4,
-    backgroundColor: '#FFD51E',
-    paddingHorizontal: 22,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  submitButtonText: {
-    fontSize: 14,
-    color: '#111111',
-  },
   errorText: {
-    fontSize: 13,
-    color: '#C62828',
     marginBottom: 10,
   },
   successText: {
-    fontSize: 13,
-    color: '#2E7D32',
     marginBottom: 10,
   },
 });

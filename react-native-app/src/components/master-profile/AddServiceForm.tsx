@@ -2,6 +2,8 @@ import { Feather } from '@expo/vector-icons';
 import { useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
+import { FormMessage } from '@/components/common/FormMessage';
+import { PrimaryButton } from '@/components/common/PrimaryButton';
 import type { Category, Service } from '@/data/handyhub-data';
 import { ServiceFormFields } from '@/components/master-profile/ServiceFormFields';
 import type { ServiceFormValues } from '@/components/master-profile/types';
@@ -120,17 +122,22 @@ export function AddServiceForm({ categories, onAdd }: AddServiceFormProps) {
             }}
           />
 
-          {error ? <Text style={styles.errorText}>{error}</Text> : null}
+          <FormMessage message={error} type="error" style={styles.errorText} />
 
-          <Pressable style={styles.addButton} onPress={handleAdd}>
-            <Text style={styles.addButtonText}>Add service</Text>
-          </Pressable>
+          <PrimaryButton
+            title="Add service"
+            onPress={handleAdd}
+            size="medium"
+            style={styles.addButton}
+          />
         </View>
       )}
 
-      {successMessage ? (
-        <Text style={styles.successText}>{successMessage}</Text>
-      ) : null}
+      <FormMessage
+        message={successMessage}
+        type="success"
+        style={styles.successText}
+      />
     </>
   );
 }
@@ -170,27 +177,12 @@ const styles = StyleSheet.create({
     color: '#111111',
   },
   addButton: {
-    alignSelf: 'flex-end',
-    minHeight: 38,
-    borderRadius: 4,
-    backgroundColor: '#FFD51E',
-    paddingHorizontal: 22,
-    alignItems: 'center',
-    justifyContent: 'center',
     marginTop: 12,
   },
-  addButtonText: {
-    fontSize: 14,
-    color: '#111111',
-  },
   errorText: {
-    fontSize: 13,
-    color: '#C62828',
     marginTop: 4,
   },
   successText: {
-    fontSize: 13,
-    color: '#2E7D32',
     marginTop: 4,
   },
 });

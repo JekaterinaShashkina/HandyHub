@@ -1,5 +1,6 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
+import { PrimaryButton } from '@/components/common/PrimaryButton';
 import { HandyHubColors } from '@/constants/theme';
 
 type ProfileActionsProps = {
@@ -30,15 +31,21 @@ export function ProfileActions({
       </Pressable>
 
       {isClient && (
-        <Pressable style={styles.primaryButton} onPress={onBecomeMaster}>
-          <Text style={styles.primaryButtonText}>Become a master</Text>
-        </Pressable>
+        <PrimaryButton
+          title="Become a master"
+          onPress={onBecomeMaster}
+          fullWidth
+          size="large"
+        />
       )}
 
       {isMaster && !hasMasterProfile && (
-        <Pressable style={styles.primaryButton} onPress={onAddMasterProfile}>
-          <Text style={styles.primaryButtonText}>Add master profile</Text>
-        </Pressable>
+        <PrimaryButton
+          title="Add master profile"
+          onPress={onAddMasterProfile}
+          fullWidth
+          size="large"
+        />
       )}
 
       {isMaster && hasMasterProfile && (
@@ -49,9 +56,12 @@ export function ProfileActions({
             </Text>
           </View>
 
-          <Pressable style={styles.primaryButton} onPress={onEditMasterProfile}>
-            <Text style={styles.primaryButtonText}>Edit master profile</Text>
-          </Pressable>
+          <PrimaryButton
+            title="Edit master profile"
+            onPress={onEditMasterProfile}
+            fullWidth
+            size="large"
+          />
         </>
       )}
 
@@ -65,18 +75,6 @@ export function ProfileActions({
 const styles = StyleSheet.create({
   actions: {
     gap: 12,
-  },
-  primaryButton: {
-    minHeight: 48,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 6,
-    backgroundColor: HandyHubColors.primary,
-  },
-  primaryButtonText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: HandyHubColors.text,
   },
   secondaryButton: {
     minHeight: 48,

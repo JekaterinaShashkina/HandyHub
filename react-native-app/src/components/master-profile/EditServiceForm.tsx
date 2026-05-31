@@ -1,6 +1,8 @@
 import { useState } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
+import { FormMessage } from '@/components/common/FormMessage';
+import { PrimaryButton } from '@/components/common/PrimaryButton';
 import type { Category } from '@/data/handyhub-data';
 import { ServiceFormFields } from '@/components/master-profile/ServiceFormFields';
 import type { MasterService, ServiceFormValues } from '@/components/master-profile/types';
@@ -125,11 +127,14 @@ export function EditServiceForm({
         }}
       />
 
-      {error ? <Text style={styles.errorText}>{error}</Text> : null}
+      <FormMessage message={error} type="error" style={styles.errorText} />
 
-      <Pressable style={styles.submitButton} onPress={handleSave}>
-        <Text style={styles.submitButtonText}>Save changes</Text>
-      </Pressable>
+      <PrimaryButton
+        title="Save changes"
+        onPress={handleSave}
+        size="medium"
+        style={styles.submitButton}
+      />
     </View>
   );
 }
@@ -148,22 +153,9 @@ const styles = StyleSheet.create({
     color: '#111111',
   },
   submitButton: {
-    alignSelf: 'flex-end',
-    minHeight: 38,
-    borderRadius: 4,
-    backgroundColor: '#FFD51E',
-    paddingHorizontal: 22,
-    alignItems: 'center',
-    justifyContent: 'center',
     marginTop: 20,
   },
-  submitButtonText: {
-    fontSize: 14,
-    color: '#111111',
-  },
   errorText: {
-    fontSize: 13,
-    color: '#C62828',
     marginTop: 4,
   },
 });

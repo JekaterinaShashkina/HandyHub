@@ -1,16 +1,15 @@
-import { Feather } from '@expo/vector-icons';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import { useState } from 'react';
 import {
   KeyboardAvoidingView,
   Platform,
-  Pressable,
   ScrollView,
   StyleSheet,
   Text,
   View,
 } from 'react-native';
 
+import { BackButton } from '@/components/common/BackButton';
 import { MasterAboutSection } from '@/components/master/MasterAboutSection';
 import { MasterProfileCard } from '@/components/master/MasterProfileCard';
 import { MasterReviewsSection } from '@/components/master/MasterReviewsSection';
@@ -43,9 +42,7 @@ export default function MasterDetailsScreen() {
         <View style={styles.emptyState}>
           <Text style={styles.emptyTitle}>Specialist not found</Text>
 
-          <Pressable style={styles.backIconButton} onPress={() => router.back()}>
-            <Feather name="arrow-left" size={24} color={HandyHubColors.text} />
-          </Pressable>
+          <BackButton onPress={() => router.back()} />
         </View>
       </View>
     );
@@ -64,7 +61,7 @@ export default function MasterDetailsScreen() {
   const hasHiddenReviews = displayedReviews.length > 3;
   const currentUserReview = currentUser
     ? displayedReviews.find((review) => review.userId === currentUser.id)
-      : undefined;
+    : undefined;
 
   const displayReviewsCount = displayedReviews.length;
   const displayRatingAvg =
@@ -130,9 +127,7 @@ export default function MasterDetailsScreen() {
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode="interactive"
       >
-        <Pressable style={styles.backIconButton} onPress={() => router.back()}>
-          <Feather name="arrow-left" size={24} color={HandyHubColors.text} />
-        </Pressable>
+        <BackButton onPress={() => router.back()} />
 
         <MasterProfileCard
           master={master}
@@ -186,13 +181,6 @@ const styles = StyleSheet.create({
   content: {
     paddingHorizontal: 16,
     paddingBottom: 28,
-  },
-  backIconButton: {
-    width: 42,
-    height: 42,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 8,
   },
   emptyState: {
     flex: 1,
