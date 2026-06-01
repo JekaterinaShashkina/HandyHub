@@ -1,5 +1,7 @@
 import { Image, StyleSheet, Text, View } from 'react-native';
 
+import { HandyHubColors } from '@/constants/theme';
+
 export function AppFooter() {
   return (
     <View style={styles.footer}>
@@ -14,7 +16,7 @@ export function AppFooter() {
         <Text style={styles.text}>Tg: @Mrshmallowww</Text>
       </View>
 
-      <Text style={styles.copyright}>© HandyHub, 2026</Text>
+      <Text style={styles.copyright}>(c) HandyHub, 2026</Text>
     </View>
   );
 }
@@ -26,7 +28,6 @@ const styles = StyleSheet.create({
     paddingTop: 26,
     paddingBottom: 22,
     borderRadius: 0,
-
   },
   logo: {
     width: 150,
@@ -40,10 +41,10 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 16,
     lineHeight: 22,
-    color: '#111111',
+    color: HandyHubColors.text,
   },
   copyright: {
     fontSize: 15,
-    color: '#111111',
+    color: HandyHubColors.text,
   },
 });

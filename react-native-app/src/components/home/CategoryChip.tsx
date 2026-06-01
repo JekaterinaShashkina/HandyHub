@@ -1,6 +1,7 @@
 import { Pressable, StyleSheet, Text } from 'react-native';
 
-import type { Category } from '@/data/handyhub-data';
+import { HandyHubColors } from '@/constants/theme';
+import type { Category } from '@/models';
 
 type CategoryChipProps = {
   category: Category;
@@ -31,19 +32,19 @@ const styles = StyleSheet.create({
     minHeight: 42,
     paddingHorizontal: 16,
     borderRadius: 21,
-    backgroundColor: '#F4F4F8',
+    backgroundColor: HandyHubColors.background,
     alignItems: 'center',
     justifyContent: 'center',
   },
   categoryChipSelected: {
-    backgroundColor: '#111111',
+    backgroundColor: HandyHubColors.text,
   },
   categoryText: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#111111',
+    color: HandyHubColors.text,
   },
   categoryTextSelected: {
-    color: '#FFFFFF',
+    color: HandyHubColors.surface,
   },
 });

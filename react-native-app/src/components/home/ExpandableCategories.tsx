@@ -2,12 +2,14 @@ import { Feather } from '@expo/vector-icons';
 import { useState } from 'react';
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 
-import type { Category } from '@/data/handyhub-data';
+import { HandyHubColors } from '@/constants/theme';
+import type { Category } from '@/models';
 
 type ExpandableCategoriesProps = {
   categories: Category[];
   selectedCategoryId: number | null;
   onCategoryPress: (category: Category) => void;
+  onShowAllPress: () => void;
 };
 
 const categoryIcons: Record<string, number> = {
@@ -29,8 +31,10 @@ export function ExpandableCategories({
   categories,
   selectedCategoryId,
   onCategoryPress,
+  onShowAllPress,
 }: ExpandableCategoriesProps) {
   const [expanded, setExpanded] = useState(false);
+  const allCategoriesSelected = selectedCategoryId === null;
 
   return (
     <View style={styles.container}>
@@ -39,12 +43,34 @@ export function ExpandableCategories({
         <Feather
           name={expanded ? 'chevron-up' : 'chevron-down'}
           size={20}
-          color="#111111"
+          color={HandyHubColors.text}
         />
       </Pressable>
 
       {expanded && (
         <View style={styles.list}>
+          <Pressable
+            style={[styles.row, allCategoriesSelected && styles.rowSelected]}
+            onPress={onShowAllPress}
+          >
+            <View style={styles.allIcon}>
+              <Feather name="grid" size={18} color={HandyHubColors.text} />
+            </View>
+
+            <Text
+              style={[
+                styles.name,
+                allCategoriesSelected && styles.nameSelected,
+              ]}
+            >
+              All categories
+            </Text>
+
+            {allCategoriesSelected && (
+              <Feather name="check" size={18} color={HandyHubColors.text} />
+            )}
+          </Pressable>
+
           {categories.map((category) => {
             const isSelected = selectedCategoryId === category.id;
 
@@ -65,7 +91,7 @@ export function ExpandableCategories({
                 </Text>
 
                 {isSelected && (
-                  <Feather name="check" size={18} color="#111111" />
+                  <Feather name="check" size={18} color={HandyHubColors.text} />
                 )}
               </Pressable>
             );
@@ -91,7 +117,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#111111',
+    color: HandyHubColors.text,
     marginRight: 8,
   },
   list: {
@@ -106,18 +132,25 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
   },
   rowSelected: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: HandyHubColors.surface,
   },
   icon: {
     width: 24,
     height: 24,
     marginRight: 16,
   },
+  allIcon: {
+    width: 24,
+    height: 24,
+    marginRight: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   name: {
     flex: 1,
     fontSize: 16,
     lineHeight: 24,
-    color: '#111111',
+    color: HandyHubColors.text,
   },
   nameSelected: {
     fontWeight: '700',

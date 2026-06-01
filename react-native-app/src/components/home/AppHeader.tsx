@@ -1,29 +1,19 @@
 import { Feather } from '@expo/vector-icons';
 import { Image, Pressable, StyleSheet, View } from 'react-native';
 
-import { canAddMaster } from '@/data/handyhub-data';
-import { useHandyHub } from '@/state/HandyHubContext';
+import { HandyHubColors } from '@/constants/theme';
+import { useHandyHub } from '@/state/AppContext';
 
 type AppHeaderProps = {
-  onAddMasterPress?: () => void;
   onLoginPress?: () => void;
   onProfilePress?: () => void;
 };
 
 export function AppHeader({
-  onAddMasterPress,
   onLoginPress,
   onProfilePress,
 }: AppHeaderProps) {
-  const { currentUser, logout, hasMasterProfile } = useHandyHub();
-  console.log('HEADER USER AVATAR:', currentUser?.avatarUrl);
-  
-  const showAddMaster =
-    canAddMaster(currentUser) &&
-    currentUser !== null &&
-    !hasMasterProfile(currentUser.id);
-
-  
+  const { currentUser, logout } = useHandyHub();
 
   return (
     <View style={styles.header}>
@@ -34,16 +24,10 @@ export function AppHeader({
       />
 
       <View style={styles.headerActions}>
-          {/* {showAddMaster && (
-            <Pressable style={styles.iconButton} onPress={onAddMasterPress}>
-              <Feather name="plus-circle" size={28} color="#111111" />
-            </Pressable>
-          )} */}
-
         {currentUser ? (
           <>
             <Pressable style={styles.iconButton} onPress={logout}>
-              <Feather name="log-out" size={28} color="#111111" />
+              <Feather name="log-out" size={28} color={HandyHubColors.text} />
             </Pressable>
 
             <Pressable style={styles.iconButton} onPress={onProfilePress}>
@@ -53,13 +37,13 @@ export function AppHeader({
                   style={styles.userAvatar}
                 />
               ) : (
-                <Feather name="user" size={28} color="#111111" />
+                <Feather name="user" size={28} color={HandyHubColors.text} />
               )}
             </Pressable>
           </>
         ) : (
           <Pressable style={styles.iconButton} onPress={onLoginPress}>
-            <Feather name="log-in" size={28} color="#111111" />
+            <Feather name="log-in" size={28} color={HandyHubColors.text} />
           </Pressable>
         )}
       </View>
@@ -94,6 +78,6 @@ const styles = StyleSheet.create({
   width: 32,
   height: 32,
   borderRadius: 16,
-  backgroundColor: '#D9DCE5',
+  backgroundColor: HandyHubColors.avatarBackground,
 },
 });

@@ -1,6 +1,8 @@
 import { Feather } from '@expo/vector-icons';
 import { StyleSheet, TextInput, View } from 'react-native';
 
+import { HandyHubColors } from '@/constants/theme';
+
 type SearchBarProps = {
   value: string;
   onChangeText: (value: string) => void;
@@ -13,11 +15,11 @@ export function SearchBar({ value, onChangeText }: SearchBarProps) {
         value={value}
         onChangeText={onChangeText}
         placeholder="Search specialist"
-        placeholderTextColor="#B9B9B9"
+        placeholderTextColor={HandyHubColors.inputPlaceholder}
         style={styles.input}
       />
 
-      <Feather name="search" size={28} color="#111111" />
+      <Feather name="search" size={28} color={HandyHubColors.text} />
     </View>
   );
 }
@@ -26,7 +28,7 @@ const styles = StyleSheet.create({
   container: {
     height: 52,
     borderRadius: 6,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: HandyHubColors.surface,
     paddingLeft: 18,
     paddingRight: 16,
     marginBottom: 20,
@@ -37,7 +39,7 @@ const styles = StyleSheet.create({
     flex: 1,
     height: '100%',
     fontSize: 16,
-    color: '#111111',
+    color: HandyHubColors.text,
     padding: 0,
   },
 });

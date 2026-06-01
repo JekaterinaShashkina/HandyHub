@@ -1,5 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native';
 
+import { HandyHubColors } from '@/constants/theme';
+
 type RatingStarsProps = {
   rating: number;
   max?: number;
@@ -34,10 +36,10 @@ const styles = StyleSheet.create({
   star: {
     fontSize: 20,
     lineHeight: 22,
-    color: '#FFC107',
+    color: HandyHubColors.star,
     marginRight: 1,
   },
   emptyStar: {
-    color: '#FFC107',
+    color: HandyHubColors.star,
   },
 });

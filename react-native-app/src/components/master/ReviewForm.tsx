@@ -1,7 +1,11 @@
-import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { StyleSheet, Text, TextInput, View } from 'react-native';
 
+import { FormMessage } from '@/components/common/FormMessage';
+import { PrimaryButton } from '@/components/common/PrimaryButton';
 import { InteractiveRating } from '@/components/master/InteractiveRating';
-import type { MasterDetails, User } from '@/data/handyhub-data';
+import { HandyHubColors } from '@/constants/theme';
+import type { User } from '@/models';
+import type { MasterDetails } from '@/ui/models';
 
 type ReviewItem = MasterDetails['reviews'][number];
 
@@ -63,15 +67,17 @@ export function ReviewForm({
         textAlignVertical="top"
       />
 
-      {reviewError ? (
-        <Text style={styles.errorText}>{reviewError}</Text>
-      ) : null}
+      <FormMessage
+        message={reviewError}
+        type="error"
+        style={styles.errorText}
+      />
 
-      <Pressable style={styles.publishButton} onPress={onSubmit}>
-        <Text style={styles.publishButtonText}>
-          {currentUserReview ? 'Update review' : 'Publish review'}
-        </Text>
-      </Pressable>
+      <PrimaryButton
+        title={currentUserReview ? 'Update review' : 'Publish review'}
+        onPress={onSubmit}
+        style={styles.publishButton}
+      />
 
       <View style={styles.formStars}>
         <InteractiveRating rating={selectedRating} onChange={onRatingChange} />
@@ -87,21 +93,21 @@ const styles = StyleSheet.create({
   updateHint: {
     fontSize: 13,
     lineHeight: 18,
-    color: '#6B6B6B',
+    color: HandyHubColors.muted,
     marginBottom: 12,
   },
   inputLabel: {
     fontSize: 13,
-    color: '#3F3F3F',
+    color: HandyHubColors.textSecondary,
     marginBottom: 5,
   },
   input: {
     minHeight: 44,
     borderRadius: 6,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: HandyHubColors.surface,
     paddingHorizontal: 14,
     fontSize: 15,
-    color: '#111111',
+    color: HandyHubColors.text,
     marginBottom: 10,
   },
   commentInput: {
@@ -109,24 +115,11 @@ const styles = StyleSheet.create({
     paddingTop: 12,
   },
   errorText: {
-    fontSize: 13,
-    color: '#C62828',
     marginTop: -4,
     marginBottom: 8,
   },
   publishButton: {
-    alignSelf: 'flex-end',
-    minHeight: 34,
-    borderRadius: 4,
-    backgroundColor: '#FFD51E',
-    paddingHorizontal: 18,
-    alignItems: 'center',
-    justifyContent: 'center',
     marginTop: 20,
-  },
-  publishButtonText: {
-    fontSize: 13,
-    color: '#111111',
   },
   formStars: {
     alignSelf: 'flex-end',

@@ -9,8 +9,9 @@ import { MasterCard } from '@/components/home/MasterCard';
 import { SearchBar } from '@/components/home/SearchBar';
 import { AppFooter } from '@/components/home/AppFooter';
 
-import type { MasterCardItem } from '@/data/handyhub-data';
-import { useHandyHub } from '@/state/HandyHubContext';
+import { HandyHubColors } from '@/constants/theme';
+import type { MasterCardItem } from '@/ui/models';
+import { useHandyHub } from '@/state/AppContext';
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -25,18 +26,16 @@ export default function HomeScreen() {
 
   const filteredMasters: MasterCardItem[] = useMemo(() => {
     const query = searchText.trim().toLowerCase();
-    const selectedCategory = categories.find(
-      (category) => category.id === selectedCategoryId
-    );
-
     return masters.filter((master: MasterCardItem) => {
       const matchesSearch =
         master.fullName.toLowerCase().includes(query) ||
         master.description.toLowerCase().includes(query) ||
-        master.categoryName.toLowerCase().includes(query);
+        master.categoryName.toLowerCase().includes(query) ||
+        master.searchText.toLowerCase().includes(query);
 
       const matchesCategory =
-        !selectedCategory || master.categoryName === selectedCategory.name;
+        selectedCategoryId === null ||
+        master.categoryIds.includes(selectedCategoryId);
 
       return matchesSearch && matchesCategory;
     });
@@ -50,9 +49,6 @@ export default function HomeScreen() {
         showsVerticalScrollIndicator={false}
       >
       <AppHeader
-        onAddMasterPress={() => {
-          router.push('/add-master' as never);
-        }}
         onLoginPress={() => {
           router.push('/login' as never);
         }}
@@ -66,6 +62,7 @@ export default function HomeScreen() {
         <ExpandableCategories
           categories={categories}
           selectedCategoryId={selectedCategoryId}
+          onShowAllPress={() => setSelectedCategoryId(null)}
           onCategoryPress={(category) =>
             setSelectedCategoryId(
               selectedCategoryId === category.id ? null : category.id
@@ -103,7 +100,7 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
 safeArea: {
   flex: 1,
-  backgroundColor: '#F4F4F8',
+  backgroundColor: HandyHubColors.background,
   paddingTop: 40,
 },
   container: {
@@ -116,7 +113,7 @@ safeArea: {
   sectionTitle: {
     fontSize: 22,
     fontWeight: '700',
-    color: '#111111',
+    color: HandyHubColors.text,
     marginBottom: 12,
   },
 
@@ -126,6 +123,6 @@ safeArea: {
   emptyText: {
     paddingVertical: 24,
     textAlign: 'center',
-    color: '#6B6B6B',
+    color: HandyHubColors.muted,
   },
 });

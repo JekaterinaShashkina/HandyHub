@@ -1,5 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native';
 
+import { HandyHubColors } from '@/constants/theme';
+
 type ReviewNoticeProps = {
   isLoggedIn: boolean;
 };
@@ -22,18 +24,18 @@ const styles = StyleSheet.create({
   notice: {
     padding: 16,
     borderRadius: 6,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: HandyHubColors.surface,
     marginBottom: 24,
   },
   title: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#111111',
+    color: HandyHubColors.text,
     marginBottom: 6,
   },
   text: {
     fontSize: 13,
     lineHeight: 18,
-    color: '#3F3F3F',
+    color: HandyHubColors.textSecondary,
   },
 });

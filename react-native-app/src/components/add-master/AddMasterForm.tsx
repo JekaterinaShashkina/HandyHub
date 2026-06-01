@@ -1,0 +1,188 @@
+import { StyleSheet, View } from 'react-native';
+
+import { FormMessage } from '@/components/common/FormMessage';
+import { FormTextInput } from '@/components/common/FormTextInput';
+import { PrimaryButton } from '@/components/common/PrimaryButton';
+import { ScreenHeader } from '@/components/common/ScreenHeader';
+import { AvatarPicker } from '@/components/add-master/AvatarPicker';
+import { CategorySelect } from '@/components/add-master/CategorySelect';
+import { FormField } from '@/components/add-master/FormField';
+import { PasswordField } from '@/components/add-master/PasswordField';
+import { PriceInput } from '@/components/add-master/PriceInput';
+import type { PriceType } from '@/components/add-master/types';
+import type { Category } from '@/models';
+
+type AddMasterFormProps = {
+  categories: Category[];
+  isExistingUser: boolean;
+  name: string;
+  surname: string;
+  phone: string;
+  email: string;
+  categoryId: number | null;
+  categoryOpen: boolean;
+  priceType: PriceType;
+  priceOpen: boolean;
+  price: string;
+  description: string;
+  password: string;
+  passwordRepeat: string;
+  passwordVisible: boolean;
+  passwordRepeatVisible: boolean;
+  avatarUri: string;
+  error: string;
+  successMessage: string;
+  onBack: () => void;
+  onNameChange: (value: string) => void;
+  onSurnameChange: (value: string) => void;
+  onPhoneChange: (value: string) => void;
+  onEmailChange: (value: string) => void;
+  onCategoryChange: (value: number) => void;
+  onCategoryOpenChange: (value: boolean) => void;
+  onPriceTypeChange: (value: PriceType) => void;
+  onPriceOpenChange: (value: boolean) => void;
+  onPriceChange: (value: string) => void;
+  onDescriptionChange: (value: string) => void;
+  onPasswordChange: (value: string) => void;
+  onPasswordRepeatChange: (value: string) => void;
+  onTogglePasswordVisible: () => void;
+  onTogglePasswordRepeatVisible: () => void;
+  onPickAvatar: () => void;
+  onSubmit: () => void;
+};
+
+export function AddMasterForm({
+  categories,
+  isExistingUser,
+  name,
+  surname,
+  phone,
+  email,
+  categoryId,
+  categoryOpen,
+  priceType,
+  priceOpen,
+  price,
+  description,
+  password,
+  passwordRepeat,
+  passwordVisible,
+  passwordRepeatVisible,
+  avatarUri,
+  error,
+  successMessage,
+  onBack,
+  onNameChange,
+  onSurnameChange,
+  onPhoneChange,
+  onEmailChange,
+  onCategoryChange,
+  onCategoryOpenChange,
+  onPriceTypeChange,
+  onPriceOpenChange,
+  onPriceChange,
+  onDescriptionChange,
+  onPasswordChange,
+  onPasswordRepeatChange,
+  onTogglePasswordVisible,
+  onTogglePasswordRepeatVisible,
+  onPickAvatar,
+  onSubmit,
+}: AddMasterFormProps) {
+  return (
+    <>
+      <ScreenHeader title="Specialist registration" onBack={onBack} />
+
+      <FormField label="Name" value={name} onChangeText={onNameChange} />
+      <FormField label="Surname" value={surname} onChangeText={onSurnameChange} />
+      <FormField
+        label="Phone"
+        value={phone}
+        onChangeText={onPhoneChange}
+        keyboardType="phone-pad"
+      />
+      <FormField
+        label="E-mail"
+        value={email}
+        onChangeText={onEmailChange}
+        keyboardType="email-address"
+      />
+
+      <View style={styles.spacer} />
+
+      <CategorySelect
+        categories={categories}
+        selectedCategoryId={categoryId}
+        open={categoryOpen}
+        onOpenChange={onCategoryOpenChange}
+        onSelect={onCategoryChange}
+      />
+
+      <PriceInput
+        priceType={priceType}
+        price={price}
+        open={priceOpen}
+        onPriceTypeChange={onPriceTypeChange}
+        onPriceChange={onPriceChange}
+        onOpenChange={onPriceOpenChange}
+      />
+
+      <FormTextInput
+        label="Service description"
+        value={description}
+        onChangeText={onDescriptionChange}
+        multiline
+        inputStyle={styles.descriptionInput}
+      />
+
+      {!isExistingUser && (
+        <>
+          <View style={styles.spacer} />
+
+          <PasswordField
+            label="Password"
+            value={password}
+            onChangeText={onPasswordChange}
+            visible={passwordVisible}
+            onToggleVisible={onTogglePasswordVisible}
+          />
+
+          <PasswordField
+            label="Repeat password"
+            value={passwordRepeat}
+            onChangeText={onPasswordRepeatChange}
+            visible={passwordRepeatVisible}
+            onToggleVisible={onTogglePasswordRepeatVisible}
+          />
+        </>
+      )}
+
+      <AvatarPicker avatarUri={avatarUri} onPickAvatar={onPickAvatar} />
+
+      <FormMessage message={error} type="error" style={styles.errorText} />
+      <FormMessage
+        message={successMessage}
+        type="success"
+        style={styles.successText}
+      />
+
+      <PrimaryButton title="Register" onPress={onSubmit} />
+    </>
+  );
+}
+
+const styles = StyleSheet.create({
+  spacer: {
+    height: 22,
+  },
+  descriptionInput: {
+    minHeight: 76,
+    paddingTop: 12,
+  },
+  errorText: {
+    marginBottom: 10,
+  },
+  successText: {
+    marginBottom: 10,
+  },
+});
