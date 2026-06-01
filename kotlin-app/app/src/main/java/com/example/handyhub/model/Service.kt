@@ -25,10 +25,7 @@ data class Service(
     val masterProfileId: Int,
     val categoryId: Int,
     val title: String,
-    val description: String,
     val price: Double,
-    val priceType: String,
-    val duration: Int,
     val createdAt: Long,
     val updatedAt: Long
 )

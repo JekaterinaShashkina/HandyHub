@@ -9,7 +9,7 @@ import com.example.handyhub.model.Service
 @Dao
 interface ServiceDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertService(service: Service)
+    suspend fun insertService(service: Service): Long
 
     @Query("SELECT * FROM services")
     suspend fun getAllServices(): List<Service>

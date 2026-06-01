@@ -129,10 +129,7 @@ object SampleData {
             masterProfileId = 1,
             categoryId = 1,
             title = "Gel Polish",
-            description = "Long-lasting gel polish manicure.",
             price = 30.0,
-            priceType = "fixed",
-            duration = 90,
             createdAt = System.currentTimeMillis(),
             updatedAt = System.currentTimeMillis()
         ),
@@ -141,10 +138,7 @@ object SampleData {
             masterProfileId = 2,
             categoryId = 3,
             title = "Socket Installation",
-            description = "Installation and replacement of electrical sockets.",
             price = 45.0,
-            priceType = "hourly",
-            duration = 60,
             createdAt = System.currentTimeMillis(),
             updatedAt = System.currentTimeMillis()
         ),
@@ -153,10 +147,7 @@ object SampleData {
             masterProfileId = 1,
             categoryId = 1,
             title = "Gel Removing",
-            description = "Gel polish gentle removing of nails.",
             price = 15.0,
-            priceType = "fixed",
-            duration = 60,
             createdAt = System.currentTimeMillis(),
             updatedAt = System.currentTimeMillis()
         ),

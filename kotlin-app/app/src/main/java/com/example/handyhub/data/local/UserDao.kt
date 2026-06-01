@@ -19,4 +19,11 @@ interface UserDao {
 
     @Query("SELECT * FROM users WHERE email = :email LIMIT 1")
     suspend fun getUserByEmail(email: String): User?
+
+    @Query("UPDATE users SET roleId = :roleId, updatedAt = :updatedAt WHERE id = :userId")
+    suspend fun updateUserRole(
+        userId: Int,
+        roleId: Int,
+        updatedAt: Long
+    )
 }

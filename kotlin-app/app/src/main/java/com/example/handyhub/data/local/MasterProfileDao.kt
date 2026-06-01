@@ -9,7 +9,7 @@ import com.example.handyhub.model.MasterProfile
 @Dao
 interface MasterProfileDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertMasterProfile(master: MasterProfile)
+    suspend fun insertMasterProfile(master: MasterProfile): Long
 
     @Query("SELECT * FROM master_profile")
     suspend fun getAllMasterProfiles(): List<MasterProfile>

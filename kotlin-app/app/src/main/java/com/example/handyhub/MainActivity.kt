@@ -11,6 +11,7 @@ import com.example.handyhub.navigation.AppNavigation
 import com.example.handyhub.viewmodel.AuthViewModel
 import com.example.handyhub.viewmodel.HomeViewModel
 import com.example.handyhub.viewmodel.MasterDetailViewModel
+import com.example.handyhub.viewmodel.MasterViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -31,12 +32,15 @@ class MainActivity : ComponentActivity() {
             val homeViewModel = HomeViewModel(repository)
             val masterDetailViewModel = MasterDetailViewModel(repository)
             val authViewModel = AuthViewModel(repository)
+            val masterViewModel = MasterViewModel(repository)
+
             homeViewModel.loadData()
 
             AppNavigation(
                 homeViewModel = homeViewModel,
                 masterDetailViewModel = masterDetailViewModel,
-                authViewModel = authViewModel
+                authViewModel = authViewModel,
+                masterViewModel = masterViewModel
             )
 
         }

@@ -1,13 +1,18 @@
 package com.example.handyhub.ui.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.ArrowBack
+import androidx.compose.material.icons.automirrored.outlined.Login
+import androidx.compose.material.icons.automirrored.outlined.Logout
 import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Login
 import androidx.compose.material.icons.outlined.Logout
@@ -19,6 +24,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.handyhub.R
@@ -27,6 +34,7 @@ import com.example.handyhub.R
 fun AppHeader(
     modifier: Modifier = Modifier,
     title: String? = null,
+    avatarUrl: Int? = null,
     showLogo: Boolean = false,
     showBack: Boolean = false,
     isLoggedIn: Boolean = false,
@@ -50,7 +58,7 @@ fun AppHeader(
             if (showBack) {
                 IconButton(onClick = onBackClick) {
                     Icon(
-                        imageVector = Icons.Outlined.ArrowBack,
+                        imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
                         contentDescription = "Back"
                     )
                 }
@@ -76,21 +84,37 @@ fun AppHeader(
                 ) {
                     Icon(
                         imageVector = if (isLoggedIn) {
-                            Icons.Outlined.Logout
+                            Icons.AutoMirrored.Outlined.Logout
                         } else {
-                            Icons.Outlined.Login
+                            Icons.AutoMirrored.Outlined.Login
                         },
                         contentDescription = if (isLoggedIn) "Logout" else "Login",
                         modifier = Modifier.size(28.dp)
                     )
 
                 }
-                IconButton(onClick = onProfileClick) {
-                    Icon(
-                        imageVector = Icons.Outlined.Person,
-                        contentDescription = "Profile",
-                        modifier = Modifier.size(32.dp)
-                    )
+                if (isLoggedIn && avatarUrl != null) {
+                    IconButton(
+                        onClick = onProfileClick
+                    ) {
+                        Image(
+                            painter = painterResource(id = avatarUrl),
+                            contentDescription = "Profile",
+                            modifier = Modifier
+                                .size(36.dp)
+                                .clip(CircleShape),
+                            contentScale = ContentScale.Crop
+                        )
+                    }
+
+                } else {
+                    IconButton(onClick = onProfileClick) {
+                        Icon(
+                            imageVector = Icons.Outlined.Person,
+                            contentDescription = "Profile",
+                            modifier = Modifier.size(32.dp)
+                        )
+                    }
                 }
             }
         }
