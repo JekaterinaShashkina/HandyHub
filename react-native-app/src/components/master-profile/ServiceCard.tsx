@@ -1,6 +1,7 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import type { MasterService } from '@/components/master-profile/types';
+import { HandyHubColors } from '@/constants/theme';
 
 type ServiceCardProps = {
   service: MasterService;
@@ -61,11 +62,11 @@ const styles = StyleSheet.create({
   card: {
     padding: 14,
     borderRadius: 6,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: HandyHubColors.surface,
   },
   selectedCard: {
     borderWidth: 1,
-    borderColor: '#D8DCE8',
+    borderColor: HandyHubColors.border,
   },
   inactiveCard: {
     opacity: 0.65,
@@ -81,12 +82,12 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 15,
     fontWeight: '700',
-    color: '#111111',
+    color: HandyHubColors.text,
   },
   price: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#111111',
+    color: HandyHubColors.text,
   },
   metaRow: {
     flexDirection: 'row',
@@ -96,25 +97,25 @@ const styles = StyleSheet.create({
   },
   category: {
     fontSize: 13,
-    color: '#5368C9',
+    color: HandyHubColors.accent,
   },
   hiddenBadge: {
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: 10,
-    backgroundColor: '#ECEEF5',
+    backgroundColor: HandyHubColors.badgeBackground,
     fontSize: 12,
-    color: '#6B6B6B',
+    color: HandyHubColors.muted,
   },
   description: {
     fontSize: 13,
     lineHeight: 19,
-    color: '#3F3F3F',
+    color: HandyHubColors.textSecondary,
   },
   duration: {
     marginTop: 8,
     fontSize: 13,
-    color: '#6B6B6B',
+    color: HandyHubColors.muted,
   },
   actions: {
     flexDirection: 'row',
@@ -125,7 +126,7 @@ const styles = StyleSheet.create({
   actionButton: {},
   actionText: {
     fontSize: 13,
-    color: '#111111',
+    color: HandyHubColors.text,
     textDecorationLine: 'underline',
   },
 });

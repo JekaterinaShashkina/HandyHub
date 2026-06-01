@@ -3,9 +3,10 @@ import { StyleSheet, Text, View } from 'react-native';
 
 import { FormMessage } from '@/components/common/FormMessage';
 import { PrimaryButton } from '@/components/common/PrimaryButton';
-import type { Category } from '@/data/handyhub-data';
+import type { Category } from '@/models';
 import { ServiceFormFields } from '@/components/master-profile/ServiceFormFields';
 import type { MasterService, ServiceFormValues } from '@/components/master-profile/types';
+import { HandyHubColors } from '@/constants/theme';
 
 type EditServiceFormProps = {
   categories: Category[];
@@ -149,13 +150,13 @@ const styles = StyleSheet.create({
     marginTop: 14,
     paddingTop: 14,
     borderTopWidth: 1,
-    borderTopColor: '#D8DCE8',
-    backgroundColor: '#FFFFFF',
+    borderTopColor: HandyHubColors.border,
+    backgroundColor: HandyHubColors.surface,
   },
   formTitle: {
     marginBottom: 12,
     fontSize: 18,
-    color: '#111111',
+    color: HandyHubColors.text,
   },
   submitButton: {
     marginTop: 20,

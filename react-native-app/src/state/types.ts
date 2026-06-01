@@ -1,12 +1,14 @@
 import type {
   Category,
-  MasterCardItem,
-  MasterDetails,
   Review,
   Service,
   User,
+} from '@/models';
+import type {
+  MasterCardItem,
+  MasterDetails,
   UserReviewItem,
-} from '@/data/handyhub-data';
+} from '@/ui/models';
 
 export type UpdateMasterProfileInput = {
   masterId: number;

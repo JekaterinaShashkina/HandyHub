@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { HandyHubColors } from '@/constants/theme';
-import type { Category } from '@/data/handyhub-data';
+import type { Category } from '@/models';
 
 type ExpandableCategoriesProps = {
   categories: Category[];

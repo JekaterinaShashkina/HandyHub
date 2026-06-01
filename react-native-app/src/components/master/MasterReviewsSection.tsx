@@ -2,7 +2,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { ReviewCard } from '@/components/master/ReviewCard';
 import { HandyHubColors } from '@/constants/theme';
-import type { MasterDetails } from '@/data/handyhub-data';
+import type { MasterDetails } from '@/ui/models';
 
 type ReviewItem = MasterDetails['reviews'][number];
 

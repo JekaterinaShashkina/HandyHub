@@ -1,3 +1,3 @@
-import type { Service } from '@/data/handyhub-data';
+import type { Service } from '@/models';
 
 export type PriceType = Service['priceType'];

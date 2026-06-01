@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 18,
     borderRadius: 4,
     borderWidth: 1,
-    borderColor: '#16D83E',
+    borderColor: HandyHubColors.uploadBorder,
     backgroundColor: HandyHubColors.surface,
     alignItems: 'center',
     justifyContent: 'center',

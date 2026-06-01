@@ -2,7 +2,7 @@ import { Feather } from '@expo/vector-icons';
 import { Image, Pressable, StyleSheet, View } from 'react-native';
 
 import { HandyHubColors } from '@/constants/theme';
-import { useHandyHub } from '@/state/HandyHubContext';
+import { useHandyHub } from '@/state/AppContext';
 
 type AppHeaderProps = {
   onLoginPress?: () => void;

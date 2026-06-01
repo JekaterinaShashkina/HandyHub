@@ -17,8 +17,8 @@ import { MasterServicesSection } from '@/components/master/MasterServicesSection
 import { ReviewForm } from '@/components/master/ReviewForm';
 import { ReviewNotice } from '@/components/master/ReviewNotice';
 import { HandyHubColors } from '@/constants/theme';
-import { canLeaveReview } from '@/data/handyhub-data';
-import { useHandyHub } from '@/state/HandyHubContext';
+import { canLeaveReview } from '@/data/rules';
+import { useHandyHub } from '@/state/AppContext';
 
 export default function MasterDetailsScreen() {
   const router = useRouter();

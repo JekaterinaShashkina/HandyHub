@@ -9,7 +9,7 @@ import {
 
 import { HandyHubColors } from '@/constants/theme';
 import { LoginForm } from '@/components/login/LoginForm';
-import { useHandyHub } from '@/state/HandyHubContext';
+import { useHandyHub } from '@/state/AppContext';
 
 export default function LoginScreen() {
   const router = useRouter();

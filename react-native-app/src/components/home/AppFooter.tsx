@@ -16,7 +16,7 @@ export function AppFooter() {
         <Text style={styles.text}>Tg: @Mrshmallowww</Text>
       </View>
 
-      <Text style={styles.copyright}>© HandyHub, 2026</Text>
+      <Text style={styles.copyright}>(c) HandyHub, 2026</Text>
     </View>
   );
 }
@@ -28,7 +28,6 @@ const styles = StyleSheet.create({
     paddingTop: 26,
     paddingBottom: 22,
     borderRadius: 0,
-
   },
   logo: {
     width: 150,

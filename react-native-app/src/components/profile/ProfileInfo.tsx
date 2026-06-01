@@ -2,7 +2,7 @@ import { Feather } from '@expo/vector-icons';
 import { Image, StyleSheet, Text, View } from 'react-native';
 
 import { HandyHubColors } from '@/constants/theme';
-import type { User } from '@/data/handyhub-data';
+import type { User } from '@/models';
 
 type ProfileInfoProps = {
   user: User;

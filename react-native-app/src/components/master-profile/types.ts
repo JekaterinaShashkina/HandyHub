@@ -1,4 +1,5 @@
-import type { MasterDetails, Service } from '@/data/handyhub-data';
+import type { Service } from '@/models';
+import type { MasterDetails } from '@/ui/models';
 
 export type MasterService = MasterDetails['services'][number];
 

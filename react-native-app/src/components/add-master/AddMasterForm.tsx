@@ -1,7 +1,7 @@
-import { Feather } from '@expo/vector-icons';
-import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { FormMessage } from '@/components/common/FormMessage';
+import { FormTextInput } from '@/components/common/FormTextInput';
 import { PrimaryButton } from '@/components/common/PrimaryButton';
 import { ScreenHeader } from '@/components/common/ScreenHeader';
 import { AvatarPicker } from '@/components/add-master/AvatarPicker';
@@ -10,7 +10,7 @@ import { FormField } from '@/components/add-master/FormField';
 import { PasswordField } from '@/components/add-master/PasswordField';
 import { PriceInput } from '@/components/add-master/PriceInput';
 import type { PriceType } from '@/components/add-master/types';
-import type { Category } from '@/data/handyhub-data';
+import type { Category } from '@/models';
 
 type AddMasterFormProps = {
   categories: Category[];
@@ -127,13 +127,12 @@ export function AddMasterForm({
         onOpenChange={onPriceOpenChange}
       />
 
-      <Text style={styles.label}>Service description</Text>
-      <TextInput
+      <FormTextInput
+        label="Service description"
         value={description}
         onChangeText={onDescriptionChange}
-        style={[styles.input, styles.descriptionInput]}
         multiline
-        textAlignVertical="top"
+        inputStyle={styles.descriptionInput}
       />
 
       {!isExistingUser && (
@@ -173,20 +172,6 @@ export function AddMasterForm({
 }
 
 const styles = StyleSheet.create({
-  label: {
-    fontSize: 13,
-    color: '#3F3F3F',
-    marginBottom: 5,
-  },
-  input: {
-    minHeight: 43,
-    borderRadius: 8,
-    backgroundColor: '#FFFFFF',
-    paddingHorizontal: 13,
-    fontSize: 15,
-    color: '#111111',
-    marginBottom: 8,
-  },
   spacer: {
     height: 22,
   },

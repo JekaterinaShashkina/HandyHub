@@ -5,7 +5,7 @@ import type {
   Role,
   Service,
   User,
-} from '@/data/handyhub-data';
+} from '@/models';
 
 export type RoleRow = {
   id: number;

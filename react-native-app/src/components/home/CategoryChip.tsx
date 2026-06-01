@@ -1,7 +1,7 @@
 import { Pressable, StyleSheet, Text } from 'react-native';
 
 import { HandyHubColors } from '@/constants/theme';
-import type { Category } from '@/data/handyhub-data';
+import type { Category } from '@/models';
 
 type CategoryChipProps = {
   category: Category;

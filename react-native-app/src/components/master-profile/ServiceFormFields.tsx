@@ -11,7 +11,7 @@ import {
 
 import { FormTextInput } from '@/components/common/FormTextInput';
 import { HandyHubColors } from '@/constants/theme';
-import type { Category, Service } from '@/data/handyhub-data';
+import type { Category, Service } from '@/models';
 
 const priceTypes: Service['priceType'][] = ['from', 'fixed', 'hourly'];
 const priceOptions = priceTypes.map((type) => ({

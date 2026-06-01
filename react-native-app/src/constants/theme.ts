@@ -31,12 +31,18 @@ export const HandyHubColors = {
   textSecondary: '#3F3F3F',
   muted: '#6B6B6B',
   placeholder: '#C3C3C3',
+  inputPlaceholder: '#B9B9B9',
   border: '#D8DCE8',
   primary: '#FFD51E',
+  star: '#FFC107',
   success: '#2E7D32',
   error: '#C62828',
+  danger: '#D04444',
   accent: '#5368C9',
   avatarBackground: '#D9DCE5',
+  badgeBackground: '#ECEEF5',
+  iconMuted: '#B9B9B9',
+  uploadBorder: '#16D83E',
 } as const;
 
 export type ThemeColor = keyof typeof Colors.light & keyof typeof Colors.dark;

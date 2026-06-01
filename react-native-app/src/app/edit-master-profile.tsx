@@ -18,7 +18,7 @@ import type {
   MasterService,
   ServiceFormValues,
 } from '@/components/master-profile/types';
-import { useHandyHub } from '@/state/HandyHubContext';
+import { useHandyHub } from '@/state/AppContext';
 
 export default function EditMasterProfileScreen() {
   const router = useRouter();

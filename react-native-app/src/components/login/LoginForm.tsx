@@ -5,6 +5,7 @@ import { FormMessage } from '@/components/common/FormMessage';
 import { FormTextInput } from '@/components/common/FormTextInput';
 import { PasswordField } from '@/components/common/PasswordField';
 import { PrimaryButton } from '@/components/common/PrimaryButton';
+import { HandyHubColors } from '@/constants/theme';
 
 type LoginFormProps = {
   email: string;
@@ -66,7 +67,7 @@ export function LoginForm({
 const styles = StyleSheet.create({
   title: {
     fontSize: 18,
-    color: '#111111',
+    color: HandyHubColors.text,
     textAlign: 'center',
     marginBottom: 24,
   },
@@ -79,7 +80,7 @@ const styles = StyleSheet.create({
   },
   registerButtonText: {
     fontSize: 14,
-    color: '#111111',
+    color: HandyHubColors.text,
     textDecorationLine: 'underline',
   },
 });

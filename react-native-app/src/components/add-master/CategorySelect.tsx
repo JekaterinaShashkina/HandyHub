@@ -1,7 +1,8 @@
 import { Feather } from '@expo/vector-icons';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
-import type { Category } from '@/data/handyhub-data';
+import { HandyHubColors } from '@/constants/theme';
+import type { Category } from '@/models';
 
 type CategorySelectProps = {
   categories: Category[];
@@ -29,7 +30,11 @@ export function CategorySelect({
         <Text style={[styles.selectText, !selectedCategory && styles.placeholder]}>
           {selectedCategory?.name ?? 'Select category'}
         </Text>
-        <Feather name={open ? 'chevron-up' : 'chevron-down'} size={22} color="#111111" />
+        <Feather
+          name={open ? 'chevron-up' : 'chevron-down'}
+          size={22}
+          color={HandyHubColors.text}
+        />
       </Pressable>
 
       {open && (
@@ -55,13 +60,13 @@ export function CategorySelect({
 const styles = StyleSheet.create({
   label: {
     fontSize: 13,
-    color: '#3F3F3F',
+    color: HandyHubColors.textSecondary,
     marginBottom: 5,
   },
   select: {
     minHeight: 43,
     borderRadius: 8,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: HandyHubColors.surface,
     paddingHorizontal: 13,
     flexDirection: 'row',
     alignItems: 'center',
@@ -70,14 +75,14 @@ const styles = StyleSheet.create({
   selectText: {
     flex: 1,
     fontSize: 14,
-    color: '#111111',
+    color: HandyHubColors.text,
   },
   placeholder: {
-    color: '#C3C3C3',
+    color: HandyHubColors.placeholder,
   },
   dropdown: {
     borderRadius: 8,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: HandyHubColors.surface,
     marginTop: -4,
     marginBottom: 8,
     overflow: 'hidden',
@@ -89,6 +94,6 @@ const styles = StyleSheet.create({
   },
   dropdownText: {
     fontSize: 14,
-    color: '#111111',
+    color: HandyHubColors.text,
   },
 });

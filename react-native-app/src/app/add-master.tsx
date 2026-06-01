@@ -14,8 +14,8 @@ import { AddMasterForm } from '@/components/add-master/AddMasterForm';
 import { AddMasterNotice } from '@/components/add-master/AddMasterNotice';
 import type { PriceType } from '@/components/add-master/types';
 import { HandyHubColors } from '@/constants/theme';
-import { canAddMaster } from '@/data/handyhub-data';
-import { useHandyHub } from '@/state/HandyHubContext';
+import { canAddMaster } from '@/data/rules';
+import { useHandyHub } from '@/state/AppContext';
 import { isValidEmail } from '@/utils/validation';
 
 export default function AddMasterScreen() {
@@ -56,7 +56,7 @@ export default function AddMasterScreen() {
     }
 
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      mediaTypes: ['images'],
       allowsEditing: true,
       aspect: [1, 1],
       quality: 0.8,

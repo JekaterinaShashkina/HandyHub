@@ -3,7 +3,8 @@ import { StyleSheet, Text, View } from 'react-native';
 import { EditServiceForm } from '@/components/master-profile/EditServiceForm';
 import { ServiceCard } from '@/components/master-profile/ServiceCard';
 import type { MasterService, ServiceFormValues } from '@/components/master-profile/types';
-import type { Category } from '@/data/handyhub-data';
+import { HandyHubColors } from '@/constants/theme';
+import type { Category } from '@/models';
 
 type CurrentServicesSectionProps = {
   categories: Category[];
@@ -61,7 +62,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     fontSize: 18,
     fontWeight: '700',
-    color: '#111111',
+    color: HandyHubColors.text,
   },
   servicesList: {
     gap: 10,

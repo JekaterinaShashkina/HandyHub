@@ -15,7 +15,7 @@ export function SearchBar({ value, onChangeText }: SearchBarProps) {
         value={value}
         onChangeText={onChangeText}
         placeholder="Search specialist"
-        placeholderTextColor="#B9B9B9"
+        placeholderTextColor={HandyHubColors.inputPlaceholder}
         style={styles.input}
       />
 

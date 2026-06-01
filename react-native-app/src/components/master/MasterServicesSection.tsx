@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native';
 
 import { HandyHubColors } from '@/constants/theme';
-import type { MasterDetails } from '@/data/handyhub-data';
+import type { MasterDetails } from '@/ui/models';
 
 type MasterService = MasterDetails['services'][number];
 

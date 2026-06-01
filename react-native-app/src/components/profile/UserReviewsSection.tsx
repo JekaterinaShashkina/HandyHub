@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native';
 
 import { HandyHubColors } from '@/constants/theme';
-import type { UserReviewItem } from '@/data/handyhub-data';
+import type { UserReviewItem } from '@/ui/models';
 import { UserReviewCard } from '@/components/profile/UserReviewCard';
 
 type UserReviewsSectionProps = {

@@ -10,8 +10,8 @@ import { SearchBar } from '@/components/home/SearchBar';
 import { AppFooter } from '@/components/home/AppFooter';
 
 import { HandyHubColors } from '@/constants/theme';
-import type { MasterCardItem } from '@/data/handyhub-data';
-import { useHandyHub } from '@/state/HandyHubContext';
+import type { MasterCardItem } from '@/ui/models';
+import { useHandyHub } from '@/state/AppContext';
 
 export default function HomeScreen() {
   const router = useRouter();

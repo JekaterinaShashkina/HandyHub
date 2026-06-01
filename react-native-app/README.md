@@ -1,202 +1,318 @@
-# Welcome to your Expo app 👋
+# HandyHub React Native App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+HandyHub is a cross-platform React Native application built with Expo. 
+The app is a mobile service marketplace where clients can find specialists, view master profiles, register accounts, 
+leave reviews, and where masters can manage their services.
 
-## Get started
+This repository contains the React Native implementation of the project. 
+The Android/Kotlin version is implemented separately, but both apps follow the same HandyHub domain idea and a similar data structure.
 
-1. Install dependencies
+## Main Features
 
-   ```bash
-   npm install
-   ```
+- Home screen with search, category filter, master cards, app header and footer.
+- Master detail screen with contact information, description, services and reviews.
+- Client registration and login.
+- Profile screen for authenticated users.
+- Profile editing with avatar update.
+- Role-based behavior for clients and masters.
+- Become a master flow for existing client users.
+- Master registration with first service creation.
+- Master service management: add, edit, hide and restore services.
+- Review system with rating stars.
+- One review per client per master. A client can update their own review.
+- User profile shows reviews written by the current user.
+- Local SQLite persistence through `expo-sqlite`.
 
-2. Start the app
+## User Roles
 
-   ```bash
-   npx expo start
-   ```
+The app uses three roles:
 
-In the output, you'll find options to open the app in a
+- `client`
+- `master`
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+Current role logic:
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+- Anonymous users can browse masters but cannot leave reviews.
+- Only authenticated clients can leave reviews.
+- Masters cannot review other masters.
+- A logged-in client can become a master.
+- A master can manage their own services.
 
-## Get a fresh project
+## Validation
 
-When you're ready, run:
+The React Native app includes validation for user input and service forms.
 
-```bash
-npm run reset-project
+User and profile validation:
+
+- Required name, surname, email, phone and password fields.
+- Email format validation.
+- Phone length validation.
+- Duplicate email validation.
+- Duplicate phone validation.
+- Profile editing ignores the current user's own email and phone when checking duplicates.
+
+Review validation:
+
+- User must be logged in.
+- User must have the client role.
+- Comment cannot be empty.
+- Rating must be selected.
+- One client can leave only one review per master. Submitting again updates the existing review.
+
+Master and service validation:
+
+- Required service title.
+- Required category.
+- Required service description.
+- Price must be greater than zero.
+- Duration must be greater than zero.
+- A master cannot hide their last active service.
+
+Validation files are placed in:
+
+```text
+src/domain/validation/
+  serviceValidation.ts
+  userValidation.ts
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## Data Persistence
 
-### Other setup steps
+The app uses local SQLite storage through `expo-sqlite`.
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+The database stores:
 
-## Learn more
+- roles
+- users
+- categories
+- master profiles
+- services
+- reviews
 
-To learn more about developing your project with Expo, look at the following resources:
+The app starts with clean user data for demonstration. Only reference data is seeded:
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+- roles
+- categories
 
-## Join the community
+Users, masters, services and reviews are created through the app flow.
 
-Join our community of developers creating universal apps.
+## Architecture
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+The React Native app is organized into layers inspired by the Kotlin project structure.
+
+```text
+src/
+  app/
+  components/
+  constants/
+  data/
+  database/
+  domain/
+  models/
+  state/
+  ui/
+  utils/
+```
+
+### App Routes
+
+Expo Router screens are stored in:
+
+```text
+src/app/
+```
+
+Important screens:
+
+```text
+src/app/index.tsx
+src/app/login.tsx
+src/app/register.tsx
+src/app/profile.tsx
+src/app/edit-profile.tsx
+src/app/add-master.tsx
+src/app/edit-master-profile.tsx
+src/app/master/[id].tsx
+```
+
+### Components
+
+Reusable UI components are stored in:
+
+```text
+src/components/
+```
+
+Main component groups:
+
+```text
+components/common/
+components/home/
+components/master/
+components/profile/
+components/register/
+components/login/
+components/add-master/
+components/master-profile/
+```
+
+Shared UI components include:
+
+- `BackButton`
+- `PrimaryButton`
+- `FormTextInput`
+- `PasswordField`
+- `FormMessage`
+- `ScreenHeader`
+- `RatingStars`
+
+### Models
+
+Domain models are stored as separate files:
+
+```text
+src/models/
+  Category.ts
+  MasterProfile.ts
+  Review.ts
+  Role.ts
+  Service.ts
+  User.ts
+  index.ts
+```
+
+These models represent the main HandyHub data entities.
+
+### UI Models and Mappers
+
+UI-specific models are stored in:
+
+```text
+src/ui/models/
+```
+
+Examples:
+
+- `MasterCardUiModel`
+- `MasterDetailsUiModel`
+- `UserReviewUiModel`
+
+Mapping from domain data to UI models is handled in:
+
+```text
+src/ui/mappers/masterMappers.ts
+```
+
+### Database Layer
+
+SQLite setup is stored in:
+
+```text
+src/database/
+  database.ts
+  mappers.ts
+  provider.ts
+  schema.ts
+```
+
+Responsibilities:
+
+- `provider.ts` opens the SQLite database.
+- `schema.ts` contains SQL table creation and migrations.
+- `mappers.ts` maps database rows to TypeScript models.
+- `database.ts` initializes the database and seeds reference data.
+
+### DAO Layer
+
+DAO files are stored in:
+
+```text
+src/data/local/
+  categoryDao.ts
+  masterProfileDao.ts
+  reviewDao.ts
+  roleDao.ts
+  serviceDao.ts
+  userDao.ts
+```
+
+DAO files contain SQL queries such as select, insert and update.
+
+### Repository Layer
+
+Repository methods are stored in:
+
+```text
+src/data/repository/repository.ts
+```
+
+The repository coordinates DAO calls and gives the state layer a cleaner API for loading and saving data.
+
+### Domain Use Cases
+
+Business logic is stored in:
+
+```text
+src/domain/usecases/
+  masterUseCases.ts
+  reviewUseCases.ts
+  serviceUseCases.ts
+  userUseCases.ts
+```
+
+Examples of use case logic:
+
+- create a master profile with the first service
+- update or insert a user in a list
+- find a user during login
+- add, edit, hide or restore services
+- recalculate master `priceFrom`
+- prevent hiding the last active service
+- create or update a review
+
+### State Layer
+
+Global app state is stored in:
+
+```text
+src/state/
+  AppContext.tsx
+  types.ts
+```
+
+`AppContext` coordinates:
+
+- current user state
+- loaded categories, users, masters, services and reviews
+- calls to repository methods
+- calls to domain use cases
+- data passed to screens and components
+
+## Running the App
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Start the app:
+
+```bash
+npx.cmd expo start --go --clear
+```
+
+For LAN mode:
+
+```bash
+npx.cmd expo start --go --lan --clear
+```
+
+NB! Web mode is not used in this project because the app uses expo-sqlite for native local persistence. The app should be tested in Expo Go on iOS or Android.
 
 
-Only authenticated users with role client can leave reviews.
-Masters cannot review other masters.
-Anonymous users cannot leave reviews.
+## Notes
 
-Build React Native home and master detail screens
-
-- Added React Native sample data based on the HandyHub domain model
-- Built the home screen with header, search, expandable categories, master cards and footer
-- Added category icons and HandyHub logo assets
-- Added master detail screen with profile info, contacts, reviews and review form layout
-- Added navigation from master cards to the detail screen
-- Added role-based review form visibility for authenticated client users
-- Unified app icons using @expo/vector-icons
-- Downgraded Expo setup to SDK 54 for Expo Go compatibility
-- Removed Expo starter tabs and template UI
-
-Add local review submission flow
-
-- Added local review creation and update with useState
-- Added one-review-per-client logic
-- Added review form validation
-- Updated displayed rating and reviews count after publishing
-- Added keyboard avoiding behavior for the review form
-- Added role-based review restrictions for clients/masters
-
-Refactor master details review flow
-
-- Added local review submission with useState
-- Added review validation for empty comment, missing rating, name and phone
-- Added one-review-per-client logic with update mode
-- Updated displayed rating average and reviews count after review changes
-- Added keyboard avoiding behavior for the review form
-- Extracted master detail review UI into reusable components
-- Added ReviewCard, ReviewNotice, InteractiveRating and ReviewForm components
-- Cleaned up the master details screen structure
-
-Add shared HandyHub state
-
-- Added HandyHub context provider for shared app state
-- Moved master cards and master details data to shared state
-- Added shared review upsert logic
-- Updated home and details screens to reflect review changes immediately
-- Added shared add master flow so new specialists appear on home
-- Connected Add Master screen and header action to shared state
-
-
-
-Что должно быть общим:
-
-одинаковая структура базы
-одинаковые таблицы
-одинаковые связи
-одинаковые seed/sample данные
-одинаковая бизнес-логика
-То есть вы с Катей делаете две реализации одного приложения, а не один общий runtime.
-
-Для отчёта это можно формулировать так:
-
-Both applications use the same domain model and SQLite schema, but each platform stores data locally in its own SQLite database.
-
-git commit -m "Add SQLite persistence and login flow"
-
-- Added expo-sqlite database layer with HandyHub schema and seed data
-- Connected shared HandyHub state to SQLite persistence
-- Persisted reviews and added masters across app restarts
-- Added login flow with role-based current user state
-- Added logout action and conditional header icons
-- Hid profile icon for guest users
-- Hid add-master action for masters that already have a profile
-- Added Back buttons to login and add-master screens
-- Added expandable review text for long comments
-
-
-git commit -m "Add user registration and avatars"
-
-- Added client registration screen
-- Added duplicate email and phone validation
-- Added avatar selection for client and master registration
-- Persisted avatar URLs in SQLite through user records
-- Displayed logged-in user avatar in the header
-- Fixed master registration role assignment
-- Improved role-based header actions
-
-Add profile screen and profile editing
-
-Added Profile screen for logged-in users.
-Added profile navigation from the header avatar/user icon.
-Added logout from profile.
-Added Become a master flow for client users.
-Fixed master registration flow so existing users are not duplicated.
-Added client profile editing screen.
-Added profile update persistence in SQLite.
-Added avatar update for profile editing.
-Added duplicate email and phone validation when editing profile.
-Replaced text Back buttons with arrow icons on login, registration, and master details screens.
-
-git add react-native-app
-git commit -m "Add user reviews to profile"
-Что вошло в коммит:
-
-Added user review list to Profile.
-Added getReviewsByUserId helper.
-Added review cards with master name, category, rating, and comment.
-Added expand/collapse for long review comments.
-Split Profile screen into smaller profile components.
-
-git commit -m "Add master service management"
-
-управление услугами мастера: add/edit/hide/restore;
-отображение услуг на странице мастера;
-показ 3 последних отзывов с раскрытием всех;
-All categories на главной;
-рефактор add-master и edit-master-profile;
-более строгая проверка email.
-
-git commit -m "Improve services, search, and form structure"
-Что вошло:
-
-поиск на главной теперь ищет по активным услугам;
-All categories возвращает общий список мастеров;
-на странице мастера сначала показываются 3 последних отзыва, остальные раскрываются через All reviews;
-убран дубль Service added.;
-добавлена строгая проверка email;
-TypeScript starter-ошибки очищены, tsc --noEmit теперь проходит;
-register и edit-profile разбиты на отдельные form-компоненты.
-
-
-git commit -m "Refactor login and master details screens"
-Что в нём:
-
-master/[id] разбит на отдельные компоненты карточки, about, services и reviews;
-login разбит на экран-логику и LoginForm;
-поведение не меняли;
-tsc --noEmit проходит.
-
-
-git commit -m "Refactor state selectors and fix category filtering"
-Что вошло:
-
-вынесли selectors из HandyHubContext;
-вынесли state/input типы;
-HandyHubContext стал короче и чище;
-исправили фильтр категорий: мастер теперь находится по любой активной услуге, а не только по первой категории;
-tsc --noEmit проходит.
+- The React Native app stores data locally in its own SQLite database.
+- The Kotlin app has its own local database implementation.
+- Both apps represent the same HandyHub domain, but they do not share one runtime database.

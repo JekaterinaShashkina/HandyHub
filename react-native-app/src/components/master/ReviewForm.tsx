@@ -4,7 +4,8 @@ import { FormMessage } from '@/components/common/FormMessage';
 import { PrimaryButton } from '@/components/common/PrimaryButton';
 import { InteractiveRating } from '@/components/master/InteractiveRating';
 import { HandyHubColors } from '@/constants/theme';
-import type { MasterDetails, User } from '@/data/handyhub-data';
+import type { User } from '@/models';
+import type { MasterDetails } from '@/ui/models';
 
 type ReviewItem = MasterDetails['reviews'][number];
 

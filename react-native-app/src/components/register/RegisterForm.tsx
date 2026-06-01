@@ -6,6 +6,7 @@ import { FormMessage } from '@/components/common/FormMessage';
 import { FormTextInput } from '@/components/common/FormTextInput';
 import { PasswordField } from '@/components/common/PasswordField';
 import { PrimaryButton } from '@/components/common/PrimaryButton';
+import { HandyHubColors } from '@/constants/theme';
 
 type RegisterFormProps = {
   name: string;
@@ -107,7 +108,7 @@ export function RegisterForm({
 const styles = StyleSheet.create({
   title: {
     fontSize: 18,
-    color: '#111111',
+    color: HandyHubColors.text,
     textAlign: 'center',
     marginBottom: 24,
   },

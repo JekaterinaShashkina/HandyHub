@@ -3,7 +3,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { RatingStars } from '@/components/common/RatingStars';
 import { HandyHubColors } from '@/constants/theme';
-import type { MasterDetails } from '@/data/handyhub-data';
+import type { MasterDetails } from '@/ui/models';
 
 type ReviewItem = MasterDetails['reviews'][number];
 

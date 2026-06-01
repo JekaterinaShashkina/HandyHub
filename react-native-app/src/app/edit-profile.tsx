@@ -14,7 +14,7 @@ import {
 import { BackButton } from '@/components/common/BackButton';
 import { HandyHubColors } from '@/constants/theme';
 import { EditProfileForm } from '@/components/profile/EditProfileForm';
-import { useHandyHub } from '@/state/HandyHubContext';
+import { useHandyHub } from '@/state/AppContext';
 
 export default function EditProfileScreen() {
   const router = useRouter();

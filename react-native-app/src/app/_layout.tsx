@@ -2,7 +2,7 @@ import { Stack } from 'expo-router';
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 
 import { HandyHubColors } from '@/constants/theme';
-import { HandyHubProvider, useHandyHub } from '@/state/HandyHubContext';
+import { HandyHubProvider, useHandyHub } from '@/state/AppContext';
 
 export default function RootLayout() {
   return (

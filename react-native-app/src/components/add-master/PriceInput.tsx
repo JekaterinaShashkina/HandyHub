@@ -2,6 +2,9 @@ import { Feather } from '@expo/vector-icons';
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 
 import type { PriceType } from '@/components/add-master/types';
+import { HandyHubColors } from '@/constants/theme';
+
+const priceTypes: PriceType[] = ['from', 'fixed', 'hourly'];
 
 type PriceInputProps = {
   priceType: PriceType;
@@ -29,14 +32,18 @@ export function PriceInput({
           onPress={() => onOpenChange(!open)}
         >
           <Text style={styles.selectText}>{priceType}</Text>
-          <Feather name={open ? 'chevron-up' : 'chevron-down'} size={22} color="#111111" />
+          <Feather
+            name={open ? 'chevron-up' : 'chevron-down'}
+            size={22}
+            color={HandyHubColors.text}
+          />
         </Pressable>
 
         <TextInput
           value={price}
           onChangeText={onPriceChange}
           placeholder="service price"
-          placeholderTextColor="#C3C3C3"
+          placeholderTextColor={HandyHubColors.placeholder}
           keyboardType="numeric"
           style={[styles.input, styles.priceInput]}
         />
@@ -44,7 +51,7 @@ export function PriceInput({
 
       {open && (
         <View style={[styles.dropdown, styles.priceDropdown]}>
-          {(['from', 'fixed', 'hourly'] as const).map((type) => (
+          {priceTypes.map((type) => (
             <Pressable
               key={type}
               style={styles.dropdownItem}
@@ -65,22 +72,22 @@ export function PriceInput({
 const styles = StyleSheet.create({
   label: {
     fontSize: 13,
-    color: '#3F3F3F',
+    color: HandyHubColors.textSecondary,
     marginBottom: 5,
   },
   input: {
     minHeight: 43,
     borderRadius: 8,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: HandyHubColors.surface,
     paddingHorizontal: 13,
     fontSize: 15,
-    color: '#111111',
+    color: HandyHubColors.text,
     marginBottom: 8,
   },
   select: {
     minHeight: 43,
     borderRadius: 8,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: HandyHubColors.surface,
     paddingHorizontal: 13,
     flexDirection: 'row',
     alignItems: 'center',
@@ -89,11 +96,11 @@ const styles = StyleSheet.create({
   selectText: {
     flex: 1,
     fontSize: 14,
-    color: '#111111',
+    color: HandyHubColors.text,
   },
   dropdown: {
     borderRadius: 8,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: HandyHubColors.surface,
     marginTop: -4,
     marginBottom: 8,
     overflow: 'hidden',
@@ -105,7 +112,7 @@ const styles = StyleSheet.create({
   },
   dropdownText: {
     fontSize: 14,
-    color: '#111111',
+    color: HandyHubColors.text,
   },
   priceRow: {
     flexDirection: 'row',

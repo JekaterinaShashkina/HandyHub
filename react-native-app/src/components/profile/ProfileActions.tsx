@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
   },
   logoutButtonText: {
     fontSize: 16,
-    color: '#D04444',
+    color: HandyHubColors.danger,
   },
   masterNotice: {
     padding: 14,

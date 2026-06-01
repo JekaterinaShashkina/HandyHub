@@ -7,7 +7,7 @@ import { HandyHubColors } from '@/constants/theme';
 import { ProfileActions } from '@/components/profile/ProfileActions';
 import { ProfileInfo } from '@/components/profile/ProfileInfo';
 import { UserReviewsSection } from '@/components/profile/UserReviewsSection';
-import { useHandyHub } from '@/state/HandyHubContext';
+import { useHandyHub } from '@/state/AppContext';
 
 export default function ProfileScreen() {
   const router = useRouter();

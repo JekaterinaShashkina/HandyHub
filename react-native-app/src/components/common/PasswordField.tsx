@@ -30,7 +30,11 @@ export function PasswordField({
         />
 
         <Pressable onPress={onToggleVisible}>
-          <Feather name={visible ? 'eye' : 'eye-off'} size={22} color="#B9B9B9" />
+          <Feather
+            name={visible ? 'eye' : 'eye-off'}
+            size={22}
+            color={HandyHubColors.iconMuted}
+          />
         </Pressable>
       </View>
     </>

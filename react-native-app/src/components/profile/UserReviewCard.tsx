@@ -3,7 +3,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { RatingStars } from '@/components/common/RatingStars';
 import { HandyHubColors } from '@/constants/theme';
-import type { UserReviewItem } from '@/data/handyhub-data';
+import type { UserReviewItem } from '@/ui/models';
 
 type UserReviewCardProps = {
   review: UserReviewItem;

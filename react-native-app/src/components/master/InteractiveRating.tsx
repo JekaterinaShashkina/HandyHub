@@ -1,5 +1,7 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
+import { HandyHubColors } from '@/constants/theme';
+
 type InteractiveRatingProps = {
   rating: number;
   onChange: (rating: number) => void;
@@ -27,7 +29,7 @@ const styles = StyleSheet.create({
   star: {
     fontSize: 22,
     lineHeight: 24,
-    color: '#FFC107',
+    color: HandyHubColors.star,
     marginLeft: 2,
   },
 });

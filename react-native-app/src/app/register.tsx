@@ -9,7 +9,7 @@ import {
 
 import { HandyHubColors } from '@/constants/theme';
 import { RegisterForm } from '@/components/register/RegisterForm';
-import { useHandyHub } from '@/state/HandyHubContext';
+import { useHandyHub } from '@/state/AppContext';
 import { isValidEmail } from '@/utils/validation';
 import * as FileSystem from 'expo-file-system/legacy';
 import * as ImagePicker from 'expo-image-picker';

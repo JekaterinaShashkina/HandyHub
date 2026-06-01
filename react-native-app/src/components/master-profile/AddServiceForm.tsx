@@ -4,7 +4,8 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { FormMessage } from '@/components/common/FormMessage';
 import { PrimaryButton } from '@/components/common/PrimaryButton';
-import type { Category, Service } from '@/data/handyhub-data';
+import { HandyHubColors } from '@/constants/theme';
+import type { Category, Service } from '@/models';
 import { ServiceFormFields } from '@/components/master-profile/ServiceFormFields';
 import type { ServiceFormValues } from '@/components/master-profile/types';
 
@@ -72,7 +73,11 @@ export function AddServiceForm({ categories, onAdd }: AddServiceFormProps) {
             clearMessages();
           }}
         >
-          <Feather name={open ? 'minus' : 'plus'} size={24} color="#111111" />
+          <Feather
+            name={open ? 'minus' : 'plus'}
+            size={24}
+            color={HandyHubColors.text}
+          />
         </Pressable>
       </View>
 
@@ -144,13 +149,13 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     fontSize: 18,
     fontWeight: '700',
-    color: '#111111',
+    color: HandyHubColors.text,
   },
   fab: {
     width: 42,
     height: 42,
     borderRadius: 21,
-    backgroundColor: '#FFD51E',
+    backgroundColor: HandyHubColors.primary,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -158,14 +163,14 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 6,
     borderWidth: 1,
-    borderColor: '#D8DCE8',
-    backgroundColor: '#FFFFFF',
+    borderColor: HandyHubColors.border,
+    backgroundColor: HandyHubColors.surface,
     marginBottom: 24,
   },
   formTitle: {
     marginBottom: 12,
     fontSize: 18,
-    color: '#111111',
+    color: HandyHubColors.text,
   },
   addButton: {
     marginTop: 12,

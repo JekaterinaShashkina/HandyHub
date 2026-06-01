@@ -3,7 +3,7 @@ import { Image, StyleSheet, Text, View } from 'react-native';
 
 import { RatingStars } from '@/components/common/RatingStars';
 import { HandyHubColors } from '@/constants/theme';
-import type { MasterDetails } from '@/data/handyhub-data';
+import type { MasterDetails } from '@/ui/models';
 
 type MasterProfileCardProps = {
   master: MasterDetails;
@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
   masterName: {
     flex: 1,
     fontSize: 14,
-    color: '#4B4B4B',
+    color: HandyHubColors.textSecondary,
   },
   ratingWithReviews: {
     flexDirection: 'row',
@@ -125,6 +125,6 @@ const styles = StyleSheet.create({
   },
   contactText: {
     fontSize: 13,
-    color: '#3B3B3B',
+    color: HandyHubColors.textSecondary,
   },
 });

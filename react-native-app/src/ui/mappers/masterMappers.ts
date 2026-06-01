@@ -1,15 +1,17 @@
 import type {
   Category,
-  MasterCardItem,
-  MasterDetails,
   MasterProfile,
   Review,
   Service,
   User,
+} from '@/models';
+import type {
+  MasterCardItem,
+  MasterDetails,
   UserReviewItem,
-} from '@/data/handyhub-data';
+} from '@/ui/models';
 
-type HandyHubCollections = {
+type Collections = {
   categories: Category[];
   users: User[];
   masterProfiles: MasterProfile[];
@@ -27,14 +29,7 @@ export function getReviewsForMaster(reviews: Review[], masterId: number) {
     );
 }
 
-export function hasMasterProfile(
-  masterProfiles: MasterProfile[],
-  userId: number
-) {
-  return masterProfiles.some((master) => master.userId === userId);
-}
-
-export function getRatingAvg({
+function getRatingAvg({
   masterProfiles,
   reviews,
   masterId,
@@ -56,19 +51,7 @@ export function getRatingAvg({
   );
 }
 
-export function getActiveServicePrices(
-  services: Service[],
-  masterId: number
-) {
-  return services
-    .filter((service) => service.masterId === masterId && service.isActive)
-    .map((service) => service.price);
-}
-
-function getServiceSearchText(
-  services: Service[],
-  categories: Category[]
-) {
+function getServiceSearchText(services: Service[], categories: Category[]) {
   return services
     .map((service) => {
       const category = categories.find((item) => item.id === service.categoryId);
@@ -84,7 +67,7 @@ export function buildMasterCards({
   masterProfiles,
   services,
   reviews,
-}: HandyHubCollections): MasterCardItem[] {
+}: Collections): MasterCardItem[] {
   return masterProfiles.map((master) => {
     const user = users.find((item) => item.id === master.userId);
     const masterServices = services.filter(
@@ -117,7 +100,7 @@ export function buildMasterDetails({
   services,
   reviews,
   masterId,
-}: HandyHubCollections & { masterId: number }): MasterDetails | undefined {
+}: Collections & { masterId: number }): MasterDetails | undefined {
   const master = masterProfiles.find((item) => item.id === masterId);
 
   if (!master) {
@@ -177,7 +160,7 @@ export function buildMasterDetails({
 }
 
 export function buildMasterDetailsByUserId(
-  collections: HandyHubCollections & { userId: number }
+  collections: Collections & { userId: number }
 ) {
   const master = collections.masterProfiles.find(
     (item) => item.userId === collections.userId
@@ -200,7 +183,7 @@ export function buildReviewsByUserId({
   services,
   reviews,
   userId,
-}: HandyHubCollections & { userId: number }): UserReviewItem[] {
+}: Collections & { userId: number }): UserReviewItem[] {
   return reviews
     .filter((review) => review.userId === userId)
     .map((review) => {
