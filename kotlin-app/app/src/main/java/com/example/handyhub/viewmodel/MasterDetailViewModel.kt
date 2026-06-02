@@ -68,6 +68,7 @@ class MasterDetailViewModel(
                 ratingAvg = ratingAvg,
                 reviewsCount = reviewsCount,
                 avatarUrl = user.avatarUrl,
+                avatarUri = user.avatarUri,
                 categoryId = category?.id,
                 categoryName = category?.name ?: "Specialist",
             )

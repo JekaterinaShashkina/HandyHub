@@ -51,7 +51,8 @@ class HomeViewModel(
                         priceFrom = master.priceFrom,
                         ratingAvg = ratingAvg,
                         reviewsCount = reviewsCount,
-                        avatarUrl = user.avatarUrl
+                        avatarUrl = user.avatarUrl,
+                        avatarUri = user.avatarUri
                     )
                 }
 

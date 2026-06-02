@@ -66,23 +66,24 @@ fun AddReviewScreen(
                     showBack = true,
                     onBackClick = onBackClick
                 )
-                AppTextField(
-                    label = "Name",
-                    value = name,
-                    onValueChange = { name = it }
-                )
-
-                AppTextField(
-                    label = "Phone",
-                    value = phone,
-                    onValueChange = { phone = it }
-                )
+//                AppTextField(
+//                    label = "Name",
+//                    value = name,
+//                    onValueChange = { name = it }
+//                )
+//
+//                AppTextField(
+//                    label = "Phone",
+//                    value = phone,
+//                    onValueChange = { phone = it }
+//                )
 
                 AppTextField(
                     label = "Comment",
                     value = comment,
                     onValueChange = { comment = it },
-                    minLines = 4
+                    minLines = 6,
+                    singleLine = false
                 )
 
                 Spacer(modifier = Modifier.height(28.dp))

@@ -32,6 +32,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.example.handyhub.model.User
 import com.example.handyhub.ui.components.AppButton
 import com.example.handyhub.ui.components.AppHeader
@@ -44,6 +45,7 @@ fun ProfileScreen(
     isMaster: Boolean,
     isLoggedIn: Boolean,
     avatarUrl: Int?,
+    avatarUri: String?,
     onBackClick: () -> Unit,
     onBecomeMasterClick: () -> Unit,
     onLoginClick: () -> Unit,
@@ -61,6 +63,7 @@ fun ProfileScreen(
         AppHeader(
             title = "Profile",
             avatarUrl = avatarUrl,
+            avatarUri = avatarUri,
             showBack = true,
             isLoggedIn = isLoggedIn,
             showAuthActions = true,
@@ -75,9 +78,9 @@ fun ProfileScreen(
             return
         }
 
-        if (currentUser.avatarUrl != null) {
-            Image(
-                painter = painterResource(id = currentUser.avatarUrl),
+        if (currentUser.avatarUrl != null || currentUser.avatarUri != null) {
+            AsyncImage(
+                model = currentUser.avatarUri ?: currentUser.avatarUrl,
                 contentDescription = "Avatar",
                 modifier = Modifier
                     .size(96.dp)

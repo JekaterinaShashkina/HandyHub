@@ -47,6 +47,7 @@ fun AppNavigation(
                 viewModel = homeViewModel,
                 isLoggedIn = currentUser != null,
                 avatarUrl = currentUser?.avatarUrl,
+                avatarUri = currentUser?.avatarUri,
                 onMasterClick = { masterId ->
                     navController.navigate(Routes.masterDetail(masterId))
                 },
@@ -77,6 +78,7 @@ fun AppNavigation(
                 viewModel = masterDetailViewModel,
                 masterId = masterId,
                 avatarUrl = currentUser?.avatarUrl,
+                avatarUri = currentUser?.avatarUri,
                 isLoggedIn = currentUser != null,
                 onBackClick = { navController.popBackStack()},
                 onAddReviewClick = {
@@ -97,6 +99,7 @@ fun AppNavigation(
         }
         // Navigation ADD REVIEW
         composable(
+
             route = Routes.ADD_REVIEW,
             arguments = listOf(
                 navArgument("masterId") {
@@ -109,6 +112,7 @@ fun AppNavigation(
                 .arguments
                 ?.getInt("masterId")
                 ?: 0
+            val context = LocalContext.current
 
             AddReviewScreen(
                 masterId = masterId,
@@ -116,13 +120,25 @@ fun AppNavigation(
                     navController.popBackStack()
                 },
                 onPublishClick = { comment, rating ->
-                    masterDetailViewModel.addReview(
-                        masterId = masterId,
-                        userId = 1, // временно, пока нет логина
-                        rating = rating,
-                        comment = comment
-                    )
-                    navController.popBackStack()
+                    val user = currentUser
+                    if (user == null) {
+                        Toast.makeText(
+                            context,
+                            "Please login first",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        navController.navigate(Routes.LOGIN)
+                    } else {
+                        masterDetailViewModel.addReview(
+                            masterId = masterId,
+                            userId = user.id,
+                            rating = rating,
+                            comment = comment
+                        )
+                        homeViewModel.loadData()
+                        masterDetailViewModel.loadMaster(masterId)
+                        navController.popBackStack()
+                    }
                 }
             )
         }
@@ -168,7 +184,7 @@ fun AppNavigation(
                 onBackClick = {
                     navController.popBackStack()
                 },
-                onRegisterClick = { name, surname, phone, email, password, repeatPassword ->
+                onRegisterClick = { name, surname, phone, email, password, repeatPassword, avatarUri ->
                     authViewModel.register(
                         name = name,
                         surname = surname,
@@ -176,13 +192,15 @@ fun AppNavigation(
                         email = email,
                         password = password,
                         repeatPassword = repeatPassword,
+                        avatarUri = avatarUri,
                         onSuccess = {
                             Toast.makeText(context, "Account created", Toast.LENGTH_SHORT).show()
                             navController.popBackStack()
                         },
                         onError = { message ->
                             Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
-                        }
+                        },
+
                     )
                 }
             )
@@ -193,6 +211,7 @@ fun AppNavigation(
                 currentUser = currentUser,
                 isMaster = currentUser?.roleId == 2,
                 avatarUrl = currentUser?.avatarUrl,
+                avatarUri = currentUser?.avatarUri,
                 isLoggedIn = currentUser != null,
                 onBackClick = {
                     navController.popBackStack()

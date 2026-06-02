@@ -39,7 +39,7 @@ fun MasterProfileCard(
     modifier: Modifier = Modifier
 ){
     Card (
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(bottom = 16.dp),
         shape = RoundedCornerShape(20.dp),
@@ -56,7 +56,7 @@ fun MasterProfileCard(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 AsyncImage(
-                    model = item.avatarUrl,
+                    model = item.avatarUrl ?: item.avatarUri,
                     contentDescription = null,
                     modifier = Modifier
                         .size(72.dp)

@@ -23,7 +23,7 @@ class AuthViewModel(
         onError: () -> Unit
     ) {
         viewModelScope.launch {
-            val user = repository.getUserByEmail(email)
+            val user = repository.getUserByEmail(email.trim())
             if (user != null && PasswordHasher.verifyPassword(
                     password = password,
                     salt = user.passwordSalt,
@@ -47,7 +47,8 @@ class AuthViewModel(
         password: String,
         repeatPassword: String,
         onSuccess: () -> Unit,
-        onError: (String) -> Unit
+        onError: (String) -> Unit,
+        avatarUri: String?
     ) {
         viewModelScope.launch {
             val validationError = AuthValidator.validateRegister(
@@ -88,6 +89,7 @@ class AuthViewModel(
                     roleId = 1,
                     createdAt = System.currentTimeMillis(),
                     updatedAt = System.currentTimeMillis(),
+                    avatarUri = avatarUri
                 )
             )
             onSuccess()

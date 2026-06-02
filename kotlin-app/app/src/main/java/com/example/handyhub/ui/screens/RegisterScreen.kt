@@ -1,5 +1,8 @@
 package com.example.handyhub.ui.screens
 
+import android.content.Intent
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -23,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import com.example.handyhub.ui.components.AppButton
 import com.example.handyhub.ui.components.AppHeader
 import com.example.handyhub.ui.components.AppTextField
+import androidx.compose.ui.platform.LocalContext
 
 @Composable
 fun RegisterScreen(
@@ -33,7 +37,8 @@ fun RegisterScreen(
         email: String,
         phone: String,
         password: String,
-        repeatPassword: String
+        repeatPassword: String,
+        avatarUri: String?
     ) -> Unit
 ) {
     var name by remember { mutableStateOf("") }
@@ -42,6 +47,20 @@ fun RegisterScreen(
     var phone by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var repeatPassword by remember { mutableStateOf("") }
+    var avatarUri by remember { mutableStateOf<String?>(null) }
+    val context = LocalContext.current
+    val imagePicker = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.OpenDocument()
+    ) { uri ->
+        uri?.let {
+            context.contentResolver.takePersistableUriPermission(
+                it,
+                Intent.FLAG_GRANT_READ_URI_PERMISSION
+            )
+
+            avatarUri = it.toString()
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -82,11 +101,18 @@ fun RegisterScreen(
         Spacer(modifier = Modifier.height(8.dp))
         OutlinedButton(
             onClick = {
-                // avatar upload later
+                imagePicker.launch(arrayOf("image/*"))
             },
             shape = RoundedCornerShape(4.dp)
         ) {
             Text("Upload file")
+        }
+        avatarUri?.let { uri ->
+            Spacer(modifier = Modifier.height(12.dp))
+            Text(
+                text = uri,
+                style = MaterialTheme.typography.bodyMedium
+            )
         }
         Spacer(modifier = Modifier.height(24.dp))
         AppButton(
@@ -97,7 +123,8 @@ fun RegisterScreen(
                     phone,
                     email,
                     password,
-                    repeatPassword
+                    repeatPassword,
+                    avatarUri
                 )
             },
             modifier = Modifier

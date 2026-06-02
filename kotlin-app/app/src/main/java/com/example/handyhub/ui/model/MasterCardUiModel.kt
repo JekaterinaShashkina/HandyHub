@@ -13,4 +13,5 @@ data class MasterCardUiModel(
     val ratingAvg: Double,
     val reviewsCount: Int,
     val avatarUrl: Int?,
+    val avatarUri: String? = null
 )

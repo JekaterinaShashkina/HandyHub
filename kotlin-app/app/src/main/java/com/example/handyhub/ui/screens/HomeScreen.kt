@@ -31,7 +31,8 @@ fun HomeScreen (
     onLogoutClick: () -> Unit,
     onProfileClick: () -> Unit,
     isLoggedIn: Boolean,
-    avatarUrl: Int?
+    avatarUrl: Int?,
+    avatarUri: String?
 ){
     val categories by viewModel.categories.collectAsState()
 
@@ -59,6 +60,7 @@ fun HomeScreen (
         item {
             AppHeader(
                 avatarUrl = avatarUrl,
+                avatarUri = avatarUri,
                 showLogo = true,
                 isLoggedIn = isLoggedIn,
                 showAuthActions = true,

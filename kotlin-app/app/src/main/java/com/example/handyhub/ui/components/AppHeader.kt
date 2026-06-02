@@ -28,6 +28,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.example.handyhub.R
 
 @Composable
@@ -35,6 +36,7 @@ fun AppHeader(
     modifier: Modifier = Modifier,
     title: String? = null,
     avatarUrl: Int? = null,
+    avatarUri: String? = null,
     showLogo: Boolean = false,
     showBack: Boolean = false,
     isLoggedIn: Boolean = false,
@@ -93,12 +95,12 @@ fun AppHeader(
                     )
 
                 }
-                if (isLoggedIn && avatarUrl != null) {
+                if (isLoggedIn && avatarUrl != null || avatarUri != null) {
                     IconButton(
                         onClick = onProfileClick
                     ) {
-                        Image(
-                            painter = painterResource(id = avatarUrl),
+                        AsyncImage(
+                            model = avatarUri ?: avatarUrl,
                             contentDescription = "Profile",
                             modifier = Modifier
                                 .size(36.dp)

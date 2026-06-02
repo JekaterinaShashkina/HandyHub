@@ -1,14 +1,11 @@
 package com.example.handyhub.ui.components
 
-import android.inputmethodservice.Keyboard.Row
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.ChatBubble
-import androidx.compose.material.icons.outlined.StarBorder
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -49,8 +46,8 @@ fun MasterCard(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                 AsyncImage(
-                    model = master.avatarUrl,
-                    contentDescription = null,
+                    model = master.avatarUrl ?: master.avatarUri,
+                    contentDescription = "Avatar",
                     modifier = Modifier
                         .size(84.dp)
                         .clip(CircleShape),

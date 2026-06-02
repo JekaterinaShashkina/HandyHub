@@ -26,6 +26,7 @@ import com.example.handyhub.viewmodel.MasterDetailViewModel
 fun MasterDetailScreen(
     masterId: Int,
     avatarUrl: Int?,
+    avatarUri: String?,
     isLoggedIn: Boolean,
     viewModel: MasterDetailViewModel,
     onBackClick: () -> Unit,
@@ -52,6 +53,7 @@ fun MasterDetailScreen(
             AppHeader(
                 title = "Master details",
                 avatarUrl = avatarUrl,
+                avatarUri = avatarUri,
                 showBack = true,
                 isLoggedIn = isLoggedIn,
                 showAuthActions = true,
