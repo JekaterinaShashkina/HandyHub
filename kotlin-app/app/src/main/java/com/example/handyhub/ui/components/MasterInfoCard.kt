@@ -33,7 +33,7 @@ fun MasterInfoCard(
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant
+            containerColor = Color(0xFFF4F4F8)
         )
     ) {
         Column(

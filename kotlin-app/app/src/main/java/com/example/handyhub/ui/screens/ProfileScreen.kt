@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -50,7 +51,8 @@ fun ProfileScreen(
     onBecomeMasterClick: () -> Unit,
     onLoginClick: () -> Unit,
     onProfileClick: () -> Unit,
-    onLogoutClick: () -> Unit
+    onLogoutClick: () -> Unit,
+    onMyServicesClick: () -> Unit
 ) {
     var showLogoutDialog by remember { mutableStateOf(false) }
 
@@ -143,12 +145,26 @@ fun ProfileScreen(
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             )
         }
+        Spacer(modifier = Modifier.height(24.dp))
+        // AppButton "Edit Profile"
+        AppButton(
+            text = "Edit profile",
+            onClick = onProfileClick,
+            modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(modifier = Modifier.height(24.dp))
+        // AppButton "My services"
+        AppButton(
+            text = "My services",
+            onClick = onMyServicesClick,
+            modifier = Modifier.fillMaxWidth()
+        )
 
-        Spacer(modifier = Modifier.weight(1f))
+        Spacer(modifier = Modifier.height(24.dp))
 
         OutlinedButton(
             onClick = { showLogoutDialog = true },
-            modifier = Modifier.align(Alignment.CenterHorizontally),
+            modifier = Modifier.align(Alignment.End),
             shape = RoundedCornerShape(10.dp)
         ) {
             Text("Logout")

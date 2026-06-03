@@ -56,7 +56,8 @@ fun AppExpandableCategories(
         AnimatedVisibility(visible = expanded) {
             Column(
                 verticalArrangement = Arrangement.spacedBy(12.dp),
-                modifier = Modifier.padding(bottom = 12.dp)
+                modifier = Modifier.padding(bottom = 12.dp),
+
             ) {
                 categories.forEach { category ->
                     val isSelected = selectedCategoryId == category.id
@@ -70,7 +71,8 @@ fun AppExpandableCategories(
                             )
                             .clickable { onCategoryClick(category) }
                             .padding(horizontal = 8.dp, vertical = 6.dp),
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.CenterVertically,
+
                     ) {
                         Icon(
                             painter = painterResource(id = getCategoryIcon(category.name)),

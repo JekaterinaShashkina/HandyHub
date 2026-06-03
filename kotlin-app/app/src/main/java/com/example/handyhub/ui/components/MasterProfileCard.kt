@@ -44,7 +44,7 @@ fun MasterProfileCard(
             .padding(bottom = 16.dp),
         shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant
+            containerColor = Color(0xFFF4F4F8)
         )
     ){
         Column (

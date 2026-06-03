@@ -33,7 +33,7 @@ fun BecomeMasterScreen(
     onBackClick: () -> Unit,
     onRegisterMasterClick: (
         categoryId: Int?,
-        priceFrom: String,
+        // priceFrom: String,
         expYears: String,
         description: String,
         serviceTitle: String,
@@ -41,7 +41,7 @@ fun BecomeMasterScreen(
     ) -> Unit
 ){
     var selectedCategoryId by remember { mutableStateOf<Int?>(null) }
-    var priceFrom by remember { mutableStateOf("") }
+    // var priceFrom by remember { mutableStateOf("") }
     var expYears by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
     var serviceTitle by remember { mutableStateOf("") }
@@ -70,12 +70,14 @@ fun BecomeMasterScreen(
             }
         )
         Spacer(modifier = Modifier.height(24.dp))
-        AppTextField(
-            label = "Price from",
-            value = priceFrom,
-            onValueChange = { priceFrom = it }
-        )
-        Spacer(modifier = Modifier.height(16.dp))
+
+//        AppTextField(
+//            label = "Price from",
+//            value = priceFrom,
+//            onValueChange = { priceFrom = it }
+//        )
+
+//        Spacer(modifier = Modifier.height(16.dp))
         AppTextField(
             label = "Experience years",
             value = expYears,
@@ -105,7 +107,7 @@ fun BecomeMasterScreen(
             onClick = {
                 onRegisterMasterClick(
                     selectedCategoryId,
-                    priceFrom,
+                   // priceFrom,
                     expYears,
                     description,
                     serviceTitle,

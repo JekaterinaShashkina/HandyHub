@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.handyhub.data.repository.HandyHubRepository
 import com.example.handyhub.model.User
+import com.example.handyhub.session.SessionManager
 import com.example.handyhub.utils.security.PasswordHasher
 import com.example.handyhub.utils.validation.AuthValidator
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -11,7 +12,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class AuthViewModel(
-    private val repository: HandyHubRepository
+    private val repository: HandyHubRepository,
+    private val sessionManager: SessionManager
 ) : ViewModel() {
     private val _currentUser = MutableStateFlow<User?>(null)
     val currentUser = _currentUser.asStateFlow()
@@ -31,6 +33,7 @@ class AuthViewModel(
                 )
             ){
                 _currentUser.value = user
+                sessionManager.saveUserId(user.id)
                 onSuccess()
             } else {
                 onError()
@@ -97,6 +100,7 @@ class AuthViewModel(
     }
     fun logout() {
         _currentUser.value = null
+        sessionManager.clearSession()
     }
 
     fun refreshCurrentUser() {
@@ -104,6 +108,16 @@ class AuthViewModel(
 
         viewModelScope.launch {
             _currentUser.value = repository.getUserById(userId)
+        }
+    }
+
+    fun loadSavedUser() {
+        viewModelScope.launch {
+            val userId = sessionManager.getUserId()
+
+            if (userId != null) {
+                _currentUser.value = repository.getUserById(userId)
+            }
         }
     }
 }

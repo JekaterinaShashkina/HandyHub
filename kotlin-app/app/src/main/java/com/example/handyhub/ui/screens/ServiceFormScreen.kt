@@ -1,15 +1,11 @@
 package com.example.handyhub.ui.screens
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -24,61 +20,51 @@ import com.example.handyhub.ui.components.AppHeader
 import com.example.handyhub.ui.components.AppTextField
 
 @Composable
-fun LoginScreen(
+fun ServiceFormScreen(
+    title: String,
+    initialTitle: String = "",
+    initialPrice: String = "",
     onBackClick: () -> Unit,
-    onLoginClick: (email: String, password: String) -> Unit,
-    onRegisterClick: () -> Unit
+    onSaveClick: (serviceTitle: String, servicePrice: String) -> Unit
 ) {
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
+    var serviceTitle by remember { mutableStateOf(initialTitle) }
+    var servicePrice by remember { mutableStateOf(initialPrice) }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color(0xFFF5F5FA))
-            .padding(24.dp, 32.dp),
-        verticalArrangement = Arrangement.Top
+            .padding(24.dp)
     ) {
         AppHeader(
-            title = "Sign In",
+            title = title,
             showBack = true,
+            showAuthActions = false,
             onBackClick = onBackClick
         )
 
         Spacer(modifier = Modifier.height(24.dp))
 
         AppTextField(
-            label = "Email",
-            value = email,
-            onValueChange = { email = it }
+            label = "Service title",
+            value = serviceTitle,
+            onValueChange = { serviceTitle = it }
         )
-
-        Spacer(modifier = Modifier.height(16.dp))
 
         AppTextField(
-            label = "Password",
-            value = password,
-            onValueChange = { password = it },
-            isPassword = true
+            label = "Price",
+            value = servicePrice,
+            onValueChange = { servicePrice = it }
         )
 
-        Spacer(modifier = Modifier.height(28.dp))
+        Spacer(modifier = Modifier.height(24.dp))
 
         AppButton(
-            text = "Sign In",
+            text = "Save",
             onClick = {
-                onLoginClick(email, password)
+                onSaveClick(serviceTitle, servicePrice)
             },
             modifier = Modifier.align(Alignment.End)
         )
-        Spacer(modifier = Modifier.height(12.dp))
-
-        TextButton(
-            onClick = onRegisterClick,
-            modifier = Modifier.align(Alignment.End)
-        ) {
-            Text("Create account", style = MaterialTheme.typography.bodyLarge)
-        }
     }
-
 }

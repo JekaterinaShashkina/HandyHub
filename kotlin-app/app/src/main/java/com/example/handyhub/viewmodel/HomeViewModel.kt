@@ -26,6 +26,7 @@ class HomeViewModel(
             _masters.value = masterProfiles.mapNotNull { master ->
                 val user = repository.getUserById(master.userId)
                 val services = repository.getServicesByMaster(master.id)
+                val priceFrom = services.minOfOrNull { it.price } ?: 0.0
                 val firstService = services.firstOrNull()
                 val category = firstService?.let {
                     repository.getCategoryById(it.categoryId)
@@ -48,7 +49,7 @@ class HomeViewModel(
                         categoryName = category?.name ?: "Specialist",
                         description = master.description,
                         expYears = master.expYears,
-                        priceFrom = master.priceFrom,
+                        priceFrom = priceFrom,
                         ratingAvg = ratingAvg,
                         reviewsCount = reviewsCount,
                         avatarUrl = user.avatarUrl,
