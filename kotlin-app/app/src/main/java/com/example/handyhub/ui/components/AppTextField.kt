@@ -61,7 +61,7 @@ fun AppTextField(
                 VisualTransformation.None,
         colors = OutlinedTextFieldDefaults.colors(
             focusedContainerColor = AppColors.CardBackground,
-            unfocusedContainerColor = AppColors.CardBackground,,
+            unfocusedContainerColor = AppColors.CardBackground,
             focusedBorderColor = AppColors.Transparent,
             unfocusedBorderColor = AppColors.Transparent
         ),
