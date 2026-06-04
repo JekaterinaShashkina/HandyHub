@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.handyhub.model.Service
+import com.example.handyhub.ui.theme.Dimens
 
 @Composable
 fun ServiceManageCard (
@@ -28,13 +29,13 @@ fun ServiceManageCard (
 ){
     Card(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(Dimens.MediumSpacing),
         colors = CardDefaults.cardColors(
             containerColor = Color.White
         )
     ) {
             Column(
-                modifier = Modifier.padding(16.dp)
+                modifier = Modifier.padding(Dimens.MediumSpacing)
             ) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -45,28 +46,34 @@ fun ServiceManageCard (
                     style = MaterialTheme.typography.titleLarge
                 )
 
-                Spacer(modifier = Modifier.height(6.dp))
+                Spacer(modifier = Modifier.height(Dimens.ExtraSmallSpacing))
 
                 Text(
                     text = "from ${service.price.toInt()} €",
                     style = MaterialTheme.typography.bodyLarge
                 )
                     }
-                Spacer(modifier = Modifier.height(6.dp))
+                Spacer(modifier = Modifier.height(Dimens.ExtraSmallSpacing))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.End
 
                 ) {
                     TextButton(onClick = onEditClick) {
-                        Text("Edit")
+                        Text(
+                            text = "Edit",
+                            style = MaterialTheme.typography.bodyMedium
+                        )
                     }
 
                     TextButton(
                         onClick = onDeleteClick,
                         enabled = canDelete
                     ) {
-                        Text("Delete")
+                        Text(
+                            text = "Delete",
+                            style = MaterialTheme.typography.bodyMedium
+                        )
                     }
                 }
                 if (!canDelete) {

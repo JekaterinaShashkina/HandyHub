@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
+import com.example.handyhub.ui.theme.Dimens
 
 @Composable
 fun ProfileInfoCard(
@@ -25,13 +26,13 @@ fun ProfileInfoCard(
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(Dimens.MediumSpacing),
         colors = CardDefaults.cardColors(
             containerColor = Color.White
         )
     ){
         Row(
-            modifier = Modifier.padding(16.dp),
+            modifier = Modifier.padding(Dimens.MediumSpacing),
             verticalAlignment = Alignment.CenterVertically,
         ){
             Icon(
@@ -40,7 +41,7 @@ fun ProfileInfoCard(
                 tint = Color(0xFFFFC800)
             )
 
-            Spacer(modifier = Modifier.width(16.dp))
+            Spacer(modifier = Modifier.width(Dimens.MediumSpacing))
 
             Text(
                 text = text,

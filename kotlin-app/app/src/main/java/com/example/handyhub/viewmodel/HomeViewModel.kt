@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 
 class HomeViewModel(
     private val repository: HandyHubRepository
-): ViewModel() {
+) : ViewModel() {
     private val _categories = MutableStateFlow<List<Category>>(emptyList())
     val categories: StateFlow<List<Category>> = _categories
 

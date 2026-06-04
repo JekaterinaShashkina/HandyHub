@@ -23,6 +23,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import com.example.handyhub.ui.components.ConfirmDialog
 import com.example.handyhub.ui.screens.BecomeMasterScreen
+import com.example.handyhub.ui.screens.EditProfileScreen
 import com.example.handyhub.ui.screens.MyServicesScreen
 import com.example.handyhub.ui.screens.ProfileScreen
 import com.example.handyhub.ui.screens.RegisterScreen
@@ -233,6 +234,9 @@ fun AppNavigation(
                 },
                 onMyServicesClick = {
                     navController.navigate(Routes.MY_SERVICES)
+                },
+                onEditProfileClick = {
+                    navController.navigate(Routes.EDIT_PROFILE)
                 }
             )
         }
@@ -394,6 +398,33 @@ fun AppNavigation(
                     }
                 )
             }
+        }
+        composable(Routes.EDIT_PROFILE) {
+            val context = LocalContext.current
+
+            EditProfileScreen(
+                currentUser = currentUser,
+                onBackClick = {
+                    navController.popBackStack()
+                },
+                onSaveClick = { name, surname, email, phone, avatarUri ->
+                    authViewModel.updateProfile(
+                        name = name,
+                        surname = surname,
+                        email = email,
+                        phone = phone,
+                        avatarUri = avatarUri,
+                        onSuccess = {
+                            Toast.makeText(context, "Profile updated", Toast.LENGTH_SHORT).show()
+                            homeViewModel.loadData()
+                            navController.popBackStack()
+                        },
+                        onError = { message ->
+                            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                        }
+                    )
+                }
+            )
         }
 
     }

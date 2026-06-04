@@ -11,6 +11,7 @@ object Routes {
     const val MY_SERVICES = "my_services"
     const val ADD_SERVICE = "add_service"
     const val EDIT_SERVICE = "edit_service/{serviceId}"
+    const val EDIT_PROFILE = "edit_profile"
 
 
     fun masterDetail(masterId: Int): String {

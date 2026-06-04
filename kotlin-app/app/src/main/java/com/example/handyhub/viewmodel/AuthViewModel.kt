@@ -120,4 +120,46 @@ class AuthViewModel(
             }
         }
     }
+    fun updateProfile(
+        name: String,
+        surname: String,
+        email: String,
+        phone: String,
+        avatarUri: String?,
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
+    ) {
+        viewModelScope.launch {
+            val user = _currentUser.value
+
+            if (user == null) {
+                onError("User not found")
+                return@launch
+            }
+
+            if (
+                name.isBlank() ||
+                surname.isBlank() ||
+                email.isBlank() ||
+                phone.isBlank()
+            ) {
+                onError("Please fill all fields")
+                return@launch
+            }
+
+            val updatedUser = user.copy(
+                name = name.trim(),
+                surname = surname.trim(),
+                email = email.trim(),
+                phone = phone.trim(),
+                avatarUri = avatarUri,
+                updatedAt = System.currentTimeMillis()
+            )
+
+            repository.updateUser(updatedUser)
+            _currentUser.value = updatedUser
+
+            onSuccess()
+        }
+    }
 }

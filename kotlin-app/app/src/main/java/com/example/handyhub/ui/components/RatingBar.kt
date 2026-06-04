@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.example.handyhub.ui.theme.Dimens
 import kotlin.math.roundToInt
 
 @Composable
@@ -30,7 +31,7 @@ fun RatingBar(
                 },
                 contentDescription = null,
                 tint = Color(0xFFFFC107),
-                modifier = Modifier.size(20.dp)
+                modifier = Modifier.size(Dimens.SmallIconSize)
             )
         }
     }

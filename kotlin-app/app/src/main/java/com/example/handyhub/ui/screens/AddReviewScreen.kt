@@ -28,6 +28,8 @@ import androidx.compose.ui.unit.dp
 import com.example.handyhub.ui.components.AppHeader
 import com.example.handyhub.ui.components.AppTextField
 import com.example.handyhub.ui.components.RatingInput
+import com.example.handyhub.ui.theme.AppColors
+import com.example.handyhub.ui.theme.Dimens
 
 @Composable
 fun AddReviewScreen(
@@ -38,45 +40,33 @@ fun AddReviewScreen(
         rating: Int
     ) -> Unit
 ) {
-    var name by remember { mutableStateOf("") }
-    var phone by remember { mutableStateOf("") }
     var comment by remember { mutableStateOf("") }
     var rating by remember { mutableIntStateOf(0) }
 
-    Box (
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.Black.copy(alpha = 0.5f))
-            .padding(24.dp,32.dp),
+            .background(AppColors.Secondary.copy(alpha = 0.5f))
+            .padding(Dimens.LargeSpacing, Dimens.ExtraLargeSpacing),
         contentAlignment = Alignment.Center
     ) {
         Card(
-            modifier = Modifier.fillMaxWidth()
-                .padding(top = 24.dp),
-            shape = RoundedCornerShape(24.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = Dimens.ScreenPadding),
+            shape = RoundedCornerShape(Dimens.ScreenPadding),
             colors = CardDefaults.cardColors(
-                containerColor = Color(0xFFF4F5FC)
+                containerColor = AppColors.Background
             )
         ) {
             Column(
-                modifier = Modifier.padding(24.dp)
+                modifier = Modifier.padding(Dimens.LargeSpacing)
             ) {
                 AppHeader(
                     title = "Add review",
                     showBack = true,
                     onBackClick = onBackClick
                 )
-//                AppTextField(
-//                    label = "Name",
-//                    value = name,
-//                    onValueChange = { name = it }
-//                )
-//
-//                AppTextField(
-//                    label = "Phone",
-//                    value = phone,
-//                    onValueChange = { phone = it }
-//                )
 
                 AppTextField(
                     label = "Comment",
@@ -86,18 +76,18 @@ fun AddReviewScreen(
                     singleLine = false
                 )
 
-                Spacer(modifier = Modifier.height(28.dp))
+                Spacer(modifier = Modifier.height(Dimens.LargeSpacing))
 
                 Button(
                     onClick = {
-                        onPublishClick( comment, rating)
+                        onPublishClick(comment, rating)
                     },
                     modifier = Modifier
                         .align(Alignment.End)
-                        .height(54.dp),
-                    shape = RoundedCornerShape(8.dp),
+                        .height(Dimens.ButtonHeight),
+                    shape = RoundedCornerShape(Dimens.RadiusCorner),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFFFFC800),
+                        containerColor = AppColors.Primary,
                         contentColor = Color.Black
                     )
                 ) {
@@ -106,9 +96,7 @@ fun AddReviewScreen(
                         style = MaterialTheme.typography.headlineSmall
                     )
                 }
-
-                Spacer(modifier = Modifier.height(24.dp))
-
+                Spacer(modifier = Modifier.height(Dimens.ScreenPadding))
                 RatingInput(
                     rating = rating,
                     onRatingChange = { rating = it },

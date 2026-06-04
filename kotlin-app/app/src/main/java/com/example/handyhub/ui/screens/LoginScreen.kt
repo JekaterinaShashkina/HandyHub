@@ -18,10 +18,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
 import com.example.handyhub.ui.components.AppButton
 import com.example.handyhub.ui.components.AppHeader
 import com.example.handyhub.ui.components.AppTextField
+import com.example.handyhub.ui.theme.AppColors
+import com.example.handyhub.ui.theme.Dimens
 
 @Composable
 fun LoginScreen(
@@ -35,8 +36,8 @@ fun LoginScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF5F5FA))
-            .padding(24.dp, 32.dp),
+            .background(AppColors.Background)
+            .padding(Dimens.LargeSpacing, Dimens.ExtraLargeSpacing),
         verticalArrangement = Arrangement.Top
     ) {
         AppHeader(
@@ -45,7 +46,7 @@ fun LoginScreen(
             onBackClick = onBackClick
         )
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(Dimens.LargeSpacing))
 
         AppTextField(
             label = "Email",
@@ -53,7 +54,7 @@ fun LoginScreen(
             onValueChange = { email = it }
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(Dimens.MediumSpacing))
 
         AppTextField(
             label = "Password",
@@ -62,7 +63,7 @@ fun LoginScreen(
             isPassword = true
         )
 
-        Spacer(modifier = Modifier.height(28.dp))
+        Spacer(modifier = Modifier.height(Dimens.LargeSpacing))
 
         AppButton(
             text = "Sign In",
@@ -71,13 +72,16 @@ fun LoginScreen(
             },
             modifier = Modifier.align(Alignment.End)
         )
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(Dimens.MediumSpacing))
 
         TextButton(
             onClick = onRegisterClick,
             modifier = Modifier.align(Alignment.End)
         ) {
-            Text("Create account", style = MaterialTheme.typography.bodyLarge)
+            Text(
+                text = "Create account",
+                style = MaterialTheme.typography.bodyLarge
+            )
         }
     }
 

@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.example.handyhub.ui.theme.Dimens
 
 @Composable
 fun RatingInput(
@@ -29,7 +30,7 @@ fun RatingInput(
                 contentDescription = null,
                 tint = Color(0xFFFFC400),
                 modifier = Modifier
-                    .size(30.dp)
+                    .size(Dimens.ProfileIconSize)
                     .clickable {
                         onRatingChange(index + 1)
                     }

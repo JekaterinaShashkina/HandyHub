@@ -62,6 +62,10 @@ class HandyHubRepository(
         database.roleDao().insertRole(role)
     }
 
+    suspend fun updateUser(user: User) {
+        database.userDao().updateUser(user)
+    }
+
     suspend fun updateUserRole(userId: Int, roleId: Int) {
         database.userDao().updateUserRole(
             userId = userId,

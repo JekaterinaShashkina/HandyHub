@@ -20,6 +20,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.handyhub.ui.model.MasterCardUiModel
+import com.example.handyhub.ui.theme.Dimens
 
 @Composable
 fun MasterCard(
@@ -31,7 +32,7 @@ fun MasterCard(
         modifier = modifier
             .fillMaxWidth()
             .clickable { onClick(master.id) },
-        shape = RoundedCornerShape(20.dp),
+        shape = RoundedCornerShape(Dimens.ExtraLargeRadiusCorner),
         colors = CardDefaults.cardColors(
         containerColor = Color(0xFFF4F4F8)
         )
@@ -39,7 +40,7 @@ fun MasterCard(
         Row (
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
+                .padding(Dimens.MediumSpacing)
 
         ){
             Column(
@@ -49,17 +50,17 @@ fun MasterCard(
                     model = master.avatarUrl ?: master.avatarUri,
                     contentDescription = "Avatar",
                     modifier = Modifier
-                        .size(84.dp)
+                        .size(Dimens.AvatarSize)
                         .clip(CircleShape),
                     contentScale = ContentScale.Crop
                 )
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(Dimens.MediumSpacing))
 
                 Text(
                     text = master.categoryName,
                     style = MaterialTheme.typography.titleMedium
                 )
-                Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = Modifier.height(Dimens.ExtraSmallSpacing))
                 Text(
                     text = master.fullName,
                     style = MaterialTheme.typography.bodyMedium,
@@ -71,7 +72,7 @@ fun MasterCard(
             Column(
                 horizontalAlignment = Alignment.End,
                 verticalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.height(140.dp)
+                // modifier = Modifier.height(140.dp)
 
             ) {
                 Text(
@@ -84,13 +85,13 @@ fun MasterCard(
                 ) {
 
                     RatingBar(rating = master.ratingAvg)
-                    Spacer(modifier = Modifier.width(8.dp))
+                    Spacer(modifier = Modifier.width(Dimens.SmallWidth))
                     Icon(
                         imageVector = Icons.Outlined.ChatBubble,
                         contentDescription = null,
-                        modifier = Modifier.size(18.dp)
+                        modifier = Modifier.size(Dimens.SmallIconSize)
                     )
-                    Spacer(modifier = Modifier.width(4.dp))
+                    Spacer(modifier = Modifier.width(Dimens.ExtraSmallWidth))
 
                     Text(text = master.reviewsCount.toString())
                 }

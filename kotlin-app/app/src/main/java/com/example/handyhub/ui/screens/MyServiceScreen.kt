@@ -1,20 +1,23 @@
 package com.example.handyhub.ui.screens
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
 import com.example.handyhub.model.Service
 import com.example.handyhub.ui.components.AppButton
 import com.example.handyhub.ui.components.AppHeader
 import com.example.handyhub.ui.components.ServiceManageCard
-
-
+import com.example.handyhub.ui.theme.AppColors
+import com.example.handyhub.ui.theme.Dimens
 
 @Composable
 fun MyServicesScreen (
@@ -27,8 +30,8 @@ fun MyServicesScreen (
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF5F5FA))
-            .padding(24.dp, 32.dp)
+            .background(AppColors.Background)
+            .padding(Dimens.LargeSpacing, Dimens.ExtraLargeSpacing)
 
     ) {
         item {
@@ -41,7 +44,7 @@ fun MyServicesScreen (
         }
 
         item {
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(Dimens.MediumSpacing))
         }
 
         items(
@@ -59,12 +62,10 @@ fun MyServicesScreen (
                     onDeleteServiceClick(service)
                 }
             )
-
-
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(Dimens.MediumHeight))
         }
         item {
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(Dimens.LargeSpacing))
         }
         item {
             Box(

@@ -12,6 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.handyhub.ui.theme.Dimens
 
 @Composable
 fun AppSearchBar (
@@ -25,7 +26,7 @@ fun AppSearchBar (
         onValueChange = onValueChange,
         modifier = modifier
             .fillMaxWidth()
-            .height(56.dp),
+            .height(Dimens.ButtonHeight),
         placeholder = {
             Text(text = placeholder)
         },
@@ -36,7 +37,7 @@ fun AppSearchBar (
             )
         },
         singleLine = true,
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(Dimens.LargeRadiusCorner),
         colors = OutlinedTextFieldDefaults.colors(
             unfocusedBorderColor = androidx.compose.ui.graphics.Color.Transparent,
             focusedBorderColor = androidx.compose.ui.graphics.Color.Transparent

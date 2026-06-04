@@ -1,6 +1,5 @@
 package com.example.handyhub.ui.screens
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -31,14 +30,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.handyhub.model.User
 import com.example.handyhub.ui.components.AppButton
 import com.example.handyhub.ui.components.AppHeader
 import com.example.handyhub.ui.components.ConfirmDialog
 import com.example.handyhub.ui.components.ProfileInfoCard
+import com.example.handyhub.ui.theme.AppColors
+import com.example.handyhub.ui.theme.Dimens
 
 @Composable
 fun ProfileScreen(
@@ -52,15 +51,16 @@ fun ProfileScreen(
     onLoginClick: () -> Unit,
     onProfileClick: () -> Unit,
     onLogoutClick: () -> Unit,
-    onMyServicesClick: () -> Unit
+    onMyServicesClick: () -> Unit,
+    onEditProfileClick: () -> Unit
 ) {
     var showLogoutDialog by remember { mutableStateOf(false) }
 
     Column (
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF5F5FA))
-            .padding(24.dp, 32.dp)
+            .background(AppColors.Background)
+            .padding(Dimens.LargeSpacing, Dimens.ExtraLargeSpacing)
     ){
         AppHeader(
             title = "Profile",
@@ -74,9 +74,11 @@ fun ProfileScreen(
             onLogoutClick = onLogoutClick,
             onProfileClick = onProfileClick
         )
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(Dimens.LargeSpacing))
         if (currentUser == null) {
-            Text("You are not logged in")
+            Text(
+                text = "You are not logged in",
+               style = MaterialTheme.typography.headlineLarge)
             return
         }
 
@@ -85,7 +87,7 @@ fun ProfileScreen(
                 model = currentUser.avatarUri ?: currentUser.avatarUrl,
                 contentDescription = "Avatar",
                 modifier = Modifier
-                    .size(96.dp)
+                    .size(Dimens.AvatarSize)
                     .clip(CircleShape)
                     .align(Alignment.CenterHorizontally),
                 contentScale = ContentScale.Crop
@@ -93,7 +95,7 @@ fun ProfileScreen(
         } else {
             Box(
                 modifier = Modifier
-                    .size(96.dp)
+                    .size(Dimens.AvatarSize)
                     .clip(CircleShape)
                     .background(Color(0xFFFFC800))
                     .align(Alignment.CenterHorizontally),
@@ -102,12 +104,12 @@ fun ProfileScreen(
                 Icon(
                     imageVector = Icons.Outlined.Person,
                     contentDescription = null,
-                    modifier = Modifier.size(48.dp)
+                    modifier = Modifier.size(Dimens.HeaderAvatarSize)
                 )
 
             }
         }
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(Dimens.MediumSpacing))
 
         Text(
             text = "${currentUser.name} ${currentUser.surname}",
@@ -121,17 +123,17 @@ fun ProfileScreen(
             modifier = Modifier.align(Alignment.CenterHorizontally)
         )
 
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(Dimens.LargeSpacing))
         ProfileInfoCard(
             icon = Icons.Outlined.Email,
             text = currentUser.email
         )
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(Dimens.MediumSpacing))
         ProfileInfoCard(
             icon = Icons.Outlined.Phone,
             text = currentUser.phone
         )
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(Dimens.LargeSpacing))
 
         if (isMaster) {
             ProfileInfoCard(
@@ -145,14 +147,14 @@ fun ProfileScreen(
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             )
         }
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(Dimens.LargeSpacing))
         // AppButton "Edit Profile"
         AppButton(
             text = "Edit profile",
-            onClick = onProfileClick,
+            onClick = onEditProfileClick,
             modifier = Modifier.fillMaxWidth()
         )
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(Dimens.LargeSpacing))
         // AppButton "My services"
         AppButton(
             text = "My services",
@@ -160,12 +162,12 @@ fun ProfileScreen(
             modifier = Modifier.fillMaxWidth()
         )
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(Dimens.LargeSpacing))
 
         OutlinedButton(
             onClick = { showLogoutDialog = true },
             modifier = Modifier.align(Alignment.End),
-            shape = RoundedCornerShape(10.dp)
+            shape = RoundedCornerShape(Dimens.RadiusCorner)
         ) {
             Text("Logout")
         }
