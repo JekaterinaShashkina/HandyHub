@@ -25,7 +25,7 @@ class AuthViewModel(
         onError: () -> Unit
     ) {
         viewModelScope.launch {
-            val user = repository.getUserByEmail(email.trim())
+            val user = repository.getUserByEmail(email.trim().lowercase())
             if (user != null && PasswordHasher.verifyPassword(
                     password = password,
                     salt = user.passwordSalt,
@@ -58,7 +58,7 @@ class AuthViewModel(
                 name = name,
                 surname = surname,
                 phone = phone,
-                email = email,
+                email = email.trim().lowercase(),
                 password = password,
                 repeatPassword = repeatPassword
             )
@@ -71,7 +71,7 @@ class AuthViewModel(
                 onError("Passwords do not match")
                 return@launch
             }
-            val existingUser = repository.getUserByEmail(email.trim())
+            val existingUser = repository.getUserByEmail(email.trim().lowercase())
             if (existingUser != null) {
                 onError("User with this email already exists")
                 return@launch
@@ -84,7 +84,7 @@ class AuthViewModel(
                     id = 0,
                     name = name.trim(),
                     surname = surname.trim(),
-                    email = email.trim(),
+                    email = email.trim().lowercase(),
                     phone = phone.trim(),
                     passwordHash = hashedPassword,
                     passwordSalt = salt,
@@ -150,7 +150,7 @@ class AuthViewModel(
             val updatedUser = user.copy(
                 name = name.trim(),
                 surname = surname.trim(),
-                email = email.trim(),
+                email = email.trim().lowercase(),
                 phone = phone.trim(),
                 avatarUri = avatarUri,
                 updatedAt = System.currentTimeMillis()

@@ -1,5 +1,6 @@
 package com.example.handyhub.ui.screens
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -30,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.handyhub.model.User
 import com.example.handyhub.ui.components.AppButton
@@ -78,7 +80,7 @@ fun ProfileScreen(
         if (currentUser == null) {
             Text(
                 text = "You are not logged in",
-               style = MaterialTheme.typography.headlineLarge)
+               style = MaterialTheme.typography.bodyLarge)
             return
         }
 
@@ -97,7 +99,7 @@ fun ProfileScreen(
                 modifier = Modifier
                     .size(Dimens.AvatarSize)
                     .clip(CircleShape)
-                    .background(Color(0xFFFFC800))
+                    .background(AppColors.SecondaryBackGround)
                     .align(Alignment.CenterHorizontally),
                 contentAlignment = Alignment.Center
             ) {
@@ -126,7 +128,7 @@ fun ProfileScreen(
         Spacer(modifier = Modifier.height(Dimens.LargeSpacing))
         ProfileInfoCard(
             icon = Icons.Outlined.Email,
-            text = currentUser.email
+            text = currentUser.email,
         )
         Spacer(modifier = Modifier.height(Dimens.MediumSpacing))
         ProfileInfoCard(
@@ -144,7 +146,9 @@ fun ProfileScreen(
             AppButton(
                 text = "Become a master",
                 onClick = onBecomeMasterClick,
-                modifier = Modifier.align(Alignment.CenterHorizontally)
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .fillMaxWidth()
             )
         }
         Spacer(modifier = Modifier.height(Dimens.LargeSpacing))
@@ -156,20 +160,31 @@ fun ProfileScreen(
         )
         Spacer(modifier = Modifier.height(Dimens.LargeSpacing))
         // AppButton "My services"
-        AppButton(
-            text = "My services",
-            onClick = onMyServicesClick,
-            modifier = Modifier.fillMaxWidth()
-        )
-
+        if (isMaster) {
+            AppButton(
+                text = "My services",
+                onClick = onMyServicesClick,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
         Spacer(modifier = Modifier.height(Dimens.LargeSpacing))
 
         OutlinedButton(
             onClick = { showLogoutDialog = true },
             modifier = Modifier.align(Alignment.End),
-            shape = RoundedCornerShape(Dimens.RadiusCorner)
+            shape = RoundedCornerShape(Dimens.RadiusCorner),
+            border = BorderStroke(
+                1.dp,
+                AppColors.ButtonBorder
+            ),
+            colors = androidx.compose.material3.ButtonDefaults.outlinedButtonColors(
+                containerColor = AppColors.ButtonBackground
+            ),
         ) {
-            Text("Logout")
+            Text(
+                text = "Logout",
+                color = AppColors.TextPrimary,
+                style = MaterialTheme.typography.titleMedium)
         }
         if (showLogoutDialog) {
             ConfirmDialog(

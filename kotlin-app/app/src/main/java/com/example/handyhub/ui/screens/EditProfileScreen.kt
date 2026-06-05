@@ -3,6 +3,7 @@ package com.example.handyhub.ui.screens
 import android.content.Intent
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -128,9 +130,19 @@ fun EditProfileScreen(
                 imagePicker.launch(arrayOf("image/*"))
             },
             shape = RoundedCornerShape(Dimens.RadiusCorner),
-            modifier = Modifier.align(Alignment.CenterHorizontally)
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+            border = BorderStroke(
+                1.dp,
+                AppColors.ButtonBorder
+            ),
+            colors = androidx.compose.material3.ButtonDefaults.outlinedButtonColors(
+                containerColor = AppColors.ButtonBackground
+            ),
         ) {
-            Text("Change avatar")
+            Text(
+                text = "Change avatar",
+                color = AppColors.TextPrimary,
+                style = MaterialTheme.typography.titleMedium)
         }
         Spacer(modifier = Modifier.height(Dimens.MediumSpacing))
         AppButton(

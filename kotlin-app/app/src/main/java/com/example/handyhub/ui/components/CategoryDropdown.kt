@@ -17,8 +17,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
 import com.example.handyhub.model.Category
+import com.example.handyhub.ui.theme.AppColors
 import com.example.handyhub.ui.theme.Dimens
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -55,10 +55,10 @@ fun CategoryDropdown(
                 .menuAnchor()
                 .fillMaxWidth(),
             colors = OutlinedTextFieldDefaults.colors(
-            focusedContainerColor = Color.White,
-            unfocusedContainerColor = Color.White,
-            focusedBorderColor = MaterialTheme.colorScheme.primary,
-            unfocusedBorderColor = Color.LightGray
+            focusedContainerColor = AppColors.Background,
+            unfocusedContainerColor = AppColors.SecondaryBackGround,
+            focusedBorderColor = AppColors.TextSecondary,
+            unfocusedBorderColor = AppColors.Background,
         )
         )
 

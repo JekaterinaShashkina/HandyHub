@@ -34,7 +34,7 @@ fun AppButton(
         shape = RoundedCornerShape(Dimens.RadiusCorner),
         colors = ButtonDefaults.buttonColors(
             containerColor = AppColors.Primary,
-            contentColor = AppColors.Secondary,
+            contentColor = AppColors.TextPrimary,
             disabledContainerColor = AppColors.disabledContainerColor,
             disabledContentColor = AppColors.TextSecondary
         )

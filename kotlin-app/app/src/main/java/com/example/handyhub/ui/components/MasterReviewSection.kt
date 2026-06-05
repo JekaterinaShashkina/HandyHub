@@ -16,9 +16,8 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
 import com.example.handyhub.ui.model.ReviewWithUser
+import com.example.handyhub.ui.theme.AppColors
 import com.example.handyhub.ui.theme.Dimens
 
 @Composable
@@ -29,9 +28,9 @@ fun MasterReviewSection(
 ) {
     Card(
         modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(Dimens.MediumSpacing),
+        shape = RoundedCornerShape(Dimens.RadiusCorner),
         colors = CardDefaults.cardColors(
-            containerColor = Color(0xFFF4F4F8)
+            containerColor = AppColors.Background
         )
     ) {
         Column(

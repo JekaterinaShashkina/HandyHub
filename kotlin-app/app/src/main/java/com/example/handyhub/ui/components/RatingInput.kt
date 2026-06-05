@@ -9,8 +9,7 @@ import androidx.compose.material.icons.outlined.StarBorder
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
+import com.example.handyhub.ui.theme.AppColors
 import com.example.handyhub.ui.theme.Dimens
 
 @Composable
@@ -28,7 +27,7 @@ fun RatingInput(
                     Icons.Outlined.StarBorder
                 },
                 contentDescription = null,
-                tint = Color(0xFFFFC400),
+                tint = AppColors.Primary,
                 modifier = Modifier
                     .size(Dimens.ProfileIconSize)
                     .clickable {

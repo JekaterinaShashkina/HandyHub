@@ -1,6 +1,7 @@
 package com.example.handyhub.ui.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -30,6 +31,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.handyhub.R
+import com.example.handyhub.ui.theme.AppColors
 import com.example.handyhub.ui.theme.Dimens
 
 @Composable
@@ -52,6 +54,7 @@ fun AppHeader(
         modifier = modifier
             .fillMaxWidth()
             .height(Dimens.HeaderNavHeight),
+
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {

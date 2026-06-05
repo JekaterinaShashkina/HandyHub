@@ -20,6 +20,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.handyhub.model.Service
+import com.example.handyhub.ui.theme.AppColors
 import com.example.handyhub.ui.theme.Dimens
 
 @Composable
@@ -34,7 +35,7 @@ fun MasterInfoCard(
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(Dimens.ExtraLargeRadiusCorner),
         colors = CardDefaults.cardColors(
-            containerColor = Color(0xFFF4F4F8)
+            containerColor = AppColors.SecondaryBackGround
         )
     ) {
         Column(

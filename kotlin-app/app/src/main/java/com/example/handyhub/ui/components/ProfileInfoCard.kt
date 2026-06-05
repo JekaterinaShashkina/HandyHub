@@ -14,9 +14,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.unit.dp
+import com.example.handyhub.ui.theme.AppColors
 import com.example.handyhub.ui.theme.Dimens
 
 @Composable
@@ -28,7 +27,7 @@ fun ProfileInfoCard(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(Dimens.MediumSpacing),
         colors = CardDefaults.cardColors(
-            containerColor = Color.White
+            containerColor = AppColors.SecondaryBackGround
         )
     ){
         Row(
@@ -38,7 +37,7 @@ fun ProfileInfoCard(
             Icon(
                 imageVector = icon,
                 contentDescription = null,
-                tint = Color(0xFFFFC800)
+                tint = AppColors.Primary
             )
 
             Spacer(modifier = Modifier.width(Dimens.MediumSpacing))

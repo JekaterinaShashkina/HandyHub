@@ -80,7 +80,8 @@ fun LoginScreen(
         ) {
             Text(
                 text = "Create account",
-                style = MaterialTheme.typography.bodyLarge
+                style = MaterialTheme.typography.bodyLarge,
+                color = AppColors.TextSecondary
             )
         }
     }

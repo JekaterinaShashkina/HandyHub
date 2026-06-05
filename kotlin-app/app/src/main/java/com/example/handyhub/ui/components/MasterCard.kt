@@ -1,5 +1,6 @@
 package com.example.handyhub.ui.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -17,9 +18,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.handyhub.ui.model.MasterCardUiModel
+import com.example.handyhub.ui.theme.AppColors
 import com.example.handyhub.ui.theme.Dimens
 
 @Composable
@@ -32,9 +33,10 @@ fun MasterCard(
         modifier = modifier
             .fillMaxWidth()
             .clickable { onClick(master.id) },
+
         shape = RoundedCornerShape(Dimens.ExtraLargeRadiusCorner),
         colors = CardDefaults.cardColors(
-        containerColor = Color(0xFFF4F4F8)
+        containerColor = AppColors.SecondaryBackGround,
         )
     ){
         Row (

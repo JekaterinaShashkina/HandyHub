@@ -68,7 +68,7 @@ fun AppExpandableCategories(
                             .fillMaxWidth()
                             .clip(RoundedCornerShape(Dimens.MediumHeight))
                             .background(
-                                if (isSelected) AppColors.SelectedCategory else Color.Transparent
+                                if (isSelected) AppColors.SecondaryBackGround else Color.Transparent
                             )
                             .clickable { onCategoryClick(category) }
                             .padding(horizontal = Dimens.SmallSpacing, vertical = Dimens.ExtraSmallSpacing),

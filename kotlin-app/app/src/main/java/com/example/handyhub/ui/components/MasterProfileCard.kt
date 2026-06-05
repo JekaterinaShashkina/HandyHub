@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.handyhub.model.Review
 import com.example.handyhub.ui.model.MasterCardUiModel
+import com.example.handyhub.ui.theme.AppColors
 import com.example.handyhub.ui.theme.Dimens
 
 @Composable
@@ -46,7 +47,7 @@ fun MasterProfileCard(
             .padding(bottom = Dimens.MediumSpacing),
         shape = RoundedCornerShape(Dimens.ExtraLargeRadiusCorner),
         colors = CardDefaults.cardColors(
-            containerColor = Color(0xFFF4F4F8)
+            containerColor = AppColors.SecondaryBackGround
         )
     ){
         Column (

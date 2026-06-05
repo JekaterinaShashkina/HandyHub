@@ -1,5 +1,6 @@
 package com.example.handyhub.ui.screens
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -18,6 +19,7 @@ import com.example.handyhub.ui.components.AppExpandableCategories
 import com.example.handyhub.ui.components.AppHeader
 import com.example.handyhub.ui.components.AppSearchBar
 import com.example.handyhub.ui.components.MasterCard
+import com.example.handyhub.ui.theme.AppColors
 import com.example.handyhub.ui.theme.Dimens
 import com.example.handyhub.viewmodel.HomeViewModel
 
@@ -51,7 +53,8 @@ fun HomeScreen (
 
     }
     LazyColumn(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize()
+            .background(AppColors.Background),
         contentPadding = PaddingValues(Dimens.LargeSpacing, Dimens.ExtraLargeSpacing)
 
     ) {

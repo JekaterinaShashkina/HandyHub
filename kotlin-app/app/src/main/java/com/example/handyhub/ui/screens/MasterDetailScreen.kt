@@ -1,5 +1,7 @@
 package com.example.handyhub.ui.screens
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -15,6 +17,7 @@ import com.example.handyhub.ui.components.AppHeader
 import com.example.handyhub.ui.components.MasterInfoCard
 import com.example.handyhub.ui.components.MasterProfileCard
 import com.example.handyhub.ui.components.MasterReviewSection
+import com.example.handyhub.ui.theme.AppColors
 import com.example.handyhub.ui.theme.Dimens
 import com.example.handyhub.viewmodel.MasterDetailViewModel
 
@@ -43,7 +46,9 @@ fun MasterDetailScreen(
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .padding(Dimens.LargeSpacing, Dimens.ExtraLargeSpacing)
+            .background(AppColors.Background),
+        contentPadding = PaddingValues(Dimens.LargeSpacing, Dimens.ExtraLargeSpacing)
+
     ) {
         item {
             AppHeader(

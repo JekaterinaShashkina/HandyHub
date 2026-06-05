@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.handyhub.model.Service
+import com.example.handyhub.ui.theme.AppColors
 import com.example.handyhub.ui.theme.Dimens
 
 @Composable
@@ -31,7 +32,7 @@ fun ServiceManageCard (
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(Dimens.MediumSpacing),
         colors = CardDefaults.cardColors(
-            containerColor = Color.White
+            containerColor = AppColors.Background
         )
     ) {
             Column(
@@ -80,7 +81,7 @@ fun ServiceManageCard (
                     Text(
                         text = "At least one service is required",
                         style = MaterialTheme.typography.bodySmall,
-                        color = Color.Gray
+                        color = AppColors.TextSecondary
                     )
                 }
             }
