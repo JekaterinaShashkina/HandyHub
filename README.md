@@ -1,32 +1,64 @@
 # HandyHub
 
-HandyHub is a mobile application for finding local service providers such as manicurists, hairdressers, electricians, plumbers, handymen and other practical specialists.
+HandyHub on mobiilirakendus kohalike teenusepakkujate leidmiseks. Rakenduse kaudu saab otsida näiteks maniküürijaid, juuksureid, elektrikuid, torulukkseppi, kosmeetikuid ja teisi praktilisi spetsialiste.
 
-The project is implemented in two versions:
+Projekt on realiseeritud kahes versioonis:
 
-- native Android application using Kotlin and Jetpack Compose;
-- cross-platform mobile application using React Native.
+- Androidi native-rakendus, mis kasutab Kotlin'i ja Jetpack Compose'i;
+- cross-platform mobiilirakendus, mis kasutab React Native'i ja Expo't.
 
-Both applications follow the same idea, structure and core functionality, but are implemented with different mobile development technologies.
+Mõlemad rakendused järgivad sama ideed, domeenistruktuuri ja põhifunktsionaalsust, kuid on loodud erinevate mobiiliarenduse tehnoloogiatega.
 
-## MVP:
+## MVP
 
-- список категорий мастеров;
-- список мастеров;
-- карточка мастера;
-- подробная страница мастера;
-- поиск или фильтр по категории;
-- рейтинг мастера;
-- комментарии/отзывы;
-- добавление мастера;
-- локальное хранение данных через SQLite.
+Projekti MVP sisaldab järgmisi põhifunktsioone:
 
-## Team work
+- teenusekategooriate nimekiri;
+- meistrite nimekiri;
+- meistri kaart;
+- meistri detailvaade;
+- otsing ja kategooriafilter;
+- meistri hinnang;
+- kommentaarid ja arvustused;
+- meistri registreerimine;
+- kliendi registreerimine ja sisselogimine;
+- teenuste lisamine ja muutmine;
+- andmete lokaalne salvestamine SQLite abil.
 
-The project is developed by two students.
+## Meeskond
 
-Jekaterina Shashkina is responsible for the Kotlin/Jetpack Compose version
+Projekti arendavad kaks tudengit:
 
-Nadežda Artamonova is responsible for the React Native version.
+- Jekaterina Shashkina — Kotlin / Jetpack Compose versioon;
+- Nadežda Artamonova — React Native / Expo versioon.
 
-Shared documentation, requirements and design decisions are maintained together.
+Ühised nõuded, dokumentatsioon ja disainiotsused on arenduse käigus kooskõlastatud.
+
+## Repositooriumi struktuur
+
+```text
+HandyHub/
+  kotlin-app/
+  react-native-app/
+  assets/
+```
+
+## Dokumentatsioon
+
+React Native versiooni detailne dokumentatsioon asub siin:
+
+[React Native README](react-native-app/README.md)
+
+React Native README sisaldab projekti kirjeldust, funktsionaalsust, arhitektuuri, andmete haldamist, valideerimist, käivitamise juhendit, ekraanipilte, video demonstratsiooni ja AI kasutamise kirjeldust.
+
+## GitHubi kasutamine
+
+Arenduse käigus kasutati GitHubi versioonihaldust:
+
+- eraldi harusid uute funktsioonide jaoks;
+- sisukaid commit message'eid;
+- pull request'e muudatuste lisamiseks `main` harusse;
+- regulaarset sünkroniseerimist `main` haruga;
+- ühist repositooriumi mõlema rakenduse versiooni jaoks.
+
+Selline töövoog võimaldas hoida Kotlin'i ja React Native'i osad ühes projektis, kuid arendada neid eraldi.

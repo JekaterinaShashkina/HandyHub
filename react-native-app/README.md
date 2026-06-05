@@ -1,74 +1,137 @@
 # HandyHub React Native App
 
-HandyHub is a cross-platform React Native application built with Expo. 
-The app is a mobile service marketplace where clients can find specialists, view master profiles, register accounts, 
-leave reviews, and where masters can manage their services.
+HandyHub React Native App on õppeprojekti HandyHub cross-platform mobiilirakenduse versioon, mis on loodud React Native'i ja Expo abil. Rakendus on kohalike teenuste platvorm, kus kasutaja saab leida meistri, vaadata tema profiili, teenuseid, hinnangut ja arvustusi. Meister saab luua spetsialisti profiili ning hallata oma teenuseid.
 
-This repository contains the React Native implementation of the project. 
-The Android/Kotlin version is implemented separately, but both apps follow the same HandyHub domain idea and a similar data structure.
+Android/Kotlin versioon on realiseeritud eraldi, kuid mõlemad versioonid kasutavad sama domeeni: kasutajad, rollid, kategooriad, meistrid, teenused ja arvustused.
 
-## Main Features
+## Üldinfo
 
-- Home screen with search, category filter, master cards, app header and footer.
-- Master detail screen with contact information, description, services and reviews.
-- Client registration and login.
-- Profile screen for authenticated users.
-- Profile editing with avatar update.
-- Role-based behavior for clients and masters.
-- Become a master flow for existing client users.
-- Master registration with first service creation.
-- Master service management: add, edit, hide and restore services.
-- Review system with rating stars.
-- One review per client per master. A client can update their own review.
-- User profile shows reviews written by the current user.
-- Local SQLite persistence through `expo-sqlite`.
+Projekt: `HandyHub`
 
-## User Roles
+React Native osa: `react-native-app`
 
-The app uses three roles:
+Meeskond:
 
-- `client`
-- `master`
+- Jekaterina Shashkina — Android/Kotlin versioon;
+- Nadežda Artamonova — React Native versioon.
 
-Current role logic:
+Rakenduse põhiidee on lihtsustada kohalike spetsialistide leidmist. Näiteks saab kasutaja otsida maniküürijaid, juuksureid, elektrikuid, torulukkseppi, kosmeetikuid ja teisi teenusepakkujaid.
 
-- Anonymous users can browse masters but cannot leave reviews.
-- Only authenticated clients can leave reviews.
-- Masters cannot review other masters.
-- A logged-in client can become a master.
-- A master can manage their own services.
+## Projekti eesmärk
 
-## Validation
+Rakendus lahendab teenusepakkujate otsimise ja võrdlemise probleemi. Klient saab kiiresti leida spetsialisti kategooria või otsingu abil, vaadata hinda, teenuse kirjeldust, hinnangut ja arvustusi. Meister saab esitada oma teenuseid, luua spetsialisti profiili ja uuendada enda andmeid.
 
-The React Native app includes validation for user input and service forms.
+Rakendus on mõeldud kahele kasutajagrupile:
 
-User and profile validation:
+- klientidele, kes otsivad teenusepakkujat;
+- meistritele, kes soovivad oma teenuseid pakkuda.
 
-- Required name, surname, email, phone and password fields.
-- Email format validation.
-- Phone length validation.
-- Duplicate email validation.
-- Duplicate phone validation.
-- Profile editing ignores the current user's own email and phone when checking duplicates.
+## Funktsionaalsus
 
-Review validation:
+### Kõigile kasutajatele
 
-- User must be logged in.
-- User must have the client role.
-- Comment cannot be empty.
-- Rating must be selected.
-- One client can leave only one review per master. Submitting again updates the existing review.
+- meistrite nimekirja vaatamine;
+- otsing nime, kategooria, teenuse pealkirja ja teenuse kirjelduse järgi;
+- meistrite filtreerimine kategooriate järgi;
+- meistri detailvaate vaatamine;
+- meistri teenuste vaatamine;
+- arvustuste ja hinnangu vaatamine;
+- pikkade arvustuste avamine ja sulgemine nuppudega `Expand` ja `Collapse`.
 
-Master and service validation:
+### Kliendile
 
-- Required service title.
-- Required category.
-- Required service description.
-- Price must be greater than zero.
-- Duration must be greater than zero.
-- A master cannot hide their last active service.
+- kliendi registreerimine;
+- kontole sisselogimine;
+- profiili muutmine;
+- avatari valimine ja uuendamine;
+- meistrile arvustuse lisamine;
+- enda olemasoleva arvustuse muutmine;
+- enda arvustuste vaatamine profiilis;
+- võimalus saada meistriks.
 
-Validation files are placed in:
+### Meistrile
+
+- spetsialisti profiili registreerimine;
+- esimese teenuse loomine meistri registreerimisel;
+- meistri profiili muutmine;
+- uue teenuse lisamine;
+- teenuse muutmine;
+- teenuse peitmine ja taastamine;
+- kontroll, et viimast aktiivset teenust ei saa peita.
+
+## Olulisemad kasutusjuhtumid
+
+1. Külaline avab rakenduse, vaatab meistreid, kasutab otsingut ja kategooriafiltrit.
+2. Kasutaja registreerib end kliendina ja logib sisse.
+3. Klient avab meistri detailvaate, valib hinnangu ja lisab arvustuse.
+4. Klient saab oma arvustust muuta ning uuendatud arvustus kuvatakse kohe nimekirjas.
+5. Klient saab profiili kaudu hakata meistriks.
+6. Meister saab lisada, muuta, peita ja taastada teenuseid.
+
+## Kasutatud tehnoloogiad
+
+- React Native;
+- Expo;
+- Expo Router;
+- TypeScript;
+- SQLite läbi `expo-sqlite`;
+- React Context;
+- `@expo/vector-icons`;
+- `expo-image-picker`.
+
+## Andmete haldamine
+
+React Native versioon kasutab lokaalset SQLite andmebaasi läbi `expo-sqlite`.
+
+Andmebaasis hoitakse:
+
+- rolle;
+- kasutajaid;
+- kategooriaid;
+- meistrite profiile;
+- teenuseid;
+- arvustusi.
+
+Esimesel käivitamisel luuakse tabelid ja lisatakse algandmed:
+
+- rollid;
+- kategooriad.
+
+Kasutajad, meistrid, teenused ja arvustused luuakse rakenduse kasutajaliidese kaudu. Testkasutajad ja testmeistrid on seed-andmetest eemaldatud, et demonstratsioon algaks puhta rakendusega.
+
+Andmed laaditakse SQLite andmebaasist rakenduse käivitamisel. Kui kasutaja lisab või muudab andmeid, uuendatakse rakenduse state kohe ning muudatused salvestatakse lokaalsesse andmebaasi repository ja DAO kihtide kaudu.
+
+## Valideerimine
+
+### Kasutaja ja profiil
+
+- kohustuslikud väljad: eesnimi, perekonnanimi, email, telefon ja parool;
+- emaili formaadi kontroll;
+- telefoni pikkuse kontroll;
+- emaili unikaalsuse kontroll;
+- telefoni unikaalsuse kontroll;
+- profiili muutmisel ei loeta kasutaja enda emaili ja telefoni duplikaadiks.
+
+### Arvustused
+
+- arvustuse saab lisada ainult sisselogitud kasutaja;
+- arvustuse saab lisada ainult kliendi rolliga kasutaja;
+- meister ei saa teistele meistritele arvustusi jätta;
+- kommentaar ei tohi olla tühi;
+- hinnang peab olema valitud;
+- üks klient saab ühele meistrile jätta ainult ühe arvustuse;
+- korduv saatmine uuendab olemasolevat arvustust.
+
+### Meistri teenused
+
+- teenuse pealkiri on kohustuslik;
+- kategooria on kohustuslik;
+- teenuse kirjeldus on kohustuslik;
+- hind peab olema suurem kui null;
+- kestus peab olema suurem kui null;
+- meister ei saa peita viimast aktiivset teenust.
+
+Valideerimise failid:
 
 ```text
 src/domain/validation/
@@ -76,29 +139,9 @@ src/domain/validation/
   userValidation.ts
 ```
 
-## Data Persistence
+## Rakenduse arhitektuur
 
-The app uses local SQLite storage through `expo-sqlite`.
-
-The database stores:
-
-- roles
-- users
-- categories
-- master profiles
-- services
-- reviews
-
-The app starts with clean user data for demonstration. Only reference data is seeded:
-
-- roles
-- categories
-
-Users, masters, services and reviews are created through the app flow.
-
-## Architecture
-
-The React Native app is organized into layers inspired by the Kotlin project structure.
+React Native rakendus on jaotatud mitmeks kihiks:
 
 ```text
 src/
@@ -114,61 +157,50 @@ src/
   utils/
 ```
 
-### App Routes
+### UI kiht
 
-Expo Router screens are stored in:
+Expo Router ekraanid:
 
 ```text
 src/app/
+  index.tsx
+  login.tsx
+  register.tsx
+  profile.tsx
+  edit-profile.tsx
+  add-master.tsx
+  edit-master-profile.tsx
+  master/[id].tsx
 ```
 
-Important screens:
-
-```text
-src/app/index.tsx
-src/app/login.tsx
-src/app/register.tsx
-src/app/profile.tsx
-src/app/edit-profile.tsx
-src/app/add-master.tsx
-src/app/edit-master-profile.tsx
-src/app/master/[id].tsx
-```
-
-### Components
-
-Reusable UI components are stored in:
+Taaskasutatavad komponendid:
 
 ```text
 src/components/
+  common/
+  home/
+  master/
+  profile/
+  register/
+  login/
+  add-master/
+  master-profile/
 ```
 
-Main component groups:
+Ühised komponendid:
 
-```text
-components/common/
-components/home/
-components/master/
-components/profile/
-components/register/
-components/login/
-components/add-master/
-components/master-profile/
-```
-
-Shared UI components include:
-
-- `BackButton`
-- `PrimaryButton`
-- `FormTextInput`
-- `PasswordField`
-- `FormMessage`
-- `ScreenHeader`
-- `RatingStars`
+- `BackButton`;
+- `PrimaryButton`;
+- `FormTextInput`;
+- `PasswordField`;
+- `FormMessage`;
+- `ScreenHeader`;
+- `RatingStars`;
+- `AvatarPicker`.
 
 ### Models
 
-Domain models are stored as separate files:
+Domeenimudelid on eraldi kaustas:
 
 ```text
 src/models/
@@ -181,50 +213,48 @@ src/models/
   index.ts
 ```
 
-These models represent the main HandyHub data entities.
+### UI models ja mappers
 
-### UI Models and Mappers
-
-UI-specific models are stored in:
+UI-mudelid:
 
 ```text
 src/ui/models/
+  MasterCardUiModel.ts
+  MasterDetailsUiModel.ts
+  UserReviewUiModel.ts
 ```
 
-Examples:
-
-- `MasterCardUiModel`
-- `MasterDetailsUiModel`
-- `UserReviewUiModel`
-
-Mapping from domain data to UI models is handled in:
+Domeeniandmete teisendamine UI-mudeliteks:
 
 ```text
 src/ui/mappers/masterMappers.ts
 ```
 
-### Database Layer
+### Domain kiht
 
-SQLite setup is stored in:
+Äriloogika:
 
 ```text
-src/database/
-  database.ts
-  mappers.ts
-  provider.ts
-  schema.ts
+src/domain/usecases/
+  masterUseCases.ts
+  reviewUseCases.ts
+  serviceUseCases.ts
+  userUseCases.ts
 ```
 
-Responsibilities:
+Valideerimine:
 
-- `provider.ts` opens the SQLite database.
-- `schema.ts` contains SQL table creation and migrations.
-- `mappers.ts` maps database rows to TypeScript models.
-- `database.ts` initializes the database and seeds reference data.
+```text
+src/domain/validation/
+  serviceValidation.ts
+  userValidation.ts
+```
 
-### DAO Layer
+Domain kiht sisaldab meistri loomise, arvustuste uuendamise, teenuste haldamise ja kasutaja uuendamise reegleid. See kiht ei sõltu rakenduse ekraanidest.
 
-DAO files are stored in:
+### Data kiht
+
+DAO-failid:
 
 ```text
 src/data/local/
@@ -236,43 +266,34 @@ src/data/local/
   userDao.ts
 ```
 
-DAO files contain SQL queries such as select, insert and update.
-
-### Repository Layer
-
-Repository methods are stored in:
+Repository:
 
 ```text
 src/data/repository/repository.ts
 ```
 
-The repository coordinates DAO calls and gives the state layer a cleaner API for loading and saving data.
+DAO sisaldab SQL-päringuid. Repository annab state-kihile mugavad meetodid andmete laadimiseks ja salvestamiseks.
 
-### Domain Use Cases
+### Database kiht
 
-Business logic is stored in:
+SQLite seadistus:
 
 ```text
-src/domain/usecases/
-  masterUseCases.ts
-  reviewUseCases.ts
-  serviceUseCases.ts
-  userUseCases.ts
+src/database/
+  database.ts
+  mappers.ts
+  provider.ts
+  schema.ts
 ```
 
-Examples of use case logic:
+- `provider.ts` avab SQLite andmebaasi;
+- `schema.ts` sisaldab SQL-skeemi ja migratsioone;
+- `mappers.ts` teisendab andmebaasi read TypeScripti mudeliteks;
+- `database.ts` initsialiseerib andmebaasi ja seed-andmed.
 
-- create a master profile with the first service
-- update or insert a user in a list
-- find a user during login
-- add, edit, hide or restore services
-- recalculate master `priceFrom`
-- prevent hiding the last active service
-- create or update a review
+### State kiht
 
-### State Layer
-
-Global app state is stored in:
+Globaalne state:
 
 ```text
 src/state/
@@ -280,39 +301,126 @@ src/state/
   types.ts
 ```
 
-`AppContext` coordinates:
+`AppContext` koordineerib aktiivset kasutajat, laaditud andmeid, repository väljakutseid ja domain use case'e.
 
-- current user state
-- loaded categories, users, masters, services and reviews
-- calls to repository methods
-- calls to domain use cases
-- data passed to screens and components
+## Rakenduse käivitamine
 
-## Running the App
+Mine rakenduse kausta:
 
-Install dependencies:
+```bash
+cd react-native-app
+```
+
+Paigalda sõltuvused:
 
 ```bash
 npm install
 ```
 
-Start the app:
+Käivita Expo:
 
 ```bash
 npx.cmd expo start --go --clear
 ```
 
-For LAN mode:
+LAN-režiimi jaoks:
 
 ```bash
 npx.cmd expo start --go --lan --clear
 ```
 
-NB! Web mode is not used in this project because the app uses expo-sqlite for native local persistence. The app should be tested in Expo Go on iOS or Android.
+React Native versiooni testitakse Expo Go abil iOS või Android seadmes. Web-režiimi ei kasutata, sest rakendus kasutab lokaalset native-andmehoidlat `expo-sqlite` kaudu.
 
+TypeScripti kontroll:
 
-## Notes
+```bash
+npx.cmd tsc --noEmit
+```
 
-- The React Native app stores data locally in its own SQLite database.
-- The Kotlin app has its own local database implementation.
-- Both apps represent the same HandyHub domain, but they do not share one runtime database.
+## Ekraanipildid
+
+Ekraanipildid asuvad kaustas:
+
+```text
+assets/screens/
+```
+
+### Avaleht
+
+![Avaleht](assets/screens/IMG_6081.PNG)
+
+### Kliendi profiil
+
+![Kliendi profiil](assets/screens/IMG_6009.PNG)
+
+### Meistri registreerimine
+
+![Meistri registreerimine](assets/screens/IMG_6010.PNG)
+
+### Sisselogimine
+
+![Sisselogimine](assets/screens/IMG_6011.PNG)
+
+### Meistri profiil
+
+![Meistri profiil](assets/screens/IMG_6008.PNG)
+
+Täiendavad ekraanipildid asuvad samuti kaustas `assets/screens/`.
+
+## Video demonstratsioon
+
+React Native versiooni video demonstratsioon:
+
+[https://www.youtube.com/shorts/uWRkQjBfEvg](https://www.youtube.com/shorts/uWRkQjBfEvg)
+
+Videos näidatakse:
+
+- rakenduse põhifunktsionaalsust;
+- kasutajaliidest ja navigeerimist;
+- registreerimist ja sisselogimist;
+- andmete lisamist ja muutmist;
+- arvustustega töötamist;
+- meistri teenuste haldamist;
+- lühikest ülevaadet kasutatud tehnoloogiatest ja arhitektuurist.
+
+## AI kasutamine
+
+React Native versiooni arendamisel kasutati ChatGPT / Codex tööriista.
+
+AI-d kasutati:
+
+- React Native versiooni arhitektuuri arutamiseks;
+- TypeScripti ja React Native vigade lahendamisel;
+- failistruktuuri refaktoreerimisel;
+- Git-käskude selgitamisel;
+- README ettevalmistamisel;
+- Expo, SQLite ja Metro bundler vigade analüüsimisel.
+
+Iseseisvalt tehti:
+
+- projekti teema valik;
+- ühise idee kooskõlastamine Kotlin-versiooniga;
+- React Native versiooni arhitektuuri lõplikud otsused;
+- rakenduse testimine telefonis;
+- video demonstratsiooni salvestamine;
+- UI ja funktsionaalsuse lõplikud otsused;
+- GitHubi, branch'ide ja pull request'idega töötamine;
+- kasutajastsenaariumide testimine.
+
+## GitHubi kasutamine
+
+Arenduse käigus kasutati:
+
+- branch'e;
+- pull request'e;
+- merge'i `main` harusse;
+- sisukaid commit message'eid;
+- regulaarset `git status` kontrolli;
+- meeskonnatööd ühes GitHubi repositooriumis.
+
+## Märkused
+
+- React Native ja Kotlin versioonid on sama rakenduse kaks eraldi realisatsiooni.
+- Mõlemal versioonil on oma lokaalne andmebaas.
+- Ühist runtime'i või ühist andmebaasi rakenduste vahel ei kasutata.
+- Pärast SQLite skeemi või seed-andmete muutmist võib iOS seadmes olla vaja Expo Go uuesti paigaldada, et lokaalne andmebaas lähtestada.
