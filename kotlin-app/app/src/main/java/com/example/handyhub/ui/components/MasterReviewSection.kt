@@ -16,8 +16,10 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.handyhub.ui.model.ReviewWithUser
+import com.example.handyhub.ui.theme.Dimens
 
 @Composable
 fun MasterReviewSection(
@@ -27,13 +29,13 @@ fun MasterReviewSection(
 ) {
     Card(
         modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(Dimens.MediumSpacing),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant
+            containerColor = Color(0xFFF4F4F8)
         )
     ) {
         Column(
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier.padding(Dimens.MediumSpacing)
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -52,14 +54,14 @@ fun MasterReviewSection(
                 }
             }
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(Dimens.SmallSpacing))
 
             reviews.forEach { review ->
                 ReviewAccordeonCard(
                     modifier = Modifier.fillMaxWidth(),
                     review = review
                 )
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(Dimens.SmallSpacing))
             }
         }
     }

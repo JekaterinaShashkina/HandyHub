@@ -8,10 +8,9 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
+import com.example.handyhub.ui.theme.AppColors
+import com.example.handyhub.ui.theme.Dimens
 
 @Composable
 fun AppButton(
@@ -26,18 +25,18 @@ fun AppButton(
         modifier = if (fillMaxWidth) {
             modifier
                 .fillMaxWidth()
-                .height(52.dp)
+                .height(Dimens.ButtonHeight)
 
         } else {
-            modifier.height(52.dp)
+            modifier.height(Dimens.ButtonHeight)
         },
         enabled = enabled,
-        shape = RoundedCornerShape(10.dp),
+        shape = RoundedCornerShape(Dimens.RadiusCorner),
         colors = ButtonDefaults.buttonColors(
-            containerColor = Color(0xFFFFC800),
-            contentColor = Color.Black,
-            disabledContainerColor = Color(0xFFFFE082),
-            disabledContentColor = Color.Gray
+            containerColor = AppColors.Primary,
+            contentColor = AppColors.Secondary,
+            disabledContainerColor = AppColors.disabledContainerColor,
+            disabledContentColor = AppColors.TextSecondary
         )
     ) {
         Text(

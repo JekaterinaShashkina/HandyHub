@@ -5,27 +5,24 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ArrowBack
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.handyhub.model.User
 import com.example.handyhub.ui.components.AppHeader
 import com.example.handyhub.ui.components.MasterInfoCard
 import com.example.handyhub.ui.components.MasterProfileCard
 import com.example.handyhub.ui.components.MasterReviewSection
+import com.example.handyhub.ui.theme.Dimens
 import com.example.handyhub.viewmodel.MasterDetailViewModel
 
 @Composable
 fun MasterDetailScreen(
     masterId: Int,
     avatarUrl: Int?,
+    avatarUri: String?,
     isLoggedIn: Boolean,
     viewModel: MasterDetailViewModel,
     onBackClick: () -> Unit,
@@ -46,12 +43,13 @@ fun MasterDetailScreen(
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .padding(24.dp, 32.dp)
+            .padding(Dimens.LargeSpacing, Dimens.ExtraLargeSpacing)
     ) {
         item {
             AppHeader(
                 title = "Master details",
                 avatarUrl = avatarUrl,
+                avatarUri = avatarUri,
                 showBack = true,
                 isLoggedIn = isLoggedIn,
                 showAuthActions = true,
@@ -71,7 +69,7 @@ fun MasterDetailScreen(
             }
 
             item {
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(Dimens.MediumSpacing))
             }
 
             item {
@@ -82,7 +80,7 @@ fun MasterDetailScreen(
             }
 
             item {
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(Dimens.MediumSpacing))
             }
 
             item{

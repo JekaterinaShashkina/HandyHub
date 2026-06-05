@@ -16,4 +16,7 @@ interface MasterProfileDao {
 
     @Query("Select * FROM master_profile WHERE id = :masterId")
     suspend fun getMasterProfileById(masterId: Int): MasterProfile?
+
+    @Query("SELECT * FROM master_profile WHERE userId = :userId LIMIT 1")
+    suspend fun getMasterProfileByUserId(userId: Int): MasterProfile?
 }

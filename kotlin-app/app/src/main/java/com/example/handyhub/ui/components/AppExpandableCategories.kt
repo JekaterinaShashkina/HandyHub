@@ -17,9 +17,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
 import com.example.handyhub.R
 import com.example.handyhub.model.Category
+import com.example.handyhub.ui.theme.AppColors
+import com.example.handyhub.ui.theme.Dimens
 
 @Composable
 fun AppExpandableCategories(
@@ -37,7 +38,7 @@ fun AppExpandableCategories(
             modifier = Modifier
                 .fillMaxWidth()
                 .clickable { expanded = !expanded }
-                .padding(vertical = 12.dp),
+                .padding(vertical = Dimens.MediumHeight),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
@@ -55,8 +56,9 @@ fun AppExpandableCategories(
 
         AnimatedVisibility(visible = expanded) {
             Column(
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-                modifier = Modifier.padding(bottom = 12.dp)
+                verticalArrangement = Arrangement.spacedBy(Dimens.MediumHeight),
+                modifier = Modifier.padding(bottom = Dimens.MediumHeight),
+
             ) {
                 categories.forEach { category ->
                     val isSelected = selectedCategoryId == category.id
@@ -64,22 +66,23 @@ fun AppExpandableCategories(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clip(RoundedCornerShape(12.dp))
+                            .clip(RoundedCornerShape(Dimens.MediumHeight))
                             .background(
-                                if (isSelected) Color(0xFFE8EAFB) else Color.Transparent
+                                if (isSelected) AppColors.SelectedCategory else Color.Transparent
                             )
                             .clickable { onCategoryClick(category) }
-                            .padding(horizontal = 8.dp, vertical = 6.dp),
-                        verticalAlignment = Alignment.CenterVertically
+                            .padding(horizontal = Dimens.SmallSpacing, vertical = Dimens.ExtraSmallSpacing),
+                        verticalAlignment = Alignment.CenterVertically,
+
                     ) {
                         Icon(
                             painter = painterResource(id = getCategoryIcon(category.name)),
                             contentDescription = null,
                             tint = Color.Unspecified,
-                            modifier = Modifier.size(24.dp)
+                            modifier = Modifier.size(Dimens.SmallAvatarSize)
                         )
 
-                        Spacer(modifier = Modifier.width(16.dp))
+                        Spacer(modifier = Modifier.width(Dimens.MediumSpacing))
 
                         Text(
                             text = category.name,

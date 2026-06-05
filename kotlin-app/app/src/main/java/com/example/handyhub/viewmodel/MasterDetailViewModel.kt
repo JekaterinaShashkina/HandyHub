@@ -33,6 +33,7 @@ class MasterDetailViewModel(
             val masterProfile = repository.getMasterProfileById(masterId) ?: return@launch
             val user = repository.getUserById(masterProfile.userId) ?: return@launch
             val services = repository.getServicesByMaster(masterId)
+            val priceFrom = services.minOfOrNull { it.price } ?: 0.0
             val firstService = services.firstOrNull()
             val category = firstService?.let {
                 repository.getCategoryById(it.categoryId)
@@ -64,10 +65,11 @@ class MasterDetailViewModel(
                 email = user.email,
                 description = masterProfile.description,
                 expYears = masterProfile.expYears,
-                priceFrom = masterProfile.priceFrom,
+                priceFrom = priceFrom,
                 ratingAvg = ratingAvg,
                 reviewsCount = reviewsCount,
                 avatarUrl = user.avatarUrl,
+                avatarUri = user.avatarUri,
                 categoryId = category?.id,
                 categoryName = category?.name ?: "Specialist",
             )

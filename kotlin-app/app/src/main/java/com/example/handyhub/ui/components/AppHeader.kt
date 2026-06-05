@@ -28,13 +28,16 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.example.handyhub.R
+import com.example.handyhub.ui.theme.Dimens
 
 @Composable
 fun AppHeader(
     modifier: Modifier = Modifier,
     title: String? = null,
     avatarUrl: Int? = null,
+    avatarUri: String? = null,
     showLogo: Boolean = false,
     showBack: Boolean = false,
     isLoggedIn: Boolean = false,
@@ -48,7 +51,7 @@ fun AppHeader(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .height(64.dp),
+            .height(Dimens.HeaderNavHeight),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -67,7 +70,7 @@ fun AppHeader(
                 Image(
                     painter = painterResource(id = R.drawable.handyhub_logo2),
                     contentDescription = "HandyHub Logo",
-                    modifier = Modifier.height(46.dp)
+                    modifier = Modifier.height(Dimens.HeaderAvatarSize)
                 )
             }
             title?.let {
@@ -89,19 +92,19 @@ fun AppHeader(
                             Icons.AutoMirrored.Outlined.Login
                         },
                         contentDescription = if (isLoggedIn) "Logout" else "Login",
-                        modifier = Modifier.size(28.dp)
+                        modifier = Modifier.size(Dimens.IconSize)
                     )
 
                 }
-                if (isLoggedIn && avatarUrl != null) {
+                if (isLoggedIn && avatarUrl != null || avatarUri != null) {
                     IconButton(
                         onClick = onProfileClick
                     ) {
-                        Image(
-                            painter = painterResource(id = avatarUrl),
+                        AsyncImage(
+                            model = avatarUri ?: avatarUrl,
                             contentDescription = "Profile",
                             modifier = Modifier
-                                .size(36.dp)
+                                .size(Dimens.ProfileIconSize)
                                 .clip(CircleShape),
                             contentScale = ContentScale.Crop
                         )
@@ -112,7 +115,7 @@ fun AppHeader(
                         Icon(
                             imageVector = Icons.Outlined.Person,
                             contentDescription = "Profile",
-                            modifier = Modifier.size(32.dp)
+                            modifier = Modifier.size(Dimens.ProfileIconSize)
                         )
                     }
                 }

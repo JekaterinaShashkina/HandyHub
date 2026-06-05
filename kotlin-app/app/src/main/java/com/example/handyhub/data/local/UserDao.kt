@@ -5,6 +5,7 @@ import androidx.room.Insert
 import com.example.handyhub.model.User
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 
 @Dao
 interface UserDao {
@@ -26,4 +27,6 @@ interface UserDao {
         roleId: Int,
         updatedAt: Long
     )
+    @Update
+    suspend fun updateUser(user: User)
 }

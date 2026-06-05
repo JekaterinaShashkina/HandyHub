@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.handyhub.model.Category
+import com.example.handyhub.ui.theme.Dimens
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -49,7 +50,7 @@ fun CategoryDropdown(
                     expanded = expanded
                 )
             },
-            shape = RoundedCornerShape(10.dp),
+            shape = RoundedCornerShape(Dimens.RadiusCorner),
             modifier = Modifier
                 .menuAnchor()
                 .fillMaxWidth(),

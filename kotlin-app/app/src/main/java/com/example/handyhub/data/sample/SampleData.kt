@@ -53,6 +53,26 @@ object SampleData {
             name = "Cosmetologist",
             iconUrl = "cosmetologist"
         ),
+        Category(
+            id = 6,
+            name = "Massage therapist",
+            iconUrl = "massage therapist"
+        ),
+        Category(
+            id = 7,
+            name = "Photographer",
+            iconUrl = "photographer"
+        ),
+        Category(
+            id = 8,
+            name = "Visagist",
+            iconUrl = "makeup"
+        ),
+        Category(
+            id = 9,
+            name = "Handyman",
+            iconUrl = "handyman"
+        )
     )
     val salt1 = PasswordHasher.generateSalt()
     val salt2 = PasswordHasher.generateSalt()

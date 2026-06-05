@@ -8,6 +8,11 @@ object Routes {
     const val REGISTER_USER = "register_user"
     const val PROFILE = "profile"
     const val BECOME_MASTER = "become_master"
+    const val MY_SERVICES = "my_services"
+    const val ADD_SERVICE = "add_service"
+    const val EDIT_SERVICE = "edit_service/{serviceId}"
+    const val EDIT_PROFILE = "edit_profile"
+
 
     fun masterDetail(masterId: Int): String {
         return "master_detail/$masterId"
@@ -15,4 +20,8 @@ object Routes {
     fun addReview(masterId: Int): String {
         return "add_review/$masterId"
     }
+    fun editService(serviceId: Int): String {
+        return "edit_service/$serviceId"
+    }
+
 }

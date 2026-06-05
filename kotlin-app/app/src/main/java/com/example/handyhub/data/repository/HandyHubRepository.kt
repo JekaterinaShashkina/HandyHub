@@ -17,14 +17,18 @@ class HandyHubRepository(
     suspend fun getAllMasterProfiles(): List<MasterProfile> {
         return database.masterProfileDao().getAllMasterProfiles()
     }
-    suspend fun getAllServices(): List<Service> {
-        return database.serviceDao().getAllServices()
-    }
+
     suspend fun getMasterProfileById(masterId: Int): MasterProfile? {
         return database.masterProfileDao().getMasterProfileById(masterId)
     }
+    suspend fun getMasterProfileByUserId(userId: Int): MasterProfile? {
+        return database.masterProfileDao().getMasterProfileByUserId(userId)
+    }
     suspend fun getServicesByMaster(masterProfileId: Int): List<Service> {
         return database.serviceDao().getServicesByMaster(masterProfileId)
+    }
+    suspend fun getServiceById(serviceId: Int): Service? {
+        return database.serviceDao().getServiceById(serviceId)
     }
     suspend fun getCategoryById(categoryId: Int): Category? {
         return database.categoryDao().getCategoryById(categoryId)
@@ -38,6 +42,7 @@ class HandyHubRepository(
     suspend fun getReviewsByMaster(masterProfileId: Int): List<Review> {
         return database.reviewDao().getReviewsByMaster(masterProfileId)
     }
+
     suspend fun insertCategory(category: Category) {
         database.categoryDao().insertCategory(category)
     }
@@ -56,6 +61,11 @@ class HandyHubRepository(
     suspend fun insertRole(role: Role) {
         database.roleDao().insertRole(role)
     }
+
+    suspend fun updateUser(user: User) {
+        database.userDao().updateUser(user)
+    }
+
     suspend fun updateUserRole(userId: Int, roleId: Int) {
         database.userDao().updateUserRole(
             userId = userId,
@@ -63,4 +73,11 @@ class HandyHubRepository(
             updatedAt = System.currentTimeMillis()
         )
     }
+    suspend fun updateService(service: Service) {
+        database.serviceDao().updateService(service)
+    }
+    suspend fun deleteService(service: Service) {
+        database.serviceDao().deleteService(service)
+    }
+
 }

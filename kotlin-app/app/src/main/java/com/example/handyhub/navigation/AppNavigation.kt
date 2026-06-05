@@ -14,6 +14,7 @@ import com.example.handyhub.viewmodel.AuthViewModel
 import com.example.handyhub.viewmodel.HomeViewModel
 import com.example.handyhub.viewmodel.MasterDetailViewModel
 import android.widget.Toast
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -22,8 +23,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import com.example.handyhub.ui.components.ConfirmDialog
 import com.example.handyhub.ui.screens.BecomeMasterScreen
+import com.example.handyhub.ui.screens.EditProfileScreen
+import com.example.handyhub.ui.screens.MyServicesScreen
 import com.example.handyhub.ui.screens.ProfileScreen
 import com.example.handyhub.ui.screens.RegisterScreen
+import com.example.handyhub.ui.screens.ServiceFormScreen
 import com.example.handyhub.viewmodel.MasterViewModel
 
 @Composable
@@ -47,6 +51,7 @@ fun AppNavigation(
                 viewModel = homeViewModel,
                 isLoggedIn = currentUser != null,
                 avatarUrl = currentUser?.avatarUrl,
+                avatarUri = currentUser?.avatarUri,
                 onMasterClick = { masterId ->
                     navController.navigate(Routes.masterDetail(masterId))
                 },
@@ -77,6 +82,7 @@ fun AppNavigation(
                 viewModel = masterDetailViewModel,
                 masterId = masterId,
                 avatarUrl = currentUser?.avatarUrl,
+                avatarUri = currentUser?.avatarUri,
                 isLoggedIn = currentUser != null,
                 onBackClick = { navController.popBackStack()},
                 onAddReviewClick = {
@@ -97,6 +103,7 @@ fun AppNavigation(
         }
         // Navigation ADD REVIEW
         composable(
+
             route = Routes.ADD_REVIEW,
             arguments = listOf(
                 navArgument("masterId") {
@@ -109,6 +116,7 @@ fun AppNavigation(
                 .arguments
                 ?.getInt("masterId")
                 ?: 0
+            val context = LocalContext.current
 
             AddReviewScreen(
                 masterId = masterId,
@@ -116,13 +124,25 @@ fun AppNavigation(
                     navController.popBackStack()
                 },
                 onPublishClick = { comment, rating ->
-                    masterDetailViewModel.addReview(
-                        masterId = masterId,
-                        userId = 1, // временно, пока нет логина
-                        rating = rating,
-                        comment = comment
-                    )
-                    navController.popBackStack()
+                    val user = currentUser
+                    if (user == null) {
+                        Toast.makeText(
+                            context,
+                            "Please login first",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        navController.navigate(Routes.LOGIN)
+                    } else {
+                        masterDetailViewModel.addReview(
+                            masterId = masterId,
+                            userId = user.id,
+                            rating = rating,
+                            comment = comment
+                        )
+                        homeViewModel.loadData()
+                        masterDetailViewModel.loadMaster(masterId)
+                        navController.popBackStack()
+                    }
                 }
             )
         }
@@ -168,7 +188,7 @@ fun AppNavigation(
                 onBackClick = {
                     navController.popBackStack()
                 },
-                onRegisterClick = { name, surname, phone, email, password, repeatPassword ->
+                onRegisterClick = { name, surname, phone, email, password, repeatPassword, avatarUri ->
                     authViewModel.register(
                         name = name,
                         surname = surname,
@@ -176,13 +196,15 @@ fun AppNavigation(
                         email = email,
                         password = password,
                         repeatPassword = repeatPassword,
+                        avatarUri = avatarUri,
                         onSuccess = {
                             Toast.makeText(context, "Account created", Toast.LENGTH_SHORT).show()
                             navController.popBackStack()
                         },
                         onError = { message ->
                             Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
-                        }
+                        },
+
                     )
                 }
             )
@@ -193,6 +215,7 @@ fun AppNavigation(
                 currentUser = currentUser,
                 isMaster = currentUser?.roleId == 2,
                 avatarUrl = currentUser?.avatarUrl,
+                avatarUri = currentUser?.avatarUri,
                 isLoggedIn = currentUser != null,
                 onBackClick = {
                     navController.popBackStack()
@@ -208,19 +231,16 @@ fun AppNavigation(
                 },
                 onProfileClick = {
                     navController.navigate(Routes.PROFILE)
-                }
-            )
-        }
-        composable(Routes.BECOME_MASTER) {
-            BecomeMasterScreen(
-                onBackClick = {
-                    navController.popBackStack()
                 },
-                onRegisterMasterClick = { categoryId, priceFrom, expYears, description, serviceTitle, servicePrice ->
-                    // подключим к БД следующим шагом
+                onMyServicesClick = {
+                    navController.navigate(Routes.MY_SERVICES)
+                },
+                onEditProfileClick = {
+                    navController.navigate(Routes.EDIT_PROFILE)
                 }
             )
         }
+
         composable(Routes.BECOME_MASTER) {
             val context = LocalContext.current
 
@@ -228,7 +248,7 @@ fun AppNavigation(
                 onBackClick = {
                     navController.popBackStack()
                 },
-                onRegisterMasterClick = { categoryId, priceFrom, expYears, description, serviceTitle, servicePrice ->
+                onRegisterMasterClick = { categoryId, expYears, description, serviceTitle, servicePrice ->
 
                     val userId = currentUser?.id
 
@@ -241,7 +261,7 @@ fun AppNavigation(
                         masterViewModel.becomeMaster(
                             userId = userId,
                             categoryId = categoryId,
-                            priceFrom = priceFrom,
+                            // priceFrom = priceFrom,
                             expYears = expYears,
                             description = description,
                             serviceTitle = serviceTitle,
@@ -264,6 +284,148 @@ fun AppNavigation(
                 }
             )
         }
+        composable(Routes.MY_SERVICES) {
+            val services by masterViewModel.services.collectAsState()
+            val context = LocalContext.current
+
+            LaunchedEffect(currentUser?.id) {
+                currentUser?.id?.let {
+                    masterViewModel.loadServicesForUser(it)
+                }
+            }
+
+            MyServicesScreen(
+                services = services,
+                onBackClick = {
+                    navController.popBackStack()
+                },
+                onAddServiceClick = {
+                    navController.navigate(Routes.ADD_SERVICE)
+                },
+                onEditServiceClick = { service ->
+                    navController.navigate(Routes.editService(service.id))
+                },
+                onDeleteServiceClick = { service ->
+                    masterViewModel.deleteService(
+                        service = service,
+                        currentServicesCount = services.size,
+                        onSuccess = {
+                            Toast.makeText(context, "Service deleted", Toast.LENGTH_SHORT).show()
+
+                        },
+                        onError = { message ->
+                            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                        }
+                    )
+                }
+            )
+        }
+        composable(Routes.ADD_SERVICE) {
+            val context = LocalContext.current
+            val masterId by masterViewModel.currentMasterId.collectAsState()
+
+            ServiceFormScreen(
+                title = "Add service",
+                onBackClick = {
+                    navController.popBackStack()
+                },
+                onSaveClick = { serviceTitle, servicePrice ->
+                    val id = masterId
+
+                    if (id == null) {
+                        Toast.makeText(context, "Master profile not found", Toast.LENGTH_SHORT).show()
+                    } else {
+                        masterViewModel.addService(
+                            masterProfileId = id,
+                            categoryId = 1, // временно, ниже поправим
+                            title = serviceTitle,
+                            price = servicePrice,
+                            onSuccess = {
+                                Toast.makeText(context, "Service added", Toast.LENGTH_SHORT).show()
+                                homeViewModel.loadData()
+                                masterViewModel.loadServicesByMaster(id)
+                                navController.popBackStack()
+                            },
+                            onError = { message ->
+                                Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                            }
+                        )
+                    }
+                }
+            )
+        }
+        composable(
+            route = Routes.EDIT_SERVICE,
+            arguments = listOf(
+                navArgument("serviceId") {
+                    type = NavType.IntType
+                }
+            )
+        ) { backStackEntry ->
+
+            val context = LocalContext.current
+
+            val serviceId = backStackEntry.arguments?.getInt("serviceId") ?: 0
+
+            LaunchedEffect(serviceId) {
+                masterViewModel.loadServiceById(serviceId)
+            }
+
+            val selectedService by masterViewModel.selectedService.collectAsState()
+
+            selectedService?.let { service ->
+                ServiceFormScreen(
+                    title = "Edit service",
+                    initialTitle = service.title,
+                    initialPrice = service.price.toString(),
+                    onBackClick = {
+                        navController.popBackStack()
+                    },
+                    onSaveClick = { serviceTitle, servicePrice ->
+                        masterViewModel.updateService(
+                            service = service,
+                            title = serviceTitle,
+                            price = servicePrice,
+                            onSuccess = {
+                                Toast.makeText(context, "Service updated", Toast.LENGTH_SHORT).show()
+                                homeViewModel.loadData()
+                                navController.popBackStack()
+                            },
+                            onError = { message ->
+                                Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                            }
+                        )
+                    }
+                )
+            }
+        }
+        composable(Routes.EDIT_PROFILE) {
+            val context = LocalContext.current
+
+            EditProfileScreen(
+                currentUser = currentUser,
+                onBackClick = {
+                    navController.popBackStack()
+                },
+                onSaveClick = { name, surname, email, phone, avatarUri ->
+                    authViewModel.updateProfile(
+                        name = name,
+                        surname = surname,
+                        email = email,
+                        phone = phone,
+                        avatarUri = avatarUri,
+                        onSuccess = {
+                            Toast.makeText(context, "Profile updated", Toast.LENGTH_SHORT).show()
+                            homeViewModel.loadData()
+                            navController.popBackStack()
+                        },
+                        onError = { message ->
+                            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                        }
+                    )
+                }
+            )
+        }
 
     }
     if (showLogoutDialog) {
@@ -281,4 +443,5 @@ fun AppNavigation(
             }
         )
     }
+
 }

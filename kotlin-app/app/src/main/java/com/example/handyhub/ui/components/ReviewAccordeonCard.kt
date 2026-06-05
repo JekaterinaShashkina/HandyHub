@@ -20,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.handyhub.ui.model.ReviewWithUser
+import com.example.handyhub.ui.theme.Dimens
 
 @Composable
 fun ReviewAccordeonCard(
@@ -32,7 +33,7 @@ fun ReviewAccordeonCard(
             modifier = Modifier
                 .fillMaxWidth()
                 .clickable { expanded = !expanded }
-                .padding(16.dp)
+                .padding(Dimens.MediumSpacing)
 
         ) {
             Row(
@@ -45,12 +46,12 @@ fun ReviewAccordeonCard(
                         text = review.user.name,
                         style = MaterialTheme.typography.titleMedium
                     )
-                    Spacer(modifier = Modifier.width(8.dp))
+                    Spacer(modifier = Modifier.width(Dimens.SmallWidth))
                     Text(
                         text = review.user.surname,
                         style = MaterialTheme.typography.titleMedium
                     )
-                    Spacer(modifier = Modifier.width(8.dp))
+                    Spacer(modifier = Modifier.width(Dimens.SmallWidth))
                     RatingBar(
                         rating = review.review.rating.toDouble()
                     )
@@ -67,7 +68,7 @@ fun ReviewAccordeonCard(
 
             }
             if (expanded) {
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(Dimens.MediumHeight))
 
                 Text(
                     text = review.review.comment,

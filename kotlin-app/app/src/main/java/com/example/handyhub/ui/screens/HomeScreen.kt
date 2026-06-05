@@ -14,13 +14,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import com.example.handyhub.navigation.Routes
 import com.example.handyhub.ui.components.AppExpandableCategories
 import com.example.handyhub.ui.components.AppHeader
 import com.example.handyhub.ui.components.AppSearchBar
 import com.example.handyhub.ui.components.MasterCard
-import com.example.handyhub.viewmodel.AuthViewModel
+import com.example.handyhub.ui.theme.Dimens
 import com.example.handyhub.viewmodel.HomeViewModel
 
 @Composable
@@ -31,7 +29,8 @@ fun HomeScreen (
     onLogoutClick: () -> Unit,
     onProfileClick: () -> Unit,
     isLoggedIn: Boolean,
-    avatarUrl: Int?
+    avatarUrl: Int?,
+    avatarUri: String?
 ){
     val categories by viewModel.categories.collectAsState()
 
@@ -53,12 +52,13 @@ fun HomeScreen (
     }
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(24.dp, 32.dp)
+        contentPadding = PaddingValues(Dimens.LargeSpacing, Dimens.ExtraLargeSpacing)
 
     ) {
         item {
             AppHeader(
                 avatarUrl = avatarUrl,
+                avatarUri = avatarUri,
                 showLogo = true,
                 isLoggedIn = isLoggedIn,
                 showAuthActions = true,
@@ -72,7 +72,7 @@ fun HomeScreen (
                 value = searchText,
                 onValueChange = { searchText = it },
                 placeholder = "Search specialist",
-                modifier = Modifier.padding(top = 16.dp)
+                modifier = Modifier.padding(top = Dimens.MediumSpacing)
             )
         }
         item {
@@ -83,7 +83,7 @@ fun HomeScreen (
                     selectedCategoryId =
                         if (selectedCategoryId == category.id) null else category.id
                 },
-                modifier = Modifier.padding(top = 16.dp)
+                modifier = Modifier.padding(top = Dimens.MediumSpacing)
             )
         }
         item {
@@ -94,7 +94,7 @@ fun HomeScreen (
         }
         item {
             Column(
-                verticalArrangement = Arrangement.spacedBy(16.dp)
+                verticalArrangement = Arrangement.spacedBy(Dimens.MediumSpacing)
             ) {
                 filteredMasters.forEach { master ->
                     MasterCard(master = master, onClick = { masterId ->

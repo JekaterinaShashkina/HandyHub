@@ -25,6 +25,7 @@ data class User(
     val passwordSalt: String,
     val roleId: Int,
     val avatarUrl: Int?,
+    val avatarUri: String? = null,
     val createdAt: Long,
     val updatedAt: Long
 )

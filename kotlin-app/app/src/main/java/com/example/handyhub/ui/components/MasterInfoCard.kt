@@ -20,6 +20,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.handyhub.model.Service
+import com.example.handyhub.ui.theme.Dimens
 
 @Composable
 fun MasterInfoCard(
@@ -31,20 +32,20 @@ fun MasterInfoCard(
 
     Card(
         modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(20.dp),
+        shape = RoundedCornerShape(Dimens.ExtraLargeRadiusCorner),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant
+            containerColor = Color(0xFFF4F4F8)
         )
     ) {
         Column(
-            modifier = Modifier.padding(20.dp)
+            modifier = Modifier.padding(Dimens.MediumHeight)
         ) {
             Text(
                 text = "About",
                 style = MaterialTheme.typography.headlineSmall
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(Dimens.SmallSpacing))
 
             Text(
                 text = description,
@@ -57,14 +58,14 @@ fun MasterInfoCard(
                 Text(
                     text = if (expanded) "Show less" else "Show more",
                     modifier = Modifier
-                        .padding(top = 8.dp)
+                        .padding(top = Dimens.SmallSpacing)
                         .clickable { expanded = !expanded },
                     color = MaterialTheme.colorScheme.primary,
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.SemiBold
                 )
             }
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(Dimens.MediumSpacing))
 
             Text(
                 text = "Services",
@@ -74,7 +75,7 @@ fun MasterInfoCard(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = 6.dp),
+                        .padding(vertical = Dimens.SmallSpacing),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
