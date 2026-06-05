@@ -381,7 +381,7 @@ Videos näidatakse:
 - andmete lisamist ja muutmist;
 - arvustustega töötamist;
 - meistri teenuste haldamist;
-- lühikest ülevaadet kasutatud tehnoloogiatest ja arhitektuurist.
+
 
 ## AI kasutamine
 
@@ -389,11 +389,9 @@ React Native versiooni arendamisel kasutati ChatGPT / Codex tööriista.
 
 AI-d kasutati:
 
-- React Native versiooni arhitektuuri arutamiseks;
 - TypeScripti ja React Native vigade lahendamisel;
 - failistruktuuri refaktoreerimisel;
 - Git-käskude selgitamisel;
-- README ettevalmistamisel;
 - Expo, SQLite ja Metro bundler vigade analüüsimisel.
 
 Iseseisvalt tehti:
