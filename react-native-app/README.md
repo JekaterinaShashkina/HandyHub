@@ -390,7 +390,6 @@ React Native versiooni arendamisel kasutati ChatGPT / Codex tööriista.
 AI-d kasutati:
 
 - TypeScripti ja React Native vigade lahendamisel;
-- failistruktuuri refaktoreerimisel;
 - Git-käskude selgitamisel;
 - Expo, SQLite ja Metro bundler vigade analüüsimisel.
 
