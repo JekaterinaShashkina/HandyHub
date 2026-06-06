@@ -135,7 +135,7 @@ Andmebaasis hoitakse:
 
 Andmed laaditakse SQLite andmebaasist rakenduse käivitamisel. Kasutaja tegevuste korral uuendatakse rakenduse state ning muudatused salvestatakse lokaalsesse andmebaasi repository ja DAO kihtide kaudu.
 
-## Andmenudel (ERD)
+## Andmemudel (ERD)
 
 Mõlemad rakenduse versioonid kasutavad sama relatsioonilist andmemudelit.
 
