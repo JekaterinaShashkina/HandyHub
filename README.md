@@ -609,11 +609,11 @@ Kasutaja logini ja review lisamine
 
 ### React Native versiooni video demonstratsioon:
 
-https://www.youtube.com/shorts/uWRkQjBfEvg
+[React Native video](https://www.youtube.com/shorts/uWRkQjBfEvg)
 
-### Kotlin Android versioni video demo:
+### Kotlin Android versioni video demonstratsioon:
 
-https://youtu.be/tPYvXmmgI2k
+[Kotlin Android video](https://youtu.be/tPYvXmmgI2k)
 
 Videos näidatakse:
 
