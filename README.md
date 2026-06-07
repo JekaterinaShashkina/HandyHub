@@ -626,7 +626,15 @@ meistri teenuste haldamist;
 
 ## Dokumentatsioon
 
-React Native versiooni detailne dokumentatsioon asub siin:
+Projekti mõlema versiooni detailne dokumentatsioon asub vastavates README failides.
+
+### Android / Kotlin versioon
+
+[Kotlin README](kotlin-app/README.md)
+
+Kotlin README sisaldab projekti kirjeldust, funktsionaalsust, Room Database arhitektuuri, andmete haldamist, rakenduse käivitamise juhendit, ekraanipilte, video demonstratsiooni ja AI kasutamise kirjeldust.
+
+### React Native versioon
 
 [React Native README](react-native-app/README.md)
 

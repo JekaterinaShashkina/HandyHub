@@ -347,23 +347,23 @@ assets/screens/
 
 ### Avaleht
 
-![Avaleht](assets/screens/IMG_6081.PNG)
+<img src="../assets/img/screens_react/IMG_6081.PNG" width="250">
 
 ### Kliendi profiil
 
-![Kliendi profiil](assets/screens/IMG_6009.PNG)
+<img src="assets/screens/IMG_6009.PNG" width="250">
 
 ### Meistri registreerimine
 
-![Meistri registreerimine](assets/screens/IMG_6010.PNG)
+<img src="assets/screens/IMG_6010.PNG" width="250">
 
 ### Sisselogimine
 
-![Sisselogimine](assets/screens/IMG_6011.PNG)
+<img src="assets/screens/IMG_6011.PNG" width="250">
 
 ### Meistri profiil
 
-![Meistri profiil](assets/screens/IMG_6008.PNG)
+<img src="assets/screens/IMG_6008.PNG" width="250">
 
 Täiendavad ekraanipildid asuvad samuti kaustas `assets/screens/`.
 
@@ -381,7 +381,6 @@ Videos näidatakse:
 - andmete lisamist ja muutmist;
 - arvustustega töötamist;
 - meistri teenuste haldamist;
-
 
 ## AI kasutamine
 
